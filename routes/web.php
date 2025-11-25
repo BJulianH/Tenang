@@ -9,7 +9,7 @@ Route::get('/', function () {
 });
 Route::get('/dashboard', function () {
     return view('dashboard');
-});
+})->name('dashboard');
 Route::get('/voice-chat-gemini', function () {
     return view('voice-chat-gemini');
 });

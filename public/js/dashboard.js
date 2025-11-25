@@ -208,7 +208,7 @@ USER BICARA: "${userMessage}"
 
 2. EFEK VOKAL YANG BOLEH DIGUNAKAN (MAKS 3 PER PARAGRAF)
 - [emmm], [hmmm] → saat mikir serius.
-- [ehhh], [aaa] → saat bingung atau ragu.
+- [ehhh], [aaa] → saat bsingung atau ragu.
 - [aduh], [yaampun] → saat kaget/heran.
 - [hiks], [sedih] → saat menyampaikan hal sedih.
 - [hehe], [hihi] → tawa kecil natural.
