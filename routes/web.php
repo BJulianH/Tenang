@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\JournalController;
 
 // Landing Page
 Route::get('/', function () {
@@ -37,3 +38,8 @@ Route::get('/reset-password/{token}', function ($token) {
 Route::get('/verify-email', function () {
     return view('auth.verify-email');
 })->middleware('auth')->name('verification.notice');
+
+Route::get('/journal', [JournalController::class, 'index'])->name('journal.index');
+Route::post('/journal', [JournalController::class, 'store'])->name('journal.store');
+Route::put('/journal/{id}', [JournalController::class, 'update'])->name('journal.update');
+Route::delete('/journal/{id}', [JournalController::class, 'destroy'])->name('journal.destroy');

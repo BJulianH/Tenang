@@ -9,11 +9,15 @@ use Illuminate\Support\Facades\Auth;
 
 class JournalController extends Controller
 {
-    public function index()
+        public function index()
     {
-        $journals = Journal::where('user_id', auth::id())->get();
-        return response()->json($journals);
+        $journals = Journal::where('user_id', Auth::id())->get();
+
+        return view('journal', [
+            'jurnals' => $journals
+        ]);
     }
+
 
     public function store(Request $request)
     {
