@@ -70,7 +70,7 @@
     </style>
 </head>
 <body class="login-bg max-h-full overflow-hidden">
-    <div class="flex flex-col lg:flex-row h-screen"> <!-- Ganti h-full dengan h-screen -->
+    <div class="flex flex-col lg:flex-row h-screen">
         <!-- Left Panel - Visualization (Hidden on mobile) -->
         <div class="hidden lg:flex lg:w-1/2 bg-blue-400 text-white p-8 lg:p-12 flex-col justify-between relative overflow-hidden">
             <!-- Background decorative elements -->
@@ -159,7 +159,8 @@
                         Welcome back! Please login to continue.
                     </div>
 
-                    <form method="POST" action="#">
+                    <!-- Form menggunakan route login yang sesuai -->
+                    <form method="POST" action="{{ route('login') }}">
                         @csrf
 
                         <!-- Email Address -->
@@ -252,7 +253,7 @@
                     <div class="text-center mt-6">
                         <p class="text-gray-600">
                             Don't have an account?
-                            <a  href="{{ route('register') }}" class="text-blue-600 hover:text-blue-800 font-medium transition-colors">
+                            <a href="{{ route('register') }}" class="text-blue-600 hover:text-blue-800 font-medium transition-colors">
                                 Sign up now
                             </a>
                         </p>
@@ -330,11 +331,8 @@
             });
         });
 
-        // Prevent form submission for demo
-        document.querySelector('form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            alert('Login functionality would be implemented here!');
-        });
+        // Form submission - biarkan normal untuk Laravel
+        // Hapus preventDefault() agar form bisa dikirim ke server
     </script>
 </body>
 </html>

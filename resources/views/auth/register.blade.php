@@ -31,6 +31,7 @@
                 opacity: 0;
                 transform: translateY(30px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -38,9 +39,12 @@
         }
 
         @keyframes float {
-            0%, 100% {
+
+            0%,
+            100% {
                 transform: translateY(0);
             }
+
             50% {
                 transform: translateY(-10px);
             }
@@ -61,7 +65,7 @@
         .hover-lift:hover {
             transform: translateY(-5px);
         }
-        
+
         /* Password strength indicator */
         .password-strength {
             height: 4px;
@@ -70,22 +74,22 @@
             transition: all 0.3s ease;
             width: 0%;
         }
-        
+
         .strength-weak {
             width: 25% !important;
             background-color: #ef4444 !important;
         }
-        
+
         .strength-medium {
             width: 50% !important;
             background-color: #f59e0b !important;
         }
-        
+
         .strength-strong {
             width: 75% !important;
             background-color: #3b82f6 !important;
         }
-        
+
         .strength-very-strong {
             width: 100% !important;
             background-color: #10b981 !important;
@@ -102,36 +106,43 @@
         .loading-dots {
             display: inline-block;
         }
-        
+
         .loading-dots:after {
             content: '...';
             animation: dots 1.5s steps(4, end) infinite;
         }
-        
+
         @keyframes dots {
-            0%, 20% {
-                color: rgba(0,0,0,0);
+
+            0%,
+            20% {
+                color: rgba(0, 0, 0, 0);
                 text-shadow:
-                    .25em 0 0 rgba(0,0,0,0),
-                    .5em 0 0 rgba(0,0,0,0);
+                    .25em 0 0 rgba(0, 0, 0, 0),
+                    .5em 0 0 rgba(0, 0, 0, 0);
             }
+
             40% {
                 color: white;
                 text-shadow:
-                    .25em 0 0 rgba(0,0,0,0),
-                    .5em 0 0 rgba(0,0,0,0);
+                    .25em 0 0 rgba(0, 0, 0, 0),
+                    .5em 0 0 rgba(0, 0, 0, 0);
             }
+
             60% {
                 text-shadow:
                     .25em 0 0 white,
-                    .5em 0 0 rgba(0,0,0,0);
+                    .5em 0 0 rgba(0, 0, 0, 0);
             }
-            80%, 100% {
+
+            80%,
+            100% {
                 text-shadow:
                     .25em 0 0 white,
                     .5em 0 0 white;
             }
         }
+
     </style>
 </head>
 <body class="login-bg max-h-full overflow-hidden">
@@ -165,12 +176,12 @@
 
                     <!-- Session Status -->
                     @if (session('status'))
-                        <div class="mb-4 p-4 bg-blue-50 text-blue-700 rounded-lg text-sm">
-                            {{ session('status') }}
-                        </div>
+                    <div class="mb-4 p-4 bg-blue-50 text-blue-700 rounded-lg text-sm">
+                        {{ session('status') }}
+                    </div>
                     @endif
 
-                    <form method="POST" action="{{ route('register') }}" id="registerForm">
+                    <form method="POST" action="{{ route('register.post') }}">
                         @csrf
 
                         <!-- Name -->
@@ -182,20 +193,10 @@
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <i class="fas fa-user text-gray-400"></i>
                                 </div>
-                                <input 
-                                    id="name" 
-                                    type="text" 
-                                    name="name" 
-                                    value="{{ old('name') }}" 
-                                    required 
-                                    autofocus 
-                                    autocomplete="name"
-                                    class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('name') border-red-500 @enderror"
-                                    placeholder="Enter your full name"
-                                >
+                                <input id="name" type="text" name="name" value="{{ old('name') }}" required autofocus autocomplete="name" class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('name') border-red-500 @enderror" placeholder="Enter your full name">
                             </div>
                             @error('name')
-                                <div class="error-message">{{ $message }}</div>
+                            <div class="error-message">{{ $message }}</div>
                             @enderror
                         </div>
 
@@ -208,19 +209,10 @@
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <i class="fas fa-envelope text-gray-400"></i>
                                 </div>
-                                <input 
-                                    id="email" 
-                                    type="email" 
-                                    name="email" 
-                                    value="{{ old('email') }}" 
-                                    required 
-                                    autocomplete="email"
-                                    class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('email') border-red-500 @enderror"
-                                    placeholder="Enter your email"
-                                >
+                                <input id="email" type="email" name="email" value="{{ old('email') }}" required autocomplete="email" class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('email') border-red-500 @enderror" placeholder="Enter your email">
                             </div>
                             @error('email')
-                                <div class="error-message">{{ $message }}</div>
+                            <div class="error-message">{{ $message }}</div>
                             @enderror
                         </div>
 
@@ -233,15 +225,7 @@
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <i class="fas fa-lock text-gray-400"></i>
                                 </div>
-                                <input 
-                                    id="password"
-                                    type="password"
-                                    name="password"
-                                    required
-                                    autocomplete="new-password"
-                                    class="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('password') border-red-500 @enderror"
-                                    placeholder="Create a password"
-                                >
+                                <input id="password" type="password" name="password" required autocomplete="new-password" class="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('password') border-red-500 @enderror" placeholder="Create a password">
                                 <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center password-toggle">
                                     <i class="fas fa-eye-slash text-gray-400 hover:text-gray-600"></i>
                                 </button>
@@ -262,7 +246,7 @@
                                 </div>
                             </div>
                             @error('password')
-                                <div class="error-message">{{ $message }}</div>
+                            <div class="error-message">{{ $message }}</div>
                             @enderror
                         </div>
 
@@ -275,15 +259,7 @@
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <i class="fas fa-lock text-gray-400"></i>
                                 </div>
-                                <input 
-                                    id="password_confirmation"
-                                    type="password"
-                                    name="password_confirmation"
-                                    required
-                                    autocomplete="new-password"
-                                    class="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                                    placeholder="Confirm your password"
-                                >
+                                <input id="password_confirmation" type="password" name="password_confirmation" required autocomplete="new-password" class="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors" placeholder="Confirm your password">
                                 <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center password-confirm-toggle">
                                     <i class="fas fa-eye-slash text-gray-400 hover:text-gray-600"></i>
                                 </button>
@@ -301,18 +277,13 @@
                         <!-- Terms and Conditions -->
                         <div class="mb-6">
                             <label class="flex items-start">
-                                <input 
-                                    type="checkbox" 
-                                    name="terms"
-                                    class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 mt-1"
-                                    required
-                                >
+                                <input type="checkbox" name="terms" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 mt-1" required>
                                 <span class="ml-2 text-sm text-gray-600">
-                                    I agree to the 
+                                    I agree to the
                                     <a href="#" class="text-blue-600 hover:text-blue-800 font-medium transition-colors">
                                         Terms of Service
-                                    </a> 
-                                    and 
+                                    </a>
+                                    and
                                     <a href="#" class="text-blue-600 hover:text-blue-800 font-medium transition-colors">
                                         Privacy Policy
                                     </a>
@@ -362,7 +333,7 @@
                     <p class="text-xl opacity-90 mb-8">
                         Start your learning journey with personalized courses and AI-powered tutors.
                     </p>
-                    
+
                     <!-- Features List -->
                     <div class="space-y-4">
                         <div class="flex items-center">
@@ -427,25 +398,25 @@
             function checkPasswordStrength() {
                 const password = passwordInput.value;
                 const strengthBar = document.getElementById('password-strength');
-                
+
                 if (!strengthBar) return;
-                
+
                 // Reset strength bar
                 strengthBar.className = 'password-strength';
                 strengthBar.style.width = '0%';
                 strengthBar.style.backgroundColor = 'transparent';
-                
+
                 // Reset hints
                 const lengthHint = document.getElementById('length');
                 const uppercaseHint = document.getElementById('uppercase');
                 const numberHint = document.getElementById('number');
-                
+
                 // Check password criteria
                 const hasLength = password.length >= 8;
                 const hasUppercase = /[A-Z]/.test(password);
                 const hasNumber = /[0-9]/.test(password);
                 const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(password);
-                
+
                 // Update hints
                 if (lengthHint) {
                     lengthHint.innerHTML = `<i class="fas fa-${hasLength ? 'check' : 'times'} ${hasLength ? 'text-green-500' : 'text-red-500'} mr-1"></i><span>At least 8 characters</span>`;
@@ -456,7 +427,7 @@
                 if (numberHint) {
                     numberHint.innerHTML = `<i class="fas fa-${hasNumber ? 'check' : 'times'} ${hasNumber ? 'text-green-500' : 'text-red-500'} mr-1"></i><span>One number</span>`;
                 }
-                
+
                 // Only show strength bar if there's input
                 if (password.length > 0) {
                     // Calculate strength score
@@ -465,7 +436,7 @@
                     if (hasUppercase) strength++;
                     if (hasNumber) strength++;
                     if (hasSpecial) strength++;
-                    
+
                     // Apply strength classes
                     if (strength === 1) {
                         strengthBar.classList.add('strength-weak');
@@ -477,19 +448,19 @@
                         strengthBar.classList.add('strength-very-strong');
                     }
                 }
-                
+
                 checkPasswordMatch();
             }
 
             // Password match checker
             function checkPasswordMatch() {
-                const password = passwordInput?.value || '';
-                const confirmPassword = passwordConfirmInput?.value || '';
+                const password = passwordInput ? .value || '';
+                const confirmPassword = passwordConfirmInput ? .value || '';
                 const matchIndicator = document.getElementById('password-match');
                 const mismatchIndicator = document.getElementById('password-mismatch');
-                
+
                 if (!matchIndicator || !mismatchIndicator) return;
-                
+
                 if (confirmPassword.length === 0) {
                     matchIndicator.classList.add('hidden');
                     mismatchIndicator.classList.add('hidden');
@@ -524,9 +495,9 @@
             if (registerForm) {
                 registerForm.addEventListener('submit', function(e) {
                     // Basic validation before showing loading state
-                    const password = passwordInput?.value || '';
-                    const confirmPassword = passwordConfirmInput?.value || '';
-                    
+                    const password = passwordInput ? .value || '';
+                    const confirmPassword = passwordConfirmInput ? .value || '';
+
                     if (password !== confirmPassword) {
                         e.preventDefault();
                         alert('Please make sure your passwords match.');
@@ -548,7 +519,7 @@
                 input.addEventListener('focus', function() {
                     this.parentElement.classList.add('ring-2', 'ring-blue-500', 'ring-opacity-50');
                 });
-                
+
                 input.addEventListener('blur', function() {
                     this.parentElement.classList.remove('ring-2', 'ring-blue-500', 'ring-opacity-50');
                 });
@@ -559,6 +530,7 @@
                 checkPasswordStrength();
             }
         });
+
     </script>
 </body>
 </html>
