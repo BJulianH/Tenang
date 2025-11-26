@@ -46,6 +46,13 @@
                             bronze: '#cd7f32',
                             diamond: '#b9f2ff',
                         },
+                        // Social Media Colors
+                        social: {
+                            google: '#DB4437',
+                            facebook: '#1877F2',
+                            google_hover: '#c23321',
+                            facebook_hover: '#166fe5',
+                        },
                         // Neutral colors for text and backgrounds
                         neutral: {
                             50: '#fafdf9',
@@ -156,6 +163,37 @@
 
         .breathe {
             animation: breathe 4s ease-in-out infinite;
+        }
+
+        /* Social Button Animations */
+        .social-btn {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .social-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px -5px rgba(0, 0, 0, 0.15);
+        }
+
+        .social-btn:active {
+            transform: translateY(0);
+        }
+
+        .social-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .social-btn:hover::before {
+            left: 100%;
         }
 
         /* Custom scrollbar */
@@ -338,34 +376,48 @@
                         <!-- Submit Button -->
                         <button 
                             type="submit"
-                            class="w-full gradient-primary text-white py-3 px-4 rounded-lg font-semibold hover:opacity-90 transition-all hover:transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                            class="w-full gradient-primary text-white py-3 px-4 rounded-lg font-semibold hover:opacity-90 transition-all hover:transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 mb-6">
                             <i class="fas fa-sign-in-alt mr-2"></i>
                             Sign In to MindWell
                         </button>
                     </form>
 
                     <!-- Divider -->
-                    <div class="my-6 flex items-center">
+                    <div class="flex items-center mb-6">
                         <div class="flex-1 border-t border-neutral-300"></div>
-                        <span class="px-3 text-neutral-500 text-sm">New to MindWell?</span>
+                        <span class="px-3 text-neutral-500 text-sm">Or sign in with</span>
                         <div class="flex-1 border-t border-neutral-300"></div>
+                    </div>
+
+                    <!-- Social Login Buttons -->
+                    <div class="space-y-3 mb-6">
+                        <!-- Google Login Button -->
+                        <a href="" class="w-full social-btn bg-white border border-neutral-300 text-neutral-700 py-3 px-4 rounded-lg font-medium hover:bg-neutral-50 flex items-center justify-center transition-all">
+                        <div class="w-5 h-5 flex items-center justify-center mr-3">
+                            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                                <path d="M16.51 9.20455V9.10045H9.18V10.8995H13.49C13.12 12.6995 11.62 13.8995 9.18 13.8995C6.43 13.8995 4.18 11.6645 4.18 8.91445C4.18 6.16445 6.43 3.92945 9.18 3.92945C10.39 3.92945 11.5 4.34945 12.37 5.17945L14.43 3.11945C13.02 1.70445 11.18 0.999545 9.18 0.999545C4.19 0.999545 0.18 4.99955 0.18 9.99955C0.18 14.9995 4.19 18.9995 9.18 18.9995C13.69 18.9995 17.18 15.8995 17.18 10.9995C17.18 10.5995 16.86 10.2045 16.51 10.2045V9.20455Z" fill="#EA4335"/>
+                                <path d="M1.18 5.31955L3.73 7.15955C4.36 5.23955 6.58 3.92955 9.18 3.92955C10.39 3.92955 11.5 4.34955 12.37 5.17955L14.43 3.11955C13.02 1.70455 11.18 0.999545 9.18 0.999545C5.69 0.999545 2.73 2.79955 1.18 5.31955Z" fill="#FBBC05"/>
+                                <path d="M9.18 18.9995C11.11 18.9995 12.89 18.2995 14.31 17.0995L11.87 15.0495C11.06 15.6495 10.03 16.0295 9.18 16.0295C6.78 16.0295 4.76 14.4695 3.94 12.2695L1.39 14.1895C2.93 16.8995 5.83 18.9995 9.18 18.9995Z" fill="#34A853"/>
+                                <path d="M16.51 9.20455V9.10045H9.18V10.8995H13.49C13.17 12.2495 12.19 13.2995 10.95 13.8995L13.42 15.8495C15.27 14.0995 16.51 11.4995 16.51 9.20455Z" fill="#4285F4"/>
+                            </svg>
+                        </div>
+                        <span>Continue with Google</span>
+                    </a>
+
+                        <!-- Facebook Login Button -->
+                        <a href="" class="w-full social-btn bg-social-facebook text-white py-3 px-4 rounded-lg font-medium hover:bg-social-facebook_hover flex items-center justify-center transition-all">
+                            <i class="fab fa-facebook-f mr-3"></i>
+                            <span>Continue with Facebook</span>
+                        </a>
                     </div>
 
                     <!-- Sign Up Link -->
                     <div class="text-center">
-                        <a href="{{ route('register') }}" class="w-full bg-white border border-primary-500 text-primary-600 py-3 px-4 rounded-lg font-semibold hover:bg-primary-50 transition-all hover:transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 inline-block">
-                            <i class="fas fa-user-plus mr-2"></i>
-                            Create New Account
-                        </a>
-                    </div>
-
-                    <!-- Additional Info -->
-                    <div class="mt-6 text-center">
-                        <p class="text-xs text-neutral-500">
-                            By continuing, you agree to our 
-                            <a href="#" class="text-primary-600 hover:text-primary-800">Terms of Service</a> 
-                            and 
-                            <a href="#" class="text-primary-600 hover:text-primary-800">Privacy Policy</a>
+                        <p class="text-neutral-600">
+                            Don't have an account?
+                            <a href="{{ route('register') }}" class="text-primary-600 hover:text-primary-800 font-medium transition-colors">
+                                Sign up now
+                            </a>
                         </p>
                     </div>
                 </div>
@@ -407,6 +459,17 @@
             const wellnessIcons = document.querySelectorAll('.breathe');
             wellnessIcons.forEach((icon, index) => {
                 icon.style.animationDelay = `${index * 0.5}s`;
+            });
+        });
+
+        // Social login button effects
+        document.querySelectorAll('.social-btn').forEach(button => {
+            button.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-2px)';
+            });
+            
+            button.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
             });
         });
     </script>
