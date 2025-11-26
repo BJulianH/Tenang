@@ -366,171 +366,114 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Password toggle functionality
-            const passwordToggle = document.querySelector('.password-toggle');
-            const passwordConfirmToggle = document.querySelector('.password-confirm-toggle');
-            const passwordInput = document.getElementById('password');
-            const passwordConfirmInput = document.getElementById('password_confirmation');
+document.addEventListener("DOMContentLoaded", () => {
 
-            // Toggle password visibility
-            function setupPasswordToggle(button, input) {
-                if (button && input) {
-                    button.addEventListener('click', function() {
-                        const icon = this.querySelector('i');
-                        if (input.type === 'password') {
-                            input.type = 'text';
-                            icon.classList.remove('fa-eye-slash');
-                            icon.classList.add('fa-eye');
-                        } else {
-                            input.type = 'password';
-                            icon.classList.remove('fa-eye');
-                            icon.classList.add('fa-eye-slash');
-                        }
-                    });
-                }
-            }
+    // Elemen password & toggle
+    const passwordInput = document.getElementById("password");
+    const passwordConfirmInput = document.getElementById("password_confirmation");
+    const passwordToggle = document.querySelector(".password-toggle");
+    const passwordConfirmToggle = document.querySelector(".password-confirm-toggle");
 
-            setupPasswordToggle(passwordToggle, passwordInput);
-            setupPasswordToggle(passwordConfirmToggle, passwordConfirmInput);
+    const submitBtn = document.getElementById("submitBtn");
+    const submitText = document.getElementById("submitText");
+    const submitLoading = document.getElementById("submitLoading");
 
-            // Password strength checker
-            function checkPasswordStrength() {
-                const password = passwordInput.value;
-                const strengthBar = document.getElementById('password-strength');
-
-                if (!strengthBar) return;
-
-                // Reset strength bar
-                strengthBar.className = 'password-strength';
-                strengthBar.style.width = '0%';
-                strengthBar.style.backgroundColor = 'transparent';
-
-                // Reset hints
-                const lengthHint = document.getElementById('length');
-                const uppercaseHint = document.getElementById('uppercase');
-                const numberHint = document.getElementById('number');
-
-                // Check password criteria
-                const hasLength = password.length >= 8;
-                const hasUppercase = /[A-Z]/.test(password);
-                const hasNumber = /[0-9]/.test(password);
-                const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(password);
-
-                // Update hints
-                if (lengthHint) {
-                    lengthHint.innerHTML = `<i class="fas fa-${hasLength ? 'check' : 'times'} ${hasLength ? 'text-green-500' : 'text-red-500'} mr-1"></i><span>At least 8 characters</span>`;
-                }
-                if (uppercaseHint) {
-                    uppercaseHint.innerHTML = `<i class="fas fa-${hasUppercase ? 'check' : 'times'} ${hasUppercase ? 'text-green-500' : 'text-red-500'} mr-1"></i><span>One uppercase letter</span>`;
-                }
-                if (numberHint) {
-                    numberHint.innerHTML = `<i class="fas fa-${hasNumber ? 'check' : 'times'} ${hasNumber ? 'text-green-500' : 'text-red-500'} mr-1"></i><span>One number</span>`;
-                }
-
-                // Only show strength bar if there's input
-                if (password.length > 0) {
-                    // Calculate strength score
-                    let strength = 0;
-                    if (hasLength) strength++;
-                    if (hasUppercase) strength++;
-                    if (hasNumber) strength++;
-                    if (hasSpecial) strength++;
-
-                    // Apply strength classes
-                    if (strength === 1) {
-                        strengthBar.classList.add('strength-weak');
-                    } else if (strength === 2) {
-                        strengthBar.classList.add('strength-medium');
-                    } else if (strength === 3) {
-                        strengthBar.classList.add('strength-strong');
-                    } else if (strength >= 4) {
-                        strengthBar.classList.add('strength-very-strong');
-                    }
-                }
-
-                checkPasswordMatch();
-            }
-
-            // Password match checker
-            function checkPasswordMatch() {
-                const password = passwordInput ? .value || '';
-                const confirmPassword = passwordConfirmInput ? .value || '';
-                const matchIndicator = document.getElementById('password-match');
-                const mismatchIndicator = document.getElementById('password-mismatch');
-
-                if (!matchIndicator || !mismatchIndicator) return;
-
-                if (confirmPassword.length === 0) {
-                    matchIndicator.classList.add('hidden');
-                    mismatchIndicator.classList.add('hidden');
-                } else if (password === confirmPassword) {
-                    matchIndicator.classList.remove('hidden');
-                    mismatchIndicator.classList.add('hidden');
-                } else {
-                    matchIndicator.classList.add('hidden');
-                    mismatchIndicator.classList.remove('hidden');
-                }
-            }
-
-            // Event listeners for real-time validation
-            if (passwordInput) {
-                passwordInput.addEventListener('input', checkPasswordStrength);
-                passwordInput.addEventListener('keyup', checkPasswordStrength);
-                passwordInput.addEventListener('change', checkPasswordStrength);
-            }
-
-            if (passwordConfirmInput) {
-                passwordConfirmInput.addEventListener('input', checkPasswordMatch);
-                passwordConfirmInput.addEventListener('keyup', checkPasswordMatch);
-                passwordConfirmInput.addEventListener('change', checkPasswordMatch);
-            }
-
-            // Form submission handling
-            const registerForm = document.getElementById('registerForm');
-            const submitBtn = document.getElementById('submitBtn');
-            const submitText = document.getElementById('submitText');
-            const submitLoading = document.getElementById('submitLoading');
-
-            if (registerForm) {
-                registerForm.addEventListener('submit', function(e) {
-                    // Basic validation before showing loading state
-                    const password = passwordInput ? .value || '';
-                    const confirmPassword = passwordConfirmInput ? .value || '';
-
-                    if (password !== confirmPassword) {
-                        e.preventDefault();
-                        alert('Please make sure your passwords match.');
-                        return;
-                    }
-
-                    // Show loading state
-                    if (submitBtn && submitText && submitLoading) {
-                        submitBtn.disabled = true;
-                        submitText.classList.add('hidden');
-                        submitLoading.classList.remove('hidden');
-                    }
-                });
-            }
-
-            // Add focus effects to inputs
-            const inputs = document.querySelectorAll('input[type="text"], input[type="email"], input[type="password"]');
-            inputs.forEach(input => {
-                input.addEventListener('focus', function() {
-                    this.parentElement.classList.add('ring-2', 'ring-blue-500', 'ring-opacity-50');
-                });
-
-                input.addEventListener('blur', function() {
-                    this.parentElement.classList.remove('ring-2', 'ring-blue-500', 'ring-opacity-50');
-                });
-            });
-
-            // Initialize strength check on page load if there's existing value
-            if (passwordInput && passwordInput.value) {
-                checkPasswordStrength();
-            }
+    // Toggle visibility
+    const setupToggle = (button, input) => {
+        if (!button || !input) return;
+        button.addEventListener("click", () => {
+            const icon = button.querySelector("i");
+            const pwdVisible = input.type === "text";
+            input.type = pwdVisible ? "password" : "text";
+            icon.classList.toggle("fa-eye");
+            icon.classList.toggle("fa-eye-slash");
         });
+    };
 
-    </script>
+    setupToggle(passwordToggle, passwordInput);
+    setupToggle(passwordConfirmToggle, passwordConfirmInput);
+
+    // Cek kekuatan password
+    const updateStrength = () => {
+        const bar = document.getElementById("password-strength");
+        if (!passwordInput || !bar) return;
+
+        const pwd = passwordInput.value;
+        bar.className = "password-strength";
+
+        const len = document.getElementById("length");
+        const up = document.getElementById("uppercase");
+        const num = document.getElementById("number");
+
+        const hasLen = pwd.length >= 8;
+        const hasUp = /[A-Z]/.test(pwd);
+        const hasNum = /[0-9]/.test(pwd);
+        const hasSpec = /[!@#$%^&*(),.?":{}|<>]/.test(pwd);
+
+        len.innerHTML = `<i class="fas fa-${hasLen ? "check text-green-500" : "times text-red-500"} mr-1"></i>At least 8 characters`;
+        up.innerHTML = `<i class="fas fa-${hasUp ? "check text-green-500" : "times text-red-500"} mr-1"></i>One uppercase letter`;
+        num.innerHTML = `<i class="fas fa-${hasNum ? "check text-green-500" : "times text-red-500"} mr-1"></i>One number`;
+
+        if (!pwd.length) return;
+
+        let score = 0;
+        if (hasLen) score++;
+        if (hasUp) score++;
+        if (hasNum) score++;
+        if (hasSpec) score++;
+
+        if (score === 1) bar.classList.add("strength-weak");
+        else if (score === 2) bar.classList.add("strength-medium");
+        else if (score === 3) bar.classList.add("strength-strong");
+        else if (score >= 4) bar.classList.add("strength-very-strong");
+
+        checkMatch();
+    };
+
+    // Cek apakah konfirmasi password sama
+    const checkMatch = () => {
+        const match = document.getElementById("password-match");
+        const mismatch = document.getElementById("password-mismatch");
+
+        if (!match || !mismatch) return;
+        const pwd = passwordInput?.value || "";
+        const conf = passwordConfirmInput?.value || "";
+
+        if (!conf.length) {
+            match.classList.add("hidden");
+            mismatch.classList.add("hidden");
+            return;
+        }
+
+        if (pwd === conf) {
+            match.classList.remove("hidden");
+            mismatch.classList.add("hidden");
+        } else {
+            match.classList.add("hidden");
+            mismatch.classList.remove("hidden");
+        }
+    };
+
+    passwordInput?.addEventListener("input", updateStrength);
+    passwordConfirmInput?.addEventListener("input", checkMatch);
+
+    // Loading state saat tombol submit ditekan
+    const form = document.querySelector("form");
+    form?.addEventListener("submit", (e) => {
+        const pwd = passwordInput?.value || "";
+        const conf = passwordConfirmInput?.value || "";
+        if (pwd !== conf) {
+            e.preventDefault();
+            alert("Please make sure your passwords match.");
+            return;
+        }
+        submitBtn.disabled = true;
+        submitText.classList.add("hidden");
+        submitLoading.classList.remove("hidden");
+    });
+
+});
+</script>
+
 </body>
 </html>

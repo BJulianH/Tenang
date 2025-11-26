@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jurnal - Tenang App</title>
+    <title>Tenang</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
@@ -55,7 +55,7 @@
 
                         <!-- DELETE -->
                         <form action="{{ route('jurnal.destroy', $jurnal->id) }}" method="POST"
-                              onsubmit="return confirm('Yakin mau hapus?')">
+                            onsubmit="return confirm('Yakin mau hapus?')">
                             @csrf
                             @method('DELETE')
                             <button
