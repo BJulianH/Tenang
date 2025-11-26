@@ -2,59 +2,72 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Journal;
 use Illuminate\Http\Request;
+use App\Models\Journal;
 use Illuminate\Support\Facades\Auth;
-
 
 class JournalController extends Controller
 {
-        public function index()
+    public function index(Request $request)
     {
-        $journals = Journal::where('user_id', Auth::id())->get();
+        $user = Auth::user();
+        $journals = $user->journals()->latest()->get();
+        
+        $journal = null;
+        if ($request->has('edit')) {
+            $journal = Journal::where('user_id', $user->id)->find($request->edit);
+        }
 
-        return view('journal', [
-            'jurnals' => $journals
-        ]);
+        return view('journal', compact('journals', 'journal'));
     }
-
 
     public function store(Request $request)
     {
-        $request->validate([
-            'title' => 'required|string',
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
             'content' => 'required|string',
+            'mood' => 'nullable|string|max:50'
         ]);
 
-        $journal = Journal::create([
-            'user_id' => auth::id(),
-            $request->input('title'),
-            'content' => $request->input('content'),
-            'date' => now()->toDateString(),
+        Journal::create([
+            'user_id' => Auth::id(),
+            'title' => $validated['title'],
+            'content' => $validated['content'],
+            'mood' => $validated['mood']
         ]);
 
-        return response()->json($journal);
-    }
-
-    public function show(Journal $journal)
-    {
-        return response()->json($journal);
+        return redirect()->route('journal.index')->with('success', 'Journal entry saved successfully!');
     }
 
     public function update(Request $request, Journal $journal)
     {
-        $request->validate([
-            'title' => 'string',
-            'content' => 'string',
+        if ($journal->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
+            'mood' => 'nullable|string|max:50'
         ]);
 
-        $journal->update($request->only(['title', 'content']));
-        return response()->json($journal);
+        $journal->update([
+            'title' => $validated['title'],
+            'content' => $validated['content'],
+            'mood' => $validated['mood']
+        ]);
+
+        return redirect()->route('journal.index')->with('success', 'Journal entry updated successfully!');
     }
 
     public function destroy(Journal $journal)
     {
+        if ($journal->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $journal->delete();
-        return response()->json(['message' => 'Jurnal berhasil dihapus.']);
+
+        return redirect()->route('journal.index')->with('success', 'Journal entry deleted successfully!');
     }
 }

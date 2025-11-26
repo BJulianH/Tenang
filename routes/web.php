@@ -39,7 +39,9 @@ Route::get('/verify-email', function () {
     return view('auth.verify-email');
 })->middleware('auth')->name('verification.notice');
 
-Route::get('/journal', [JournalController::class, 'index'])->name('journal.index');
-Route::post('/journal', [JournalController::class, 'store'])->name('journal.store');
-Route::put('/journal/{id}', [JournalController::class, 'update'])->name('journal.update');
-Route::delete('/journal/{id}', [JournalController::class, 'destroy'])->name('journal.destroy');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/journal', [JournalController::class, 'index'])->name('journal.index');
+    Route::post('/journal', [JournalController::class, 'store'])->name('journal.store');
+    Route::put('/journal/{journal}', [JournalController::class, 'update'])->name('journal.update');
+    Route::delete('/journal/{journal}', [JournalController::class, 'destroy'])->name('journal.destroy');
+});
