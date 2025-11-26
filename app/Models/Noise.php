@@ -1,4 +1,6 @@
 <?php
+// app/Models/Noise.php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -37,5 +39,21 @@ class Noise extends Model
         return $this->belongsToMany(UseCase::class, 'noise_use_case')
                     ->withPivot('effectiveness_rating')
                     ->withTimestamps();
+    }
+
+    // Tambahkan scopes yang diperlukan
+    public function scopeApproved($query)
+    {
+        return $query->where('is_active', true);
+    }
+
+    public function scopeSorted($query)
+    {
+        return $query->orderBy('play_count', 'desc')->orderBy('created_at', 'desc');
+    }
+
+    public function scopePopular($query)
+    {
+        return $query->orderBy('play_count', 'desc');
     }
 }

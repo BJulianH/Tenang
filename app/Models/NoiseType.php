@@ -21,4 +21,14 @@ class NoiseType extends Model
     {
         return $this->hasMany(Noise::class);
     }
+    public function scopeActive($query)
+{
+    return $query->where('is_active', true);
+}
+public function scopeSorted($query)
+{
+    return $query->orderBy('sort_order', 'asc');
+}
+
+
 }

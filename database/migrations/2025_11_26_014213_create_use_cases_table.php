@@ -10,7 +10,9 @@ return new class extends Migration
         Schema::create('use_cases', function (Blueprint $table) {
             $table->id();
             $table->string('name'); // Tidur, Fokus, Relaksasi, dll
+            $table->string('slug')->unique();
             $table->string('icon')->nullable(); // Icon representasi
+            $table->text('description')->nullable(); // Icon representasi
             $table->integer('sort_order')->default(0);
             $table->timestamps();
         });

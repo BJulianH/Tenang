@@ -3,9 +3,11 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\NoiseController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CommunityController;
+use App\Http\Controllers\NoiseTypeController;
 
 // Landing Page
 Route::get('/', function () {
@@ -88,8 +90,54 @@ Route::prefix('profile')->group(function () {
         Route::delete('/delete-cover-image', [ProfileController::class, 'deleteCoverImage'])->name('profile.delete-cover');
     });
 });
+Route::prefix('noises')->name('noises.')->group(function () {
+    // Main noise routes
+    Route::get('/', [NoiseController::class, 'index'])->name('index');
+    Route::get('/type/{type}', [NoiseController::class, 'byType'])->name('by-type');
+    Route::get('/use-case/{useCase}', [NoiseController::class, 'byUseCase'])->name('by-use-case');
+    Route::get('/search', [NoiseController::class, 'search'])->name('search');
+    Route::get('/{noise}', [NoiseController::class, 'show'])->name('show');
+    
+    // Actions
+    Route::post('/{noise}/play', [NoiseController::class, 'incrementPlayCount'])->name('play');
+    Route::post('/{noise}/favorite', [NoiseController::class, 'toggleFavorite'])->name('favorite');
+    Route::post('/{noise}/save', [NoiseController::class, 'toggleSave'])->name('save');
+});
+
+// Noise types routes (optional separate prefix)
+Route::prefix('noise-types')->name('noise-types.')->group(function () {
+    Route::get('/', [NoiseTypeController::class, 'index'])->name('index');
+    Route::get('/{type}', [NoiseTypeController::class, 'show'])->name('show');
+});
 // Profile routes
 Route::get('/profile/{user:username}', [ProfileController::class, 'show'])->name('profile.community');
 
 // Support groups routes
 Route::get('/support-groups', [SupportGroupController::class, 'index'])->name('support-groups.index');
+
+Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
+    // Dashboard
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    
+    // Users Management
+    Route::get('/users', [AdminUserController::class, 'index'])->name('admin.users.index');
+    Route::get('/users/{user}', [AdminUserController::class, 'show'])->name('admin.users.show');
+    Route::put('/users/{user}', [AdminUserController::class, 'update'])->name('admin.users.update');
+    Route::delete('/users/{user}', [AdminUserController::class, 'destroy'])->name('admin.users.destroy');
+    
+    // Posts Management
+    Route::get('/posts', [AdminPostController::class, 'index'])->name('admin.posts.index');
+    Route::get('/posts/{post}', [AdminPostController::class, 'show'])->name('admin.posts.show');
+    Route::put('/posts/{post}', [AdminPostController::class, 'update'])->name('admin.posts.update');
+    Route::delete('/posts/{post}', [AdminPostController::class, 'destroy'])->name('admin.posts.destroy');
+    
+    // Communities Management
+    Route::get('/communities', [AdminCommunityController::class, 'index'])->name('admin.communities.index');
+    Route::get('/communities/{community}', [AdminCommunityController::class, 'show'])->name('admin.communities.show');
+    Route::put('/communities/{community}', [AdminCommunityController::class, 'update'])->name('admin.communities.update');
+    Route::delete('/communities/{community}', [AdminCommunityController::class, 'destroy'])->name('admin.communities.destroy');
+    
+    // Reports Management
+    Route::get('/reports', [AdminReportController::class, 'index'])->name('admin.reports.index');
+    Route::put('/reports/{report}/resolve', [AdminReportController::class, 'resolve'])->name('admin.reports.resolve');
+});

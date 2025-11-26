@@ -36,7 +36,7 @@ class CreatePostsTable extends Migration
             $table->boolean('is_approved')->default(true);
             $table->boolean('is_featured')->default(false);
             $table->timestamp('featured_until')->nullable();
-            $table->unsignedBigInteger('views_count')->default(0)->after('is_approved');
+            $table->unsignedBigInteger('views_count')->default(0);
 
             $table->timestamps();
             $table->softDeletes();
