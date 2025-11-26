@@ -60,14 +60,15 @@ class User extends Authenticatable
      * Accessor untuk avatar URL
      */
     public function getAvatarUrlAttribute()
-    {
-        if ($this->avatar) {
-            return asset('storage/avatars/' . $this->avatar);
+        {
+            if ($this->avatar) {
+                // Pastikan menggunakan storage_path yang benar
+                return asset(path: 'storage/avatars/' . $this->avatar);
+            }
+
+            // Generate avatar berdasarkan inisial nama
+            return 'https://ui-avatars.com/api/?name=' . urlencode($this->name) . '&color=4caf50&background=dcf2dc';
         }
-        
-        // Generate avatar berdasarkan inisial nama
-        return 'https://ui-avatars.com/api/?name=' . urlencode($this->name) . '&color=4caf50&background=dcf2dc';
-    }
 
     /**
      * Check if user is admin

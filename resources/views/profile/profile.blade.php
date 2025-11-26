@@ -182,7 +182,7 @@
                         <div class="avatar-upload mb-4">
                             <div class="avatar-preview">
                                 @if(auth()->user()->avatar)
-                                    <img src="{{ auth()->user()->avatarUrl }}" alt="Avatar" class="w-full h-full rounded-full object-cover">
+                                    <img src="{{ asset(auth()->user()->avatarUrl) }}" alt="Avatar" class="w-full h-full rounded-full object-cover">
                                 @else
                                     {{ substr(auth()->user()->name, 0, 1) }}
                                 @endif
