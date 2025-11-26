@@ -5,9 +5,10 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\NoiseController;
 use App\Http\Controllers\CommentController;
-use App\Http\Controllers\CommunityProfileController;
+use App\Http\Controllers\JournalController;
 use App\Http\Controllers\CommunityController;
 use App\Http\Controllers\NoiseTypeController;
+use App\Http\Controllers\CommunityProfileController;
 
 // Landing Page
 Route::get('/', function () {

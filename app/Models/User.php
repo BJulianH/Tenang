@@ -162,4 +162,8 @@ class User extends Authenticatable
     {
         return $this->username ? '@' . $this->username : $this->name;
     }
+    public function journals()
+    {
+        return $this->hasMany(Journal::class);
+    }
 }
