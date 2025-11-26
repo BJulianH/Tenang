@@ -5,7 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\NoiseController;
 use App\Http\Controllers\CommentController;
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\CommunityProfileController;
 use App\Http\Controllers\CommunityController;
 use App\Http\Controllers\NoiseTypeController;
 
@@ -74,20 +74,20 @@ Route::prefix('community')->group(function () {
     Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
     Route::post('/comments/{comment}/like', [CommentController::class, 'like'])->name('comments.like');
     Route::post('/comments/{comment}/unlike', [CommentController::class, 'unlike'])->name('comments.unlike');
-});
-Route::prefix('profile')->group(function () {
-    Route::get('/{user:username}', [ProfileController::class, 'show'])->name('profile.community');
-    Route::get('/{user:username}/posts', [ProfileController::class, 'posts'])->name('profile.posts');
-    Route::get('/{user:username}/comments', [ProfileController::class, 'comments'])->name('profile.comments');
-    Route::get('/{user:username}/communities', [ProfileController::class, 'communities'])->name('profile.communities');
-    
-    Route::middleware('auth')->group(function () {
-        Route::get('/edit', [ProfileController::class, 'edit'])->name('profile.edit');
-        Route::put('/update', [ProfileController::class, 'update'])->name('profile.update');
-        Route::put('/update-preferences', [ProfileController::class, 'updatePreferences'])->name('profile.preferences');
-        Route::put('/update-password', [ProfileController::class, 'updatePassword'])->name('profile.password');
-        Route::delete('/delete-profile-image', [ProfileController::class, 'deleteProfileImage'])->name('profile.delete-image');
-        Route::delete('/delete-cover-image', [ProfileController::class, 'deleteCoverImage'])->name('profile.delete-cover');
+    Route::prefix('profile')->group(function () {
+        Route::get('/{user:username}', [CommunityProfileController::class, 'show'])->name('profile.community');
+        Route::get('/{user:username}/posts', [CommunityProfileController::class, 'posts'])->name('profile.posts');
+        Route::get('/{user:username}/comments', [CommunityProfileController::class, 'comments'])->name('profile.comments');
+        Route::get('/{user:username}/communities', [CommunityProfileController::class, 'communities'])->name('profile.communities');
+        
+        Route::middleware('auth')->group(function () {
+            Route::get('/edit', [CommunityProfileController::class, 'edit'])->name('profile.edit');
+            Route::put('/update', [CommunityProfileController::class, 'update'])->name('profile.update');
+            Route::put('/update-preferences', [CommunityProfileController::class, 'updatePreferences'])->name('profile.preferences');
+            Route::put('/update-password', [CommunityProfileController::class, 'updatePassword'])->name('profile.password');
+            Route::delete('/delete-profile-image', [CommunityProfileController::class, 'deleteProfileImage'])->name('profile.delete-image');
+            Route::delete('/delete-cover-image', [CommunityProfileController::class, 'deleteCoverImage'])->name('profile.delete-cover');
+        });
     });
 });
 Route::prefix('noises')->name('noises.')->group(function () {
@@ -110,7 +110,7 @@ Route::prefix('noise-types')->name('noise-types.')->group(function () {
     Route::get('/{type}', [NoiseTypeController::class, 'show'])->name('show');
 });
 // Profile routes
-Route::get('/profile/{user:username}', [ProfileController::class, 'show'])->name('profile.community');
+Route::get('/profile/{user:username}', [CommunityProfileController::class, 'show'])->name('profile.community');
 
 // Support groups routes
 Route::get('/support-groups', [SupportGroupController::class, 'index'])->name('support-groups.index');

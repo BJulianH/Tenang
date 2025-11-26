@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
-class ProfileController extends Controller
+class CommunityProfileController extends Controller
 {
     public function show($username)
     {
