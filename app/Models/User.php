@@ -15,18 +15,27 @@ class User extends Authenticatable
     /**
      * The attributes that are mass assignable.
      *
-     * @var list<string>
+     * @var array<int, string>
      */
     protected $fillable = [
         'name',
         'email',
         'password',
+        'role',
+        'phone',
+        'birthdate',
+        'bio',
+        'avatar',
+        'streak',
+        'coins',
+        'diamonds',
+        'level',
     ];
 
     /**
      * The attributes that should be hidden for serialization.
      *
-     * @var list<string>
+     * @var array<int, string>
      */
     protected $hidden = [
         'password',
@@ -43,6 +52,28 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'birthdate' => 'date',
         ];
+    }
+
+    /**
+     * Accessor untuk avatar URL
+     */
+    public function getAvatarUrlAttribute()
+    {
+        if ($this->avatar) {
+            return asset('storage/avatars/' . $this->avatar);
+        }
+        
+        // Generate avatar berdasarkan inisial nama
+        return 'https://ui-avatars.com/api/?name=' . urlencode($this->name) . '&color=4caf50&background=dcf2dc';
+    }
+
+    /**
+     * Check if user is admin
+     */
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
     }
 }

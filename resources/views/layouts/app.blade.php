@@ -299,13 +299,14 @@
 
                         <!-- User Profile Dropdown -->
                         <div class="relative">
-                            <button class="flex items-center space-x-2 focus:outline-none">
-                                <div class="w-8 h-8 rounded-full bg-gradient-to-r from-primary-400 to-secondary-400 flex items-center justify-center text-white font-bold text-sm">
-                                    {{ substr(auth()->user()->name, 0, 1) ?? 'U' }}
-                                </div>
-                                <span class="text-neutral-700 font-medium">{{ auth()->user()->name ?? 'User' }}</span>
-                                <i class="fas fa-chevron-down text-neutral-500"></i>
-                            </button>
+                            <a href="{{ route('profile') }}" class="block">
+                                <button id="profile-toggle" class="flex items-center space-x-2 focus:outline-none **hover-lift** transition duration-300 ease-in-out p-2 rounded-lg">
+                                    <div class="w-8 h-8 rounded-full bg-gradient-to-r from-primary-400 to-secondary-400 flex items-center justify-center text-white font-bold text-sm">
+                                        {{ substr(auth()->user()->name, 0, 1) ?? 'U' }}
+                                    </div>
+                                    <span class="text-neutral-700 font-medium">{{ auth()->user()->name ?? 'User' }}</span>
+                                </button>
+                            </a>
                         </div>
                     </div>
                 </div>
