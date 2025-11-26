@@ -25,10 +25,10 @@ class ProfileController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
             'phone' => 'nullable|string|max:20',
-            'birthdate' => 'nullable|date|before:today',
+            'date_of_birth' => 'nullable|date|before:today',
             'bio' => 'nullable|string|max:500',
         ], [
-            'birthdate.before' => 'Tanggal lahir harus sebelum hari ini.',
+            'date_of_birth.before' => 'Tanggal lahir harus sebelum hari ini.',
         ]);
 
         if ($validator->fails()) {
@@ -44,7 +44,7 @@ class ProfileController extends Controller
                 'name' => $request->name,
                 'email' => $request->email,
                 'phone' => $request->phone,
-                'birthdate' => $request->birthdate,
+                'date_of_birth' => $request->birthdate,
                 'bio' => $request->bio,
             ]);
 
