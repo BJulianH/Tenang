@@ -210,11 +210,12 @@
                         </a>
                     </li>
                     <li>
-                        <a href="" class="flex items-center p-3 text-neutral-700 rounded-lg hover:bg-primary-50 hover:text-primary-600 transition-colors">
-                            <i class="fas fa-meditation w-6 text-center"></i>
-                            <span class="sidebar-text ml-3 font-medium">Meditation</span>
+                        <a href="{{ route('journal.index') }}" class="flex items-center p-3 text-neutral-700 rounded-lg hover:bg-primary-50 hover:text-primary-600 transition-colors">
+                            <i class="fas fa-book w-6 text-center"></i>
+                            <span class="sidebar-text ml-3 font-medium">Journal</span>
                         </a>
                     </li>
+
                     <li>
                         <a href="" class="flex items-center p-3 text-neutral-700 rounded-lg hover:bg-primary-50 hover:text-primary-600 transition-colors">
                             <i class="fas fa-tasks w-6 text-center"></i>

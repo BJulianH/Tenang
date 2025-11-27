@@ -141,6 +141,86 @@
     .text-red-500 {
         color: #f44336;
     }
+
+    .mood-option {
+    transition: all 0.3s ease;
+    }
+
+    .mood-option input:checked + div {
+    border-color: #4caf50;
+    background-color: #f0f9f0;
+    }
+
+    .mood-option:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Mood Option Styles */
+    .mood-option input:checked + label {
+        border-color: #4caf50;
+        background-color: #f0f9f0;
+        transform: scale(1.02);
+        box-shadow: 0 4px 6px -1px rgba(76, 175, 80, 0.1), 0 2px 4px -1px rgba(76, 175, 80, 0.06);
+    }
+
+    .mood-option input:checked + label .mood-icon-container {
+        transform: scale(1.1);
+    }
+
+    .mood-option label {
+        transition: all 0.3s ease;
+    }
+
+    .mood-option:hover label {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Line Chart Container */
+    .line-chart-container {
+        position: relative;
+        width: 100%;
+    }
+
+    /* Scrollbar untuk mood entries */
+    #mood-entries::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    #mood-entries::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 3px;
+    }
+
+    #mood-entries::-webkit-scrollbar-thumb {
+        background: #c1c1c1;
+        border-radius: 3px;
+    }
+
+    #mood-entries::-webkit-scrollbar-thumb:hover {
+        background: #a8a8a8;
+    }
+
+    /* Modal Styles */
+    #deleteMoodModal {
+        transition: opacity 0.3s ease;
+    }
+    
+    #deleteMoodModal .modal-content {
+        transform: scale(0.7);
+        opacity: 0;
+        transition: all 0.3s ease;
+    }
+    
+    #deleteMoodModal.show {
+        display: flex !important;
+    }
+    
+    #deleteMoodModal.show .modal-content {
+        transform: scale(1);
+        opacity: 1;
+    }
 </style>
 @endsection
 
@@ -420,88 +500,233 @@
                 <div id="mental-health" class="tab-content">
                     <h3 class="text-xl font-bold text-neutral-800 mb-6">Informasi Kesehatan Mental</h3>
                     
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <!-- Mood Tracking Section -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                        <!-- Mood Tracking Form -->
                         <div class="mental-health-card p-5">
                             <div class="flex items-center mb-4">
                                 <div class="w-12 h-12 rounded-full bg-primary-100 flex items-center justify-center text-primary-600 mr-4">
-                                    <i class="fas fa-heartbeat text-xl"></i>
+                                    <i class="fas fa-smile text-xl"></i>
                                 </div>
                                 <div>
-                                    <h4 class="font-bold text-neutral-800">Kesehatan Emosional</h4>
-                                    <p class="text-sm text-neutral-600">Berdasarkan 30 hari terakhir</p>
+                                    <h4 class="font-bold text-neutral-800">Lacak Mood Anda</h4>
+                                    <p class="text-sm text-neutral-600">Bagaimana perasaan Anda hari ini?</p>
                                 </div>
                             </div>
-                            <div class="flex justify-between items-center">
-                                <div class="flex items-center">
-                                    <span class="wellness-indicator wellness-good"></span>
-                                    <span class="text-neutral-700 font-medium">Baik</span>
+                            
+                            <form id="mood-form" action="{{ route('mood.tracking.store') }}" method="POST">
+                                @csrf
+                                <div class="mb-4">
+                                    <label class="block text-sm font-medium text-neutral-700 mb-3">Pilih Mood</label>
+                                    <div class="grid grid-cols-2 gap-3" id="mood-options">
+                                        @foreach(['senang', 'sedih', 'cemas', 'stress', 'tenang', 'marah', 'lelah'] as $mood)
+                                            <div class="mood-option" data-mood="{{ $mood }}">
+                                                <input type="radio" name="mood" value="{{ $mood }}" class="sr-only" id="mood-{{ $mood }}">
+                                                <label for="mood-{{ $mood }}" class="flex items-center p-3 border-2 border-neutral-200 rounded-lg cursor-pointer hover:bg-neutral-50 transition-all duration-200 h-full">
+                                                    <div class="flex items-center w-full">
+                                                        <div class="w-8 h-8 rounded-full flex items-center justify-center mr-3 transition-all duration-200
+                                                            @if($mood === 'senang') bg-green-100 text-green-600 @endif
+                                                            @if($mood === 'sedih') bg-blue-100 text-blue-600 @endif
+                                                            @if($mood === 'cemas') bg-yellow-100 text-yellow-600 @endif
+                                                            @if($mood === 'stress') bg-red-100 text-red-600 @endif
+                                                            @if($mood === 'tenang') bg-teal-100 text-teal-600 @endif
+                                                            @if($mood === 'marah') bg-orange-100 text-orange-600 @endif
+                                                            @if($mood === 'lelah') bg-gray-100 text-gray-600 @endif">
+                                                            <i class="fas 
+                                                                @if($mood === 'senang') fa-smile @endif
+                                                                @if($mood === 'sedih') fa-frown @endif
+                                                                @if($mood === 'cemas') fa-flushed @endif
+                                                                @if($mood === 'stress') fa-dizzy @endif
+                                                                @if($mood === 'tenang') fa-smile @endif
+                                                                @if($mood === 'marah') fa-angry @endif
+                                                                @if($mood === 'lelah') fa-tired @endif
+                                                            "></i>
+                                                        </div>
+                                                        <span class="text-sm font-medium text-neutral-700">{{ ucfirst($mood) }}</span>
+                                                    </div>
+                                                </label>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                    @error('mood')
+                                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                    @enderror
                                 </div>
-                                <div class="text-right">
-                                    <p class="text-2xl font-bold text-primary-600">7.5</p>
-                                    <p class="text-xs text-neutral-500">dari 10</p>
+                                
+                                <div class="mb-4">
+                                    <label for="mood_description" class="block text-sm font-medium text-neutral-700 mb-2">Deskripsi Mood (Opsional)</label>
+                                    <textarea name="description" id="mood_description" rows="3" 
+                                        class="w-full px-4 py-3 border border-neutral-300 rounded-lg input-field focus:ring-2 focus:ring-primary-500 focus:border-primary-500" 
+                                        placeholder="Ceritakan lebih detail tentang perasaan Anda hari ini...">{{ old('description') }}</textarea>
+                                    @error('description')
+                                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                    @enderror
                                 </div>
-                            </div>
+                                
+                                <button type="submit" class="w-full px-4 py-3 bg-primary-500 text-white rounded-lg font-medium hover:bg-primary-600 transition-colors">
+                                    <i class="fas fa-save mr-2"></i>Simpan Mood
+                                </button>
+                            </form>
                         </div>
                         
+                        <!-- Latest Mood & Stats -->
                         <div class="mental-health-card p-5">
                             <div class="flex items-center mb-4">
                                 <div class="w-12 h-12 rounded-full bg-secondary-100 flex items-center justify-center text-secondary-600 mr-4">
-                                    <i class="fas fa-bed text-xl"></i>
+                                    <i class="fas fa-chart-line text-xl"></i>
                                 </div>
                                 <div>
-                                    <h4 class="font-bold text-neutral-800">Kualitas Tidur</h4>
-                                    <p class="text-sm text-neutral-600">Rata-rata mingguan</p>
+                                    <h4 class="font-bold text-neutral-800">Statistik Mood</h4>
+                                    <p class="text-sm text-neutral-600">Ringkasan 7 hari terakhir</p>
                                 </div>
                             </div>
-                            <div class="flex justify-between items-center">
-                                <div class="flex items-center">
-                                    <span class="wellness-indicator wellness-good"></span>
-                                    <span class="text-neutral-700 font-medium">Baik</span>
+                            
+                            <!-- Latest Mood -->
+                            @if(auth()->user()->latestMood)
+                                <div class="mb-6 p-4 bg-neutral-50 rounded-lg border border-neutral-200">
+                                    <h5 class="font-medium text-neutral-700 mb-2">Mood Terakhir</h5>
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center">
+                                            <span class="px-3 py-1 rounded-full text-sm font-medium {{ auth()->user()->latestMood->mood_color }}">
+                                                <i class="{{ auth()->user()->latestMood->mood_icon }} mr-2"></i>
+                                                {{ ucfirst(auth()->user()->latestMood->mood) }}
+                                            </span>
+                                        </div>
+                                        <span class="text-sm text-neutral-500">{{ auth()->user()->latestMood->created_at->format('d M Y') }}</span>
+                                    </div>
+                                    @if(auth()->user()->latestMood->description)
+                                        <p class="text-sm text-neutral-600 mt-2">"{{ auth()->user()->latestMood->description }}"</p>
+                                    @endif
                                 </div>
-                                <div class="text-right">
-                                    <p class="text-2xl font-bold text-secondary-600">6.8</p>
-                                    <p class="text-xs text-neutral-500">jam per malam</p>
-                                </div>
+                            @endif
+                            
+                            <!-- Mood Statistics -->
+                            <div class="space-y-3">
+                                @php
+                                    $moodStats = auth()->user()->moodTrackings()
+                                        ->where('created_at', '>=', now()->subDays(7))
+                                        ->selectRaw('mood, COUNT(*) as count')
+                                        ->groupBy('mood')
+                                        ->get()
+                                        ->keyBy('mood');
+                                    
+                                    $totalMoods = $moodStats->sum('count');
+                                @endphp
+                                
+                                @foreach(['senang', 'tenang', 'lelah', 'cemas', 'sedih', 'marah', 'stress'] as $mood)
+                                    @if(isset($moodStats[$mood]))
+                                        @php
+                                            $percentage = $totalMoods > 0 ? ($moodStats[$mood]->count / $totalMoods) * 100 : 0;
+                                        @endphp
+                                        <div>
+                                            <div class="flex justify-between text-sm mb-1">
+                                                <span class="text-neutral-600 capitalize">{{ $mood }}</span>
+                                                <span class="font-medium text-neutral-700">{{ $moodStats[$mood]->count }}x ({{ number_format($percentage, 1) }}%)</span>
+                                            </div>
+                                            <div class="progress-bar">
+                                                <div class="progress-fill 
+                                                    @if($mood === 'senang') bg-green-500 @endif
+                                                    @if($mood === 'sedih') bg-blue-500 @endif
+                                                    @if($mood === 'cemas') bg-yellow-500 @endif
+                                                    @if($mood === 'stress') bg-red-500 @endif
+                                                    @if($mood === 'tenang') bg-teal-500 @endif
+                                                    @if($mood === 'marah') bg-orange-500 @endif
+                                                    @if($mood === 'lelah') bg-gray-500 @endif
+                                                " style="width: {{ $percentage }}%"></div>
+                                            </div>
+                                        </div>
+                                    @endif
+                                @endforeach
+                                    
+                                @if($totalMoods === 0)
+                                    <p class="text-neutral-500 text-sm text-center py-4">Belum ada data mood tracking.</p>
+                                @endif
                             </div>
                         </div>
                     </div>
                     
+                    <!-- Riwayat Mood 7 Hari Terakhir - Grafik Garis -->
                     <div class="mb-8">
-                        <h4 class="font-bold text-neutral-800 mb-4">Riwayat Mood 30 Hari Terakhir</h4>
-                        <div class="bg-white rounded-lg border border-neutral-200 p-4">
-                            <div class="h-40 flex items-end justify-between">
-                                <div class="text-center">
-                                    <div class="h-32 w-6 bg-primary-300 rounded-t mx-auto mb-1"></div>
-                                    <span class="text-xs text-neutral-500">Sen</span>
+                        <div class="flex justify-between items-center mb-4">
+                            <h4 class="font-bold text-neutral-800">Riwayat Mood 7 Hari Terakhir</h4>
+                            <span class="text-sm text-neutral-600">{{ auth()->user()->moodTrackings()->where('created_at', '>=', now()->subDays(7))->count() }} catatan</span>
+                        </div>
+                        
+                        @if(auth()->user()->moodTrackings()->where('created_at', '>=', now()->subDays(7))->count() > 0)
+                            <div class="bg-white rounded-lg border border-neutral-200 p-4 overflow-hidden">
+                                <div class="line-chart-container" style="height: 200px; position: relative;">
+                                    <canvas id="moodLineChart" height="200"></canvas>
                                 </div>
-                                <div class="text-center">
-                                    <div class="h-24 w-6 bg-primary-300 rounded-t mx-auto mb-1"></div>
-                                    <span class="text-xs text-neutral-500">Sel</span>
+                            </div>
+                            
+                            <!-- Recent Mood Entries -->
+                            <div class="mt-6">
+                                <h5 class="font-medium text-neutral-700 mb-3">Catatan Mood Terbaru</h5>
+                                <div class="space-y-3 max-h-60 overflow-y-auto pr-2" id="mood-entries">
+                                    @foreach(auth()->user()->moodTrackings()->latest()->take(10)->get() as $tracking)
+                                        <div class="flex items-center justify-between p-3 bg-white border border-neutral-200 rounded-lg mood-entry" data-id="{{ $tracking->id }}">
+                                            <div class="flex items-center">
+                                                <div class="w-10 h-10 rounded-full flex items-center justify-center mr-3
+                                                    @if($tracking->mood === 'senang') bg-green-100 text-green-600 @endif
+                                                    @if($tracking->mood === 'sedih') bg-blue-100 text-blue-600 @endif
+                                                    @if($tracking->mood === 'cemas') bg-yellow-100 text-yellow-600 @endif
+                                                    @if($tracking->mood === 'stress') bg-red-100 text-red-600 @endif
+                                                    @if($tracking->mood === 'tenang') bg-teal-100 text-teal-600 @endif
+                                                    @if($tracking->mood === 'marah') bg-orange-100 text-orange-600 @endif
+                                                    @if($tracking->mood === 'lelah') bg-gray-100 text-gray-600 @endif">
+                                                    <i class="{{ $tracking->mood_icon }}"></i>
+                                                </div>
+                                                <div>
+                                                    <p class="font-medium text-neutral-800 capitalize">{{ $tracking->mood }}</p>
+                                                    @if($tracking->description)
+                                                        <p class="text-sm text-neutral-600 truncate max-w-xs">{{ $tracking->description }}</p>
+                                                    @endif
+                                                    <p class="text-xs text-neutral-500">{{ $tracking->created_at->format('d M Y H:i') }}</p>
+                                                </div>
+                                            </div>
+                                            <button type="button" class="text-red-500 hover:text-red-700 transition-colors delete-mood-btn" data-id="{{ $tracking->id }}">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    @endforeach
                                 </div>
-                                <div class="text-center">
-                                    <div class="h-28 w-6 bg-primary-300 rounded-t mx-auto mb-1"></div>
-                                    <span class="text-xs text-neutral-500">Rab</span>
+                            </div>
+                        @else
+                            <div class="bg-white rounded-lg border border-neutral-200 p-8 text-center">
+                                <i class="fas fa-smile text-4xl text-neutral-400 mb-3"></i>
+                                <p class="text-neutral-500">Belum ada riwayat mood tracking.</p>
+                                <p class="text-sm text-neutral-400 mt-1">Gunakan form di atas untuk mulai mencatat mood Anda.</p>
+                            </div>
+                        @endif
+                    </div>
+                    
+                    <!-- Modal Konfirmasi Hapus -->
+                    <div id="deleteMoodModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+                        <div class="bg-white rounded-lg p-6 max-w-sm mx-4 modal-content">
+                            <div class="text-center">
+                                <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <i class="fas fa-exclamation-triangle text-red-600 text-2xl"></i>
                                 </div>
-                                <div class="text-center">
-                                    <div class="h-20 w-6 bg-primary-300 rounded-t mx-auto mb-1"></div>
-                                    <span class="text-xs text-neutral-500">Kam</span>
-                                </div>
-                                <div class="text-center">
-                                    <div class="h-30 w-6 bg-primary-300 rounded-t mx-auto mb-1"></div>
-                                    <span class="text-xs text-neutral-500">Jum</span>
-                                </div>
-                                <div class="text-center">
-                                    <div class="h-26 w-6 bg-primary-300 rounded-t mx-auto mb-1"></div>
-                                    <span class="text-xs text-neutral-500">Sab</span>
-                                </div>
-                                <div class="text-center">
-                                    <div class="h-22 w-6 bg-primary-300 rounded-t mx-auto mb-1"></div>
-                                    <span class="text-xs text-neutral-500">Min</span>
+                                <h3 class="text-lg font-bold text-neutral-800 mb-2">Hapus Catatan Mood</h3>
+                                <p class="text-neutral-600 mb-6">Apakah Anda yakin ingin menghapus catatan mood ini? Tindakan ini tidak dapat dibatalkan.</p>
+                                
+                                <div class="flex space-x-3">
+                                    <button type="button" id="cancelDelete" class="flex-1 px-4 py-2 border border-neutral-300 text-neutral-700 rounded-lg font-medium hover:bg-neutral-50 transition-colors">
+                                        Batal
+                                    </button>
+                                    <form id="deleteMoodForm" method="POST" class="flex-1">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="w-full px-4 py-2 bg-red-500 text-white rounded-lg font-medium hover:bg-red-600 transition-colors">
+                                            Hapus
+                                        </button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
                     </div>
                     
+                    <!-- Tetap pertahankan bagian Aktivitas Kesehatan Mental yang sudah ada -->
                     <div>
                         <h4 class="font-bold text-neutral-800 mb-4">Aktivitas Kesehatan Mental</h4>
                         <div class="space-y-4">
@@ -663,5 +888,358 @@
         const activeTab = urlParams.get('tab') || 'edit-profile';
         switchTab(activeTab);
     });
+
+        // Mood Tracking Functionality
+    // Mood Tracking Functionality
+function initializeMoodTracking() {
+    // Mood selection with visual feedback
+    const moodOptions = document.querySelectorAll('.mood-option');
+    
+    moodOptions.forEach(option => {
+        const input = option.querySelector('input[type="radio"]');
+        const label = option.querySelector('label');
+        
+        // Add visual feedback on click
+        label.addEventListener('click', (e) => {
+            // Remove active class from all options
+            moodOptions.forEach(opt => {
+                const optLabel = opt.querySelector('label');
+                optLabel.classList.remove('border-primary-500', 'bg-primary-50', 'ring-2', 'ring-primary-200');
+            });
+            
+            // Add active class to clicked option
+            label.classList.add('border-primary-500', 'bg-primary-50', 'ring-2', 'ring-primary-200');
+        });
+        
+        // Check if this option is pre-selected (from old data)
+        if (input.checked) {
+            label.classList.add('border-primary-500', 'bg-primary-50', 'ring-2', 'ring-primary-200');
+        }
+    });
+    
+    // Enter key submission for mood form
+    const moodForm = document.getElementById('mood-form');
+    const moodDescription = document.getElementById('mood_description');
+    
+    if (moodForm && moodDescription) {
+        moodDescription.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+                // Ctrl+Enter or Cmd+Enter to submit
+                e.preventDefault();
+                moodForm.submit();
+            }
+        });
+        
+        // Also allow Enter key when a mood is selected and textarea is focused
+        moodForm.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                const selectedMood = moodForm.querySelector('input[name="mood"]:checked');
+                if (selectedMood && document.activeElement === moodDescription) {
+                    e.preventDefault();
+                    moodForm.submit();
+                }
+            }
+        });
+    }
+    
+    // Initialize line chart with real data
+    initializeMoodLineChart();
+    
+    // Initialize delete confirmation modal
+    initializeDeleteModal();
+}
+
+// Mood Line Chart dengan Data Real
+function initializeMoodLineChart() {
+    const canvas = document.getElementById('moodLineChart');
+    if (!canvas) return;
+    
+    const ctx = canvas.getContext('2d');
+    
+    // Get real mood data from the page
+    const moodData = getRealMoodChartData();
+    
+    if (moodData.values.filter(v => v !== null).length === 0) {
+        canvas.parentElement.innerHTML = '<p class="text-center text-neutral-500 py-8">Belum ada data mood untuk ditampilkan dalam grafik.</p>';
+        return;
+    }
+    
+    // Mood value mapping for chart
+    const moodValues = {
+        'senang': 6,
+        'tenang': 5,
+        'lelah': 4,
+        'cemas': 3,
+        'sedih': 2,
+        'marah': 1,
+        'stress': 0
+    };
+    
+    // Mood colors
+    const moodColors = {
+        'senang': '#4caf50',
+        'tenang': '#14b8a6', 
+        'lelah': '#6b7280',
+        'cemas': '#eab308',
+        'sedih': '#3b82f6',
+        'marah': '#f97316',
+        'stress': '#ef4444'
+    };
+    
+    // Create gradient
+    const gradient = ctx.createLinearGradient(0, 0, 0, 200);
+    gradient.addColorStop(0, 'rgba(76, 175, 80, 0.3)');
+    gradient.addColorStop(1, 'rgba(76, 175, 80, 0.05)');
+    
+    // Draw chart
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: moodData.labels,
+            datasets: [{
+                label: 'Tingkat Mood',
+                data: moodData.values,
+                borderColor: '#4caf50',
+                backgroundColor: gradient,
+                borderWidth: 3,
+                fill: true,
+                tension: 0.4,
+                pointBackgroundColor: moodData.colors,
+                pointBorderColor: '#ffffff',
+                pointBorderWidth: 2,
+                pointRadius: 6,
+                pointHoverRadius: 8,
+                spanGaps: true // Allow gaps in data
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const moodText = moodData.moods[context.dataIndex];
+                            return moodText ? `Mood: ${moodText}` : 'Tidak ada data';
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    min: 0,
+                    max: 6,
+                    ticks: {
+                        callback: function(value) {
+                            const moodLabels = {
+                                0: 'Stress',
+                                1: 'Marah', 
+                                2: 'Sedih',
+                                3: 'Cemas',
+                                4: 'Lelah',
+                                5: 'Tenang',
+                                6: 'Senang'
+                            };
+                            return moodLabels[value];
+                        },
+                        stepSize: 1
+                    },
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.1)'
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false
+                    }
+                }
+            },
+            interaction: {
+                intersect: false,
+                mode: 'index'
+            }
+        }
+    });
+}
+
+// Get real mood data from user's actual entries
+function getRealMoodChartData() {
+    const moodValues = {
+        'senang': 6,
+        'tenang': 5,
+        'lelah': 4,
+        'cemas': 3,
+        'sedih': 2,
+        'marah': 1,
+        'stress': 0
+    };
+    
+    const moodColors = {
+        'senang': '#4caf50',
+        'tenang': '#14b8a6',
+        'lelah': '#6b7280',
+        'cemas': '#eab308',
+        'sedih': '#3b82f6',
+        'marah': '#f97316',
+        'stress': '#ef4444'
+    };
+    
+    // Get mood entries from the page
+    const moodEntries = document.querySelectorAll('.mood-entry');
+    const moodDataMap = new Map();
+    
+    // Process each mood entry
+    moodEntries.forEach(entry => {
+        const moodText = entry.querySelector('.font-medium').textContent.toLowerCase();
+        const dateText = entry.querySelector('.text-xs').textContent;
+        
+        // Parse date - assuming format like "15 Mar 2024 14:30"
+        const date = new Date(dateText);
+        const dateKey = date.toDateString();
+        
+        // Only include entries from last 7 days
+        const sevenDaysAgo = new Date();
+        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+        
+        if (date >= sevenDaysAgo) {
+            moodDataMap.set(dateKey, {
+                mood: moodText,
+                value: moodValues[moodText],
+                color: moodColors[moodText],
+                date: date
+            });
+        }
+    });
+    
+    // Generate last 7 days data
+    const labels = [];
+    const values = [];
+    const colors = [];
+    const moods = [];
+    
+    for (let i = 6; i >= 0; i--) {
+        const date = new Date();
+        date.setDate(date.getDate() - i);
+        date.setHours(0, 0, 0, 0);
+        
+        const dateKey = date.toDateString();
+        labels.push(date.getDate() + '/' + (date.getMonth() + 1));
+        
+        if (moodDataMap.has(dateKey)) {
+            const data = moodDataMap.get(dateKey);
+            values.push(data.value);
+            colors.push(data.color);
+            moods.push(data.mood);
+        } else {
+            values.push(null);
+            colors.push('#cbd5e1'); // gray-300 for no data
+            moods.push(null);
+        }
+    }
+    
+    return { labels, values, colors, moods };
+}
+
+// Delete Confirmation Modal
+function initializeDeleteModal() {
+    const modal = document.getElementById('deleteMoodModal');
+    const cancelBtn = document.getElementById('cancelDelete');
+    const deleteForm = document.getElementById('deleteMoodForm');
+    let currentMoodId = null;
+    
+    // Open modal when delete button is clicked
+    document.querySelectorAll('.delete-mood-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            currentMoodId = this.getAttribute('data-id');
+            const deleteUrl = `{{ route('mood.tracking.destroy', '') }}/${currentMoodId}`;
+            deleteForm.action = deleteUrl;
+            modal.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        });
+    });
+    
+    // Close modal when cancel button is clicked
+    cancelBtn.addEventListener('click', function() {
+        modal.classList.remove('show');
+        document.body.style.overflow = 'auto';
+        currentMoodId = null;
+    });
+    
+    // Close modal when clicking outside
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            modal.classList.remove('show');
+            document.body.style.overflow = 'auto';
+            currentMoodId = null;
+        }
+    });
+    
+    // Handle form submission
+    deleteForm.addEventListener('submit', function(e) {
+        // The form will submit normally, no need for AJAX unless you want it
+        modal.classList.remove('show');
+        document.body.style.overflow = 'auto';
+    });
+    
+    // Close with Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modal.classList.contains('show')) {
+            modal.classList.remove('show');
+            document.body.style.overflow = 'auto';
+            currentMoodId = null;
+        }
+    });
+}
+
+// Initialize when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    initializeMoodTracking();
+    
+    // Add event listener for mood form submission
+    const moodForm = document.getElementById('mood-form');
+    if (moodForm) {
+        moodForm.addEventListener('submit', function(e) {
+            const selectedMood = this.querySelector('input[name="mood"]:checked');
+            if (!selectedMood) {
+                e.preventDefault();
+                showToast('Pilih mood terlebih dahulu!', 'error');
+                return;
+            }
+            
+            // Add loading state
+            const submitBtn = this.querySelector('button[type="submit"]');
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Menyimpan...';
+            submitBtn.disabled = true;
+        });
+    }
+});
+
+// Toast notification function
+function showToast(message, type = 'info') {
+    const toast = document.createElement('div');
+    toast.className = `fixed top-4 right-4 px-6 py-3 rounded-lg shadow-lg text-white font-medium z-50 transform translate-x-full transition-transform duration-300 ${
+        type === 'error' ? 'bg-red-500' : 
+        type === 'success' ? 'bg-green-500' : 'bg-blue-500'
+    }`;
+    toast.textContent = message;
+    
+    document.body.appendChild(toast);
+    
+    // Animate in
+    setTimeout(() => {
+        toast.classList.remove('translate-x-full');
+    }, 100);
+    
+    // Remove after 3 seconds
+    setTimeout(() => {
+        toast.classList.add('translate-x-full');
+        setTimeout(() => {
+            document.body.removeChild(toast);
+        }, 300);
+    }, 3000);
+}
 </script>
 @endsection

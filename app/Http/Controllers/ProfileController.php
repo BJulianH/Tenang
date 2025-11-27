@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers; // Pastikan namespace ini
+namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -14,7 +14,7 @@ class ProfileController extends Controller
     public function edit()
     {
         $user = Auth::user();
-        return view('profile.profile', compact('user'));
+        return view('profile', compact('user'));
     }
 
     public function update(Request $request)
@@ -25,18 +25,15 @@ class ProfileController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
             'phone' => 'nullable|string|max:20',
-            'birthdate' => 'nullable|date|before:today',
+            'birthdate' => 'nullable|date',
             'bio' => 'nullable|string|max:500',
-        ], [
-            'birthdate.before' => 'Tanggal lahir harus sebelum hari ini.',
         ]);
 
         if ($validator->fails()) {
             return redirect()->back()
                 ->withErrors($validator)
                 ->withInput()
-                ->with('error', 'Terjadi kesalahan dalam mengupdate profil.')
-                ->with('active_tab', 'edit-profile');
+                ->with('error', 'Terjadi kesalahan dalam mengupdate profil.');
         }
 
         try {
@@ -48,13 +45,9 @@ class ProfileController extends Controller
                 'bio' => $request->bio,
             ]);
 
-            return redirect()->back()
-                ->with('success', 'Profil berhasil diperbarui!')
-                ->with('active_tab', 'edit-profile');
+            return redirect()->back()->with('success', 'Profil berhasil diperbarui!');
         } catch (\Exception $e) {
-            return redirect()->back()
-                ->with('error', 'Gagal memperbarui profil: ' . $e->getMessage())
-                ->with('active_tab', 'edit-profile');
+            return redirect()->back()->with('error', 'Gagal memperbarui profil: ' . $e->getMessage());
         }
     }
 
@@ -72,16 +65,13 @@ class ProfileController extends Controller
             return redirect()->back()
                 ->withErrors($validator)
                 ->withInput()
-                ->with('error', 'Terjadi kesalahan dalam mengubah kata sandi.')
-                ->with('active_tab', 'change-password');
+                ->with('error', 'Terjadi kesalahan dalam mengubah kata sandi.');
         }
 
         $user = Auth::user();
 
         if (!Hash::check($request->current_password, $user->password)) {
-            return redirect()->back()
-                ->with('error', 'Kata sandi saat ini tidak sesuai.')
-                ->with('active_tab', 'change-password');
+            return redirect()->back()->with('error', 'Kata sandi saat ini tidak sesuai.');
         }
 
         try {
@@ -89,72 +79,107 @@ class ProfileController extends Controller
                 'password' => Hash::make($request->new_password)
             ]);
 
-            return redirect()->back()
-                ->with('success', 'Kata sandi berhasil diubah!')
-                ->with('active_tab', 'change-password');
+            return redirect()->back()->with('success', 'Kata sandi berhasil diubah!');
         } catch (\Exception $e) {
-            return redirect()->back()
-                ->with('error', 'Gagal mengubah kata sandi: ' . $e->getMessage())
-                ->with('active_tab', 'change-password');
+            return redirect()->back()->with('error', 'Gagal mengubah kata sandi: ' . $e->getMessage());
         }
     }
 
-    public function updateAvatar(Request $request)
-        {
-            $validator = Validator::make($request->all(), [
-                'avatar' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
-            ]);
-        
-            if ($validator->fails()) {
-                return redirect()->back()
-                    ->with('error', 'File harus berupa gambar (JPEG, PNG, JPG, GIF, WEBP) dengan ukuran maksimal 2MB.')
-                    ->with('active_tab', 'edit-profile');
-            }
-        
-            $user = Auth::user();
-        
-            try {
-                if ($request->hasFile('avatar')) {
-                    // Pastikan folder avatars exists
-                    if (!Storage::disk('public')->exists('avatars')) {
-                        Storage::disk('public')->makeDirectory('avatars');
-                    }
-                
-                    // Hapus avatar lama jika ada
-                    if ($user->avatar && Storage::disk('public')->exists('avatars/' . $user->avatar)) {
-                        Storage::disk('public')->delete('avatars/' . $user->avatar);
-                    }
-                
-                    // Generate nama file yang unik
-                    $avatarName = $user->id . '_avatar_' . time() . '.' . $request->avatar->getClientOriginalExtension();
-                    
-                    // Simpan avatar baru
-                    $path = $request->avatar->storeAs('avatars', $avatarName, 'public');
-                
-                    // Debug: cek apakah file benar-benar tersimpan
-                    \Log::info('Avatar saved:', [
-                        'path' => $path,
-                        'full_path' => storage_path('app/public/' . $path),
-                        'exists' => Storage::disk('public')->exists($path)
-                    ]);
-                
-                    $user->update([
-                        'avatar' => $avatarName
-                    ]);
-                
-                    return redirect()->back()
-                        ->with('success', 'Foto profil berhasil diubah!')
-                        ->with('active_tab', 'edit-profile');
-                }
-            } catch (\Exception $e) {
-                \Log::error('Avatar upload error: ' . $e->getMessage());
-                return redirect()->back()
-                    ->with('error', 'Gagal mengubah foto profil: ' . $e->getMessage())
-                    ->with('active_tab', 'edit-profile');
-            }
-        
+        public function updateAvatar(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'avatar' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+        ]);
+
+        if ($validator->fails()) {
             return redirect()->back()
-                ->with('error', 'Tidak ada file yang diunggah.')
+                ->with('error', 'File harus berupa gambar (JPEG, PNG, JPG, GIF, WEBP) dengan ukuran maksimal 2MB.')
                 ->with('active_tab', 'edit-profile');
         }
+
+        $user = Auth::user();
+
+        try {
+            if ($request->hasFile('avatar')) {
+                // Pastikan folder avatars exists
+                if (!Storage::disk('public')->exists('avatars')) {
+                    Storage::disk('public')->makeDirectory('avatars');
+                }
+
+                // Hapus avatar lama jika ada
+                if ($user->avatar && Storage::disk('public')->exists('avatars/' . $user->avatar)) {
+                    Storage::disk('public')->delete('avatars/' . $user->avatar);
+                }
+
+                // Generate nama file yang unik
+                $avatarName = $user->id . '_avatar_' . time() . '.' . $request->avatar->getClientOriginalExtension();
+
+                // Simpan avatar baru
+                $path = $request->avatar->storeAs('avatars', $avatarName, 'public');
+
+                // Debug: cek apakah file benar-benar tersimpan
+                \Log::info('Avatar saved:', [
+                    'path' => $path,
+                    'full_path' => storage_path('app/public/' . $path),
+                    'exists' => Storage::disk('public')->exists($path)
+                ]);
+
+                $user->update([
+                    'avatar' => $avatarName
+                ]);
+
+                return redirect()->back()
+                    ->with('success', 'Foto profil berhasil diubah!')
+                    ->with('active_tab', 'edit-profile');
+            }
+        } catch (\Exception $e) {
+            \Log::error('Avatar upload error: ' . $e->getMessage());
+            return redirect()->back()
+                ->with('error', 'Gagal mengubah foto profil: ' . $e->getMessage())
+                ->with('active_tab', 'edit-profile');
+        }
+
+        return redirect()->back()
+            ->with('error', 'Tidak ada file yang diunggah.')
+            ->with('active_tab', 'edit-profile');
+    }
+
+    public function getMoodChartData()
+    {
+        $user = Auth::user();
+        
+        $moodData = $user->moodTrackings()
+            ->where('created_at', '>=', now()->subDays(30))
+            ->selectRaw('DATE(created_at) as date, mood, COUNT(*) as count')
+            ->groupBy('date', 'mood')
+            ->orderBy('date')
+            ->get();
+        
+        $moodValues = [
+            'senang' => 6,
+            'tenang' => 5,
+            'lelah' => 4,
+            'cemas' => 3,
+            'sedih' => 2,
+            'marah' => 1,
+            'stress' => 0
+        ];
+        
+        // Process data for chart
+        $chartData = [];
+        $labels = [];
+        
+        for ($i = 29; $i >= 0; $i--) {
+            $date = now()->subDays($i)->format('Y-m-d');
+            $labels[] = now()->subDays($i)->format('d/m');
+            
+            $dayMood = $moodData->where('date', $date)->first();
+            $chartData[] = $dayMood ? $moodValues[$dayMood->mood] : null;
+        }
+        
+        return response()->json([
+            'labels' => $labels,
+            'data' => $chartData
+        ]);
+    }
 }

@@ -1,625 +1,420 @@
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Study Anywhere and Everywhere</title>
-        <script src="https://cdn.tailwindcss.com"></script>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-        <style>
-            @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-
-            body {
-                font-family: 'Poppins', sans-serif;
-            }
-
-            .gradient-bg {
-                background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            }
-
-            .card-shadow {
-                box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            }
-
-            /* ===== ANIMASI CUSTOM ===== */
-
-            /* Fade In Animations */
-            .fade-in {
-                animation: fadeIn 0.6s ease-in-out;
-            }
-
-            .fade-in-up {
-                animation: fadeInUp 0.8s ease-out;
-            }
-
-            .fade-in-down {
-                animation: fadeInDown 0.8s ease-out;
-            }
-
-            .fade-in-left {
-                animation: fadeInLeft 0.8s ease-out;
-            }
-
-            .fade-in-right {
-                animation: fadeInRight 0.8s ease-out;
-            }
-
-            /* Slide Animations */
-            .slide-in-left {
-                animation: slideInLeft 0.8s ease-out;
-            }
-
-            .slide-in-right {
-                animation: slideInRight 0.8s ease-out;
-            }
-
-            .slide-in-up {
-                animation: slideInUp 0.8s ease-out;
-            }
-
-            .slide-in-down {
-                animation: slideInDown 0.8s ease-out;
-            }
-
-            /* Scale Animations */
-            .scale-in {
-                animation: scaleIn 0.5s ease-out;
-            }
-
-            .scale-in-up {
-                animation: scaleInUp 0.6s ease-out;
-            }
-
-            .pulse-slow {
-                animation: pulse 3s infinite;
-            }
-
-            .bounce-slow {
-                animation: bounce 2s infinite;
-            }
-
-            .float {
-                animation: float 6s ease-in-out infinite;
-            }
-
-            /* Hover Effects */
-            .hover-lift {
-                transition: all 0.3s ease;
-            }
-
-            .hover-lift:hover {
-                transform: translateY(-8px);
-                box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.15);
-            }
-
-            .hover-scale {
-                transition: all 0.3s ease;
-            }
-
-            .hover-scale:hover {
-                transform: scale(1.05);
-            }
-
-            .hover-glow:hover {
-                box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
-            }
-
-            /* Gradient Text */
-            .gradient-text {
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                background-clip: text;
-            }
-
-            .gradient-text-blue {
-                background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                background-clip: text;
-            }
-
-            /* Custom Shadows */
-            .shadow-soft {
-                box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.08);
-            }
-
-            .shadow-medium {
-                box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.15);
-            }
-
-            .shadow-strong {
-                box-shadow: 0 20px 50px -12px rgba(0, 0, 0, 0.25);
-            }
-
-            .shadow-inner-lg {
-                box-shadow: inset 0 4px 8px 0 rgba(0, 0, 0, 0.06);
-            }
-
-            /* Glass Morphism */
-            .glass {
-                background: rgba(255, 255, 255, 0.25);
-                backdrop-filter: blur(10px);
-                border: 1px solid rgba(255, 255, 255, 0.18);
-            }
-
-            .glass-dark {
-                background: rgba(0, 0, 0, 0.25);
-                backdrop-filter: blur(10px);
-                border: 1px solid rgba(255, 255, 255, 0.1);
-            }
-
-            /* Custom Borders */
-            .border-gradient {
-                border: 2px solid transparent;
-                background: linear-gradient(white, white) padding-box,
-                    linear-gradient(135deg, #3b82f6, #8b5cf6) border-box;
-            }
-
-            /* Loading Animations */
-            .spin-slow {
-                animation: spin 3s linear infinite;
-            }
-
-            .ping-slow {
-                animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
-            }
-
-            /* Staggered Animations */
-            .stagger-1 {
-                animation-delay: 0.1s;
-            }
-
-            .stagger-2 {
-                animation-delay: 0.2s;
-            }
-
-            .stagger-3 {
-                animation-delay: 0.3s;
-            }
-
-            .stagger-4 {
-                animation-delay: 0.4s;
-            }
-
-            .stagger-5 {
-                animation-delay: 0.5s;
-            }
-
-            /* Text Effects */
-            .text-shadow {
-                text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            }
-
-            .text-shadow-lg {
-                text-shadow: 0 4px 8px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.08);
-            }
-
-            /* Custom Transitions */
-            .transition-slow {
-                transition: all 0.5s ease;
-            }
-
-            .transition-fast {
-                transition: all 0.2s ease;
-            }
-
-            .transition-all-smooth {
-                transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            }
-
-            /* Background Patterns */
-            .pattern-dots {
-                background-image: radial-gradient(currentColor 1px, transparent 1px);
-                background-size: 16px 16px;
-            }
-
-            .pattern-grid {
-                background-image:
-                    linear-gradient(currentColor 1px, transparent 1px),
-                    linear-gradient(90deg, currentColor 1px, transparent 1px);
-                background-size: 20px 20px;
-            }
-
-            /* ===== KEYFRAMES ===== */
-
-            @keyframes fadeIn {
-                from {
-                    opacity: 0;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindWell - Your Mental Wellness Companion</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        // Primary Green Palette - calming and soothing
+                        primary: {
+                            50: '#f0f9f0',
+                            100: '#dcf2dc',
+                            200: '#bce5bc',
+                            300: '#8fd18f',
+                            400: '#5cb85c',
+                            500: '#4caf50', // Main brand color
+                            600: '#3d8b40',
+                            700: '#2e6b34',
+                            800: '#25572a',
+                            900: '#1e4621',
+                        },
+                        // Secondary Teal Palette - complementary calming colors
+                        secondary: {
+                            50: '#f0fdfa',
+                            100: '#ccfbef',
+                            200: '#99f6e0',
+                            300: '#5eead4',
+                            400: '#2dd4bf',
+                            500: '#14b8a6',
+                            600: '#0d9488',
+                            700: '#0f766e',
+                            800: '#115e59',
+                            900: '#134e4a',
+                        },
+                        // Accent colors for gamification
+                        accent: {
+                            gold: '#ffd700',
+                            silver: '#c0c0c0',
+                            bronze: '#cd7f32',
+                            diamond: '#b9f2ff',
+                        },
+                        // Neutral colors for text and backgrounds
+                        neutral: {
+                            50: '#fafdf9',
+                            100: '#f5f9f3',
+                            200: '#e8f0e5',
+                            300: '#d4e2d0',
+                            400: '#aec5a8',
+                            500: '#8ba886',
+                            600: '#6a8a65',
+                            700: '#546e50',
+                            800: '#40573d',
+                            900: '#2f3f2d',
+                        }
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'ui-sans-serif', 'system-ui'],
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'breathe': 'breathe 4s ease-in-out infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        breathe: {
+                            '0%, 100%': { transform: 'scale(1)' },
+                            '50%': { transform: 'scale(1.05)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
                 }
-
-                to {
-                    opacity: 1;
-                }
-            }
-
-            @keyframes fadeInUp {
-                from {
-                    opacity: 0;
-                    transform: translateY(30px);
-                }
-
-                to {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
-            }
-
-            @keyframes fadeInDown {
-                from {
-                    opacity: 0;
-                    transform: translateY(-30px);
-                }
-
-                to {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
-            }
-
-            @keyframes fadeInLeft {
-                from {
-                    opacity: 0;
-                    transform: translateX(-30px);
-                }
-
-                to {
-                    opacity: 1;
-                    transform: translateX(0);
-                }
-            }
-
-            @keyframes fadeInRight {
-                from {
-                    opacity: 0;
-                    transform: translateX(30px);
-                }
-
-                to {
-                    opacity: 1;
-                    transform: translateX(0);
-                }
-            }
-
-            @keyframes slideInLeft {
-                from {
-                    transform: translateX(-100%);
-                    opacity: 0;
-                }
-
-                to {
-                    transform: translateX(0);
-                    opacity: 1;
-                }
-            }
-
-            @keyframes slideInRight {
-                from {
-                    transform: translateX(100%);
-                    opacity: 0;
-                }
-
-                to {
-                    transform: translateX(0);
-                    opacity: 1;
-                }
-            }
-
-            @keyframes slideInUp {
-                from {
-                    transform: translateY(100%);
-                    opacity: 0;
-                }
-
-                to {
-                    transform: translateY(0);
-                    opacity: 1;
-                }
-            }
-
-            @keyframes slideInDown {
-                from {
-                    transform: translateY(-100%);
-                    opacity: 0;
-                }
-
-                to {
-                    transform: translateY(0);
-                    opacity: 1;
-                }
-            }
-
-            @keyframes scaleIn {
-                from {
-                    transform: scale(0.9);
-                    opacity: 0;
-                }
-
-                to {
-                    transform: scale(1);
-                    opacity: 1;
-                }
-            }
-
-            @keyframes scaleInUp {
-                from {
-                    transform: scale(0.9) translateY(20px);
-                    opacity: 0;
-                }
-
-                to {
-                    transform: scale(1) translateY(0);
-                    opacity: 1;
-                }
-            }
-
-            @keyframes float {
-
-                0%,
-                100% {
-                    transform: translateY(0);
-                }
-
-                50% {
-                    transform: translateY(-10px);
-                }
-            }
-
-            @keyframes pulse {
-
-                0%,
-                100% {
-                    opacity: 1;
-                }
-
-                50% {
-                    opacity: 0.7;
-                }
-            }
-
-            @keyframes bounce {
-
-                0%,
-                100% {
-                    transform: translateY(0);
-                }
-
-                50% {
-                    transform: translateY(-5px);
-                }
-            }
-
-            @keyframes spin {
-                from {
-                    transform: rotate(0deg);
-                }
-
-                to {
-                    transform: rotate(360deg);
-                }
-            }
-
-            @keyframes ping {
-
-                75%,
-                100% {
-                    transform: scale(2);
-                    opacity: 0;
-                }
-            }
-
-        </style>
-
-        <style type="text/tailwindcss">
-            @layer components {
-            /* --- Headings --- */
-            .h1 {
-                @apply text-5xl md:text-6xl font-extrabold text-gray-800 leading-tight;
-            }
-
-            .h2 {
-                @apply text-4xl md:text-5xl font-bold text-gray-800 leading-snug;
-            }
-
-            .h3 {
-                @apply text-3xl font-semibold text-gray-700 leading-snug;
-            }
-
-            .h4 {
-                @apply text-2xl font-semibold text-gray-700 leading-normal;
-            }
-
-            .h5 {
-                @apply text-xl font-medium text-gray-600 leading-relaxed;
-            }
-
-            .h6 {
-                @apply text-lg font-medium text-gray-500 uppercase tracking-wide;
-            }
-
-            /* --- Optional Accent Variants --- */
-            .h1-accent {
-                @apply text-8xl md:text-9xl font-extrabold leading-tight text-blue-900;
-            }
-
-            .h2-accent {
-                @apply text-6xl font-light text-blue-900 leading-snug;
-            }
-
-            .h3-accent {
-                @apply text-3xl font-light text-blue-900 leading-snug;
-            }
-
-            /* --- Custom Components dengan Animasi --- */
-            
-            /* Animated Card */
-            .animated-card {
-                @apply bg-white rounded-xl p-6 card-shadow transition-all-smooth hover-lift;
-            }
-            
-            /* Feature Item dengan Animasi */
-            .feature-item {
-                @apply animated-card fade-in-up stagger-1;
-            }
-            
-            /* Hero Section dengan Animasi */
-            .hero-title {
-                @apply h1-accent fade-in-down;
-            }
-            
-            .hero-subtitle {
-                @apply h3-accent fade-in-up stagger-1;
-            }
-            
-            /* Button dengan Efek */
-            .btn-primary {
-                @apply px-6 py-3 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition-all-smooth hover-scale;
-            }
-            
-            .btn-secondary {
-                @apply px-6 py-3 bg-transparent border-2 border-blue-600 text-blue-600 font-bold rounded-lg hover:bg-blue-600 hover:text-white transition-all-smooth;
-            }
-            
-            .btn-glow {
-                @apply btn-primary hover-glow;
-            }
-            
-            /* Navigation Item dengan Animasi */
-            .nav-item {
-                @apply text-gray-700 hover:text-blue-600 font-medium transition-fast relative;
-            }
-            
-            .nav-item::after {
-                content: '';
-                @apply absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 transition-slow;
-            }
-            
-            .nav-item:hover::after {
-                @apply w-full;
-            }
-            
-            /* Loading Spinner */
-            .spinner {
-                @apply w-8 h-8 border-4 border-blue-200 border-t-blue-600 rounded-full spin-slow;
-            }
-            
-            /* Progress Bar */
-            .progress-bar {
-                @apply w-full bg-gray-200 rounded-full h-2 overflow-hidden;
-            }
-            
-            .progress-fill {
-                @apply h-full bg-gradient-to-r from-blue-500 to-purple-600 transition-slow;
-            }
-            
-            /* Testimonial Card */
-            .testimonial-card {
-                @apply bg-white rounded-2xl p-6 card-shadow hover-lift border-gradient;
-            }
-            
-            /* Stats Counter */
-            .stat-number {
-                @apply text-4xl font-bold gradient-text-blue;
-            }
-            
-            /* Gradient Backgrounds */
-            .gradient-primary {
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            }
-            
-            .gradient-secondary {
-                background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            }
-            
-            .gradient-success {
-                background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            }
-            
-            /* Section dengan Animasi */
-            .section-fade-in {
-                @apply opacity-0 fade-in-up;
             }
         }
+    </script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fafdf9; /* neutral-50 */
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #f0f9f0 0%, #dcf2dc 100%);
+        }
+
+        .card-shadow {
+            box-shadow: 0 4px 6px -1px rgba(46, 107, 52, 0.1), 0 2px 4px -1px rgba(46, 107, 52, 0.06);
+        }
+
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(220, 242, 220, 0.3);
+        }
+
+        .gradient-primary {
+            background: linear-gradient(135deg, #4caf50 0%, #2e6b34 100%);
+        }
+
+        .gradient-secondary {
+            background: linear-gradient(135deg, #14b8a6 0%, #0f766e 100%);
+        }
+
+        .gradient-calm {
+            background: linear-gradient(135deg, #f0f9f0 0%, #dcf2dc 100%);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .fade-in-down {
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .fade-in-left {
+            animation: fadeInLeft 0.8s ease-out;
+        }
+
+        .fade-in-right {
+            animation: fadeInRight 0.8s ease-out;
+        }
+
+        .float {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .breathe {
+            animation: breathe 4s ease-in-out infinite;
+        }
+
+        .hover-lift {
+            transition: all 0.3s ease;
+        }
+
+        .hover-lift:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f0f9f0;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #8fd18f;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #5cb85c;
+        }
+
+        /* Gradient Text */
+        .gradient-text {
+            background: linear-gradient(135deg, #4caf50 0%, #14b8a6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
     </style>
+</head>
+<body class="gradient-calm min-h-screen">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Header -->
+        <header class="flex justify-between items-center mb-16">
+            <div class="text-2xl font-bold text-primary-700 flex items-center">
+                <i class="fas fa-heart mr-2 text-primary-500"></i>
+                Mind<span class="text-secondary-500">Well</span>
+            </div>
+            <nav class="hidden md:flex space-x-8">
+                <a href="#" class="nav-item text-neutral-700 hover:text-primary-600 font-medium transition-colors">Home</a>
+                <a href="#" class="nav-item text-neutral-700 hover:text-primary-600 font-medium transition-colors">Features</a>
+                <a href="#" class="nav-item text-neutral-700 hover:text-primary-600 font-medium transition-colors">Journal</a>
+                <a href="#" class="nav-item text-neutral-700 hover:text-primary-600 font-medium transition-colors">Resources</a>
+                <a href="#" class="nav-item text-neutral-700 hover:text-primary-600 font-medium transition-colors">About</a>
+            </nav>
+            <div class="flex space-x-4">
+                <a href="{{ route('login') }}" class="px-4 py-2 text-primary-600 font-medium border border-primary-500 rounded-lg transition-all duration-300 hover:bg-primary-50">
+                    Log In
+                </a>
+                <a href="{{ route('register') }}">
+                    <button class="px-4 py-2 gradient-primary text-white font-medium rounded-lg hover:opacity-90 transition-all">
+                        Get Started
+                    </button>
+                </a>
+            </div>
+        </header>
 
-    </head>
-    <body class="bg-white min-h-screen py-8 px-4">
-        <div class="max-w-6xl mx-auto">
-            <!-- Header -->
-            <header class="flex justify-between items-center mb-12">
-                <div class="text-2xl font-bold text-gray-800">Study<span class="text-blue-600">Hub</span></div>
-                <nav class="hidden md:flex space-x-8">
-                    <a href="#" class="text-gray-700 hover:text-blue-600 font-medium">Home</a>
-                    <a href="#" class="text-gray-700 hover:text-blue-600 font-medium">About</a>
-                    <a href="#" class="text-gray-700 hover:text-blue-600 font-medium">Courses</a>
-                    <a href="#" class="text-gray-700 hover:text-blue-600 font-medium">Resources</a>
-                    <a href="#" class="text-gray-700 hover:text-blue-600 font-medium">Contact</a>
-                </nav>
-    <div class="flex space-x-4">
-    <a href="{{ route('login') }}"
-        class="px-4 py-2 text-white font-bold border border-transparent rounded transition-all duration-300 hover:border-white hover:rounded-lg">
-        LOG IN
-        </a>
-        <a href="{{ route('register') }}">
-        <button class="px-4 py-2 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 transition-colors">SIGN UP</button>
-        </a>
-    </div>
-            </header>
+        <!-- Main Content -->
+        <main class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center min-h-[70vh]">
+            <!-- Text Content -->
+            <div class="space-y-8 fade-in-left">
+                <div class="space-y-4">
+                    <h1 class="text-5xl lg:text-6xl font-bold text-neutral-800 leading-tight">
+                        Your Mental
+                        <span class="gradient-text">Wellness</span>
+                        Companion
+                    </h1>
+                    <h2 class="text-2xl lg:text-3xl text-secondary-600 font-medium">
+                        Journey to mindfulness starts here
+                    </h2>
+                </div>
 
-            <!-- Main Content -->
-            <main class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                <!-- Text Content -->
-                <div class="space-y-8">
-                    <div class="space-y-1">
-                        <h1 class="h1-accent font-bold text-blue-900 leading-tight">
-                            Study
-                        </h1>
-                        <h2 class="h3-accent text-blue-400 -mt-1">
-                            Anywhere and everywhere
-                        </h2>
-                    </div>
+                <p class="text-lg text-neutral-600 leading-relaxed">
+                    Track your mood, journal your thoughts, and discover personalized wellness activities. 
+                    MindWell helps you build healthy habits and find balance in your daily life through 
+                    mindful practices and supportive tools.
+                </p>
 
-
-                    <p class="text-lg text-gray-600 leading-relaxed">
-                        dung dung pk dung dung, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
-                    </p>
-
-                    <div class="pt-4">
-                        <a>
-                        <button class="px-6 py-3 bg-yellow-500 text-grey-900 font-bold rounded-md hover:bg-blue-700 transition-colors flex items-center">
-                            Start Learning Now
-                            <i class="fas fa-arrow-right ml-2"></i>
+                <div class="flex flex-col sm:flex-row gap-4 pt-4">
+                    <a href="{{ route('register') }}">
+                        <button class="px-8 py-4 gradient-primary text-white font-bold rounded-lg hover:opacity-90 transition-all hover:transform hover:scale-105 flex items-center">
+                            Start Your Journey
+                            <i class="fas fa-heart ml-3"></i>
                         </button>
-                        </a>
+                    </a>
+                    <button class="px-8 py-4 bg-white text-primary-600 border border-primary-500 font-bold rounded-lg hover:bg-primary-50 transition-all flex items-center">
+                        <i class="fas fa-play-circle mr-3"></i>
+                        Watch Demo
+                    </button>
+                </div>
+
+                <!-- Stats -->
+                <div class="grid grid-cols-3 gap-6 pt-8">
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-primary-600">10K+</div>
+                        <div class="text-sm text-neutral-500">Active Users</div>
                     </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-secondary-600">95%</div>
+                        <div class="text-sm text-neutral-500">Report Improvement</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-primary-500">4.9★</div>
+                        <div class="text-sm text-neutral-500">User Rating</div>
+                    </div>
+                </div>
+            </div>
 
-                    <!-- Learn More Section -->
-
+            <!-- Illustration Section -->
+            <div class="relative fade-in-right">
+                <!-- Main Illustration Container -->
+                <div class="relative z-10">
+                    <div class="bg-white rounded-3xl p-8 card-shadow border border-neutral-200">
+                        <div class="grid grid-cols-2 gap-6">
+                            <!-- Mood Tracking Card -->
+                            <div class="bg-primary-50 rounded-2xl p-6 border border-primary-200 hover-lift">
+                                <div class="w-12 h-12 bg-primary-500 rounded-full flex items-center justify-center mb-4 breathe">
+                                    <i class="fas fa-heart text-white text-lg"></i>
+                                </div>
+                                <h3 class="font-bold text-primary-700 mb-2">Mood Tracking</h3>
+                                <p class="text-sm text-primary-600">Daily emotional check-ins</p>
+                            </div>
+                            
+                            <!-- Journal Card -->
+                            <div class="bg-secondary-50 rounded-2xl p-6 border border-secondary-200 hover-lift">
+                                <div class="w-12 h-12 bg-secondary-500 rounded-full flex items-center justify-center mb-4 breathe" style="animation-delay: 0.5s;">
+                                    <i class="fas fa-book text-white text-lg"></i>
+                                </div>
+                                <h3 class="font-bold text-secondary-700 mb-2">Journal</h3>
+                                <p class="text-sm text-secondary-600">Express your thoughts</p>
+                            </div>
+                            
+                            <!-- Meditation Card -->
+                            <div class="bg-primary-100 rounded-2xl p-6 border border-primary-300 hover-lift">
+                                <div class="w-12 h-12 bg-primary-600 rounded-full flex items-center justify-center mb-4 breathe" style="animation-delay: 1s;">
+                                    <i class="fas fa-wind text-white text-lg"></i>
+                                </div>
+                                <h3 class="font-bold text-primary-800 mb-2">Meditation</h3>
+                                <p class="text-sm text-primary-700">Mindful breathing exercises</p>
+                            </div>
+                            
+                            <!-- Progress Card -->
+                            <div class="bg-secondary-100 rounded-2xl p-6 border border-secondary-300 hover-lift">
+                                <div class="w-12 h-12 bg-secondary-600 rounded-full flex items-center justify-center mb-4 breathe" style="animation-delay: 1.5s;">
+                                    <i class="fas fa-chart-line text-white text-lg"></i>
+                                </div>
+                                <h3 class="font-bold text-secondary-800 mb-2">Progress</h3>
+                                <p class="text-sm text-secondary-700">Track your wellness journey</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Illustration Section -->
-                <div class="absolute top-0 right-0 -z-20 h-[100%] max-h-screen object-cover">
-                    <svg class="w-full h-full object-contain" viewBox="0 0 1215 1138" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M917.5 0C917.5 0 847.932 31.7568 810.113 62C777.517 88.0658 770.58 115.63 736 139C695.875 166.118 665.281 165.704 619.5 181.5C562.702 201.097 524.426 197.428 473 228.5C423.83 258.209 403.574 286.198 367 330.5C217.913 511.087 367.499 718.227 244.5 917.5C218.712 959.28 204.578 983.679 171 1019.5C115.511 1078.7 0 1137.5 0 1137.5H1215V0H917.5Z" fill="#B5DEDD" />
-                    </svg>
+                <!-- Background decorative elements -->
+                <div class="absolute -top-6 -right-6 w-32 h-32 bg-primary-200 rounded-full opacity-40 float"></div>
+                <div class="absolute -bottom-8 -left-8 w-24 h-24 bg-secondary-200 rounded-full opacity-40 float" style="animation-delay: 2s;"></div>
+                <div class="absolute top-1/2 -right-12 w-16 h-16 bg-primary-300 rounded-full opacity-30 float" style="animation-delay: 1s;"></div>
+            </div>
+        </main>
 
+        <!-- Features Preview -->
+        <section class="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="bg-white rounded-2xl p-6 card-shadow border border-neutral-200 hover-lift fade-in-up">
+                <div class="w-14 h-14 bg-primary-100 rounded-2xl flex items-center justify-center mb-4">
+                    <i class="fas fa-brain text-primary-600 text-xl"></i>
                 </div>
-                <div class="absolute top-0 right-0 -z-10 h-[100%] max-h-screen object-cover">
-                    <svg class="w-full h-full object-contain" viewBox="0 0 1345 1153" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M772 0C772 0 674.688 89.6891 690 143C700.331 178.969 727.5 177 727.5 177C727.5 177 876.464 194.36 971 177C1197 135.5 1344.5 354 1344.5 354V0H772Z" fill="#008F97" />
-                        <path d="M1344.5 885C1344.5 885 1205.52 987.246 1101 1005.5C1008.18 1021.71 954.494 979.344 860.5 986C714.816 996.316 650.031 1101.22 504 1099C377.565 1097.07 316.506 974.168 194 1005.5C101.795 1029.08 0 1153 0 1153H1344.5V885Z" fill="#008F97" />
-                    </svg>
-
-
+                <h3 class="text-xl font-bold text-neutral-800 mb-3">Mindful Tracking</h3>
+                <p class="text-neutral-600">Monitor your emotional wellbeing with daily check-ins and personalized insights.</p>
+            </div>
+            
+            <div class="bg-white rounded-2xl p-6 card-shadow border border-neutral-200 hover-lift fade-in-up" style="animation-delay: 0.2s;">
+                <div class="w-14 h-14 bg-secondary-100 rounded-2xl flex items-center justify-center mb-4">
+                    <i class="fas fa-tasks text-secondary-600 text-xl"></i>
                 </div>
-                <div class="relative">
-
-                    <!-- Background decorative elements -->
-                    <div class="absolute -top-8 -right-8 w-40 h-40 bg-blue-200 rounded-full opacity-30"></div>
-                    <div class="absolute -bottom-8 -left-8 w-32 h-32 bg-green-200 rounded-full opacity-30"></div>
+                <h3 class="text-xl font-bold text-neutral-800 mb-3">Wellness Challenges</h3>
+                <p class="text-neutral-600">Engage in daily activities designed to boost your mental health and build resilience.</p>
+            </div>
+            
+            <div class="bg-white rounded-2xl p-6 card-shadow border border-neutral-200 hover-lift fade-in-up" style="animation-delay: 0.4s;">
+                <div class="w-14 h-14 bg-primary-100 rounded-2xl flex items-center justify-center mb-4">
+                    <i class="fas fa-users text-primary-600 text-xl"></i>
                 </div>
-            </main>
+                <h3 class="text-xl font-bold text-neutral-800 mb-3">Support Community</h3>
+                <p class="text-neutral-600">Connect with others on similar journeys in a safe, supportive environment.</p>
+            </div>
+        </section>
+    </div>
 
-        </div>
-    </body>
-    </html>
+    <script>
+        // Add breathing animation to wellness elements
+        document.addEventListener('DOMContentLoaded', function() {
+            const wellnessIcons = document.querySelectorAll('.breathe');
+            wellnessIcons.forEach((icon, index) => {
+                icon.style.animationDelay = `${index * 0.5}s`;
+            });
+            
+            // Add scroll animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animationPlayState = 'running';
+                    }
+                });
+            }, observerOptions);
+
+            // Observe all animated elements
+            document.querySelectorAll('.fade-in-up, .fade-in-down, .fade-in-left, .fade-in-right').forEach(el => {
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
+</html>
