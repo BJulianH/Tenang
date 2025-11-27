@@ -48,6 +48,11 @@ class User extends Authenticatable
         'preferences',
         'last_login_at',
         'last_login_ip',
+        'phone',
+        'streak',
+        'coins',
+        'diamonds',
+        'level',
     ];
 
     protected $hidden = [
@@ -66,6 +71,10 @@ class User extends Authenticatable
         'show_date_of_birth' => 'boolean',
         'notification_settings' => 'array',
         'preferences' => 'array',
+        'streak' => 'integer',
+        'coins' => 'integer',
+        'diamonds' => 'integer',
+        'level' => 'integer',
     ];
 
     // Relasi ke communities yang dimiliki (sebagai creator)
@@ -98,6 +107,18 @@ class User extends Authenticatable
     public function votes()
     {
         return $this->hasMany(Vote::class);
+    }
+
+    // Relasi journals
+    public function journals()
+    {
+        return $this->hasMany(Journal::class);
+    }
+
+    // TAMBAHAN: Relasi mood trackings untuk MindWell
+    public function moodTrackings()
+    {
+        return $this->hasMany(MoodTracking::class);
     }
 
     // Scope untuk admin
@@ -162,8 +183,38 @@ class User extends Authenticatable
     {
         return $this->username ? '@' . $this->username : $this->name;
     }
-    public function journals()
+
+    // TAMBAHAN: Accessor untuk avatar URL (menggunakan profile_image yang sudah ada)
+    public function getAvatarUrlAttribute()
     {
-        return $this->hasMany(Journal::class);
+        if ($this->avatar) {
+            return asset('storage/avatars/' . $this->avatar);
+        }
+        
+        // Fallback ke avatar berdasarkan inisial nama
+        return 'https://ui-avatars.com/api/?name=' . urlencode($this->name) . '&color=4caf50&background=dcf2dc';
     }
+
+    // TAMBAHAN: Accessor untuk latest mood
+    public function getLatestMoodAttribute()
+    {
+        return $this->moodTrackings()->latest()->first();
+    }
+
+    // TAMBAHAN: Accessor untuk mood history
+    public function getMoodHistoryAttribute()
+    {
+        return $this->moodTrackings()
+            ->where('created_at', '>=', now()->subDays(30))
+            ->orderBy('created_at', 'desc')
+            ->get();
+    }
+
+    // TAMBAHAN: Default values untuk field MindWell
+    protected $attributes = [
+        'streak' => 0,
+        'coins' => 0,
+        'diamonds' => 0,
+        'level' => 1,
+    ];
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\MoodTracking;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -11,12 +12,21 @@ use Illuminate\Support\Facades\Validator;
 
 class ProfileController extends Controller
 {
-    public function edit()
+    /**
+     * Display the user's profile.
+     */
+    public function index()
     {
-        $user = Auth::user();
-        return view('profile', compact('user'));
+        $user = Auth::user()->load(['moodTrackings' => function($query) {
+            $query->latest()->take(10);
+        }]);
+        
+        return view('profile.index', compact('user'));
     }
 
+    /**
+     * Update the user's profile information.
+     */
     public function update(Request $request)
     {
         $user = Auth::user();
@@ -25,15 +35,18 @@ class ProfileController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
             'phone' => 'nullable|string|max:20',
-            'birthdate' => 'nullable|date',
+            'birthdate' => 'nullable|date|before:today',
             'bio' => 'nullable|string|max:500',
+        ], [
+            'birthdate.before' => 'Tanggal lahir harus sebelum hari ini.',
         ]);
 
         if ($validator->fails()) {
             return redirect()->back()
                 ->withErrors($validator)
                 ->withInput()
-                ->with('error', 'Terjadi kesalahan dalam mengupdate profil.');
+                ->with('error', 'Terjadi kesalahan dalam mengupdate profil.')
+                ->with('active_tab', 'edit-profile');
         }
 
         try {
@@ -45,19 +58,26 @@ class ProfileController extends Controller
                 'bio' => $request->bio,
             ]);
 
-            return redirect()->back()->with('success', 'Profil berhasil diperbarui!');
+            return redirect()->back()
+                ->with('success', 'Profil berhasil diperbarui!')
+                ->with('active_tab', 'edit-profile');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Gagal memperbarui profil: ' . $e->getMessage());
+            return redirect()->back()
+                ->with('error', 'Gagal memperbarui profil: ' . $e->getMessage())
+                ->with('active_tab', 'edit-profile');
         }
     }
 
+    /**
+     * Update the user's password.
+     */
     public function updatePassword(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'current_password' => 'required',
-            'new_password' => 'required|min:8|confirmed|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/',
+            'new_password' => 'required|min:8|confirmed',
         ], [
-            'new_password.regex' => 'Kata sandi harus mengandung setidaknya 1 huruf besar, 1 huruf kecil, 1 angka, dan 1 karakter khusus.',
+            'new_password.min' => 'Kata sandi minimal harus 8 karakter.',
             'new_password.confirmed' => 'Konfirmasi kata sandi tidak cocok.',
         ]);
 
@@ -65,13 +85,16 @@ class ProfileController extends Controller
             return redirect()->back()
                 ->withErrors($validator)
                 ->withInput()
-                ->with('error', 'Terjadi kesalahan dalam mengubah kata sandi.');
+                ->with('error', 'Terjadi kesalahan dalam mengubah kata sandi.')
+                ->with('active_tab', 'change-password');
         }
 
         $user = Auth::user();
 
         if (!Hash::check($request->current_password, $user->password)) {
-            return redirect()->back()->with('error', 'Kata sandi saat ini tidak sesuai.');
+            return redirect()->back()
+                ->with('error', 'Kata sandi saat ini tidak sesuai.')
+                ->with('active_tab', 'change-password');
         }
 
         try {
@@ -79,13 +102,20 @@ class ProfileController extends Controller
                 'password' => Hash::make($request->new_password)
             ]);
 
-            return redirect()->back()->with('success', 'Kata sandi berhasil diubah!');
+            return redirect()->back()
+                ->with('success', 'Kata sandi berhasil diubah!')
+                ->with('active_tab', 'change-password');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Gagal mengubah kata sandi: ' . $e->getMessage());
+            return redirect()->back()
+                ->with('error', 'Gagal mengubah kata sandi: ' . $e->getMessage())
+                ->with('active_tab', 'change-password');
         }
     }
 
-        public function updateAvatar(Request $request)
+    /**
+     * Update the user's avatar.
+     */
+    public function updateAvatar(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'avatar' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
@@ -113,16 +143,9 @@ class ProfileController extends Controller
 
                 // Generate nama file yang unik
                 $avatarName = $user->id . '_avatar_' . time() . '.' . $request->avatar->getClientOriginalExtension();
-
+                
                 // Simpan avatar baru
                 $path = $request->avatar->storeAs('avatars', $avatarName, 'public');
-
-                // Debug: cek apakah file benar-benar tersimpan
-                \Log::info('Avatar saved:', [
-                    'path' => $path,
-                    'full_path' => storage_path('app/public/' . $path),
-                    'exists' => Storage::disk('public')->exists($path)
-                ]);
 
                 $user->update([
                     'avatar' => $avatarName
@@ -142,44 +165,5 @@ class ProfileController extends Controller
         return redirect()->back()
             ->with('error', 'Tidak ada file yang diunggah.')
             ->with('active_tab', 'edit-profile');
-    }
-
-    public function getMoodChartData()
-    {
-        $user = Auth::user();
-        
-        $moodData = $user->moodTrackings()
-            ->where('created_at', '>=', now()->subDays(30))
-            ->selectRaw('DATE(created_at) as date, mood, COUNT(*) as count')
-            ->groupBy('date', 'mood')
-            ->orderBy('date')
-            ->get();
-        
-        $moodValues = [
-            'senang' => 6,
-            'tenang' => 5,
-            'lelah' => 4,
-            'cemas' => 3,
-            'sedih' => 2,
-            'marah' => 1,
-            'stress' => 0
-        ];
-        
-        // Process data for chart
-        $chartData = [];
-        $labels = [];
-        
-        for ($i = 29; $i >= 0; $i--) {
-            $date = now()->subDays($i)->format('Y-m-d');
-            $labels[] = now()->subDays($i)->format('d/m');
-            
-            $dayMood = $moodData->where('date', $date)->first();
-            $chartData[] = $dayMood ? $moodValues[$dayMood->mood] : null;
-        }
-        
-        return response()->json([
-            'labels' => $labels,
-            'data' => $chartData
-        ]);
     }
 }

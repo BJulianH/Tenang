@@ -14,8 +14,7 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->string('phone')->nullable()->after('email');
             $table->date('birthdate')->nullable()->after('phone');
-            $table->text('bio')->nullable()->after('birthdate');
-            $table->string('avatar')->nullable()->after('bio');
+            $table->string('avatar')->nullable()->after('birthdate');
             $table->integer('streak')->default(0)->after('avatar');
             $table->integer('coins')->default(0)->after('streak');
             $table->integer('diamonds')->default(0)->after('coins');

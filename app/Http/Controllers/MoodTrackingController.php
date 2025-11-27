@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Validator;
 
 class MoodTrackingController extends Controller
 {
+    /**
+     * Store a newly created mood tracking.
+     */
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -42,9 +45,13 @@ class MoodTrackingController extends Controller
         }
     }
 
+    /**
+     * Remove the specified mood tracking.
+     */
     public function destroy(MoodTracking $moodTracking)
     {
         try {
+            // Authorization check
             if ($moodTracking->user_id !== Auth::id()) {
                 return redirect()->back()->with('error', 'Unauthorized action.');
             }
@@ -60,5 +67,5 @@ class MoodTrackingController extends Controller
                 ->with('error', 'Gagal menghapus catatan mood.')
                 ->with('active_tab', 'mental-health');
         }
-    }    
+    }
 }

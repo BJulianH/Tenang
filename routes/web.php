@@ -149,3 +149,13 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/journal/{journal}', [JournalController::class, 'update'])->name('journal.update');
     Route::delete('/journal/{journal}', [JournalController::class, 'destroy'])->name('journal.destroy');
 });
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'index'])->name('profile');
+    Route::put('/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profile/password', [App\Http\Controllers\ProfileController::class, 'updatePassword'])->name('profile.password.update');
+    Route::put('/profile/avatar', [App\Http\Controllers\ProfileController::class, 'updateAvatar'])->name('profile.avatar.update');
+    Route::post('/mood-tracking', [App\Http\Controllers\MoodTrackingController::class, 'store'])->name('mood.tracking.store');
+    Route::delete('/mood-tracking/{moodTracking}', [App\Http\Controllers\MoodTrackingController::class, 'destroy'])->name('mood.tracking.destroy');
+    Route::get('/mood-chart-data', [App\Http\Controllers\ProfileController::class, 'getMoodChartData'])->name('mood.chart.data');
+});

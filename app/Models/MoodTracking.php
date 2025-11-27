@@ -45,17 +45,6 @@ class MoodTracking extends Model
     public function getMoodIconAttribute()
     {
         $icons = [
-            'senang' => 'fas fa-smile',
-            'sedih' => 'fas fa-sad-tear',
-            'cemas' => 'fas fa-worry',
-            'stress' => 'fas fa-stress',
-            'tenang' => 'fas fa-peace',
-            'marah' => 'fas fa-angry',
-            'lelah' => 'fas fa-tired',
-        ];
-
-        // Fallback ke icon umum jika tidak ditemukan
-        $fallbackIcons = [
             'senang' => 'fas fa-smile-beam',
             'sedih' => 'fas fa-frown',
             'cemas' => 'fas fa-flushed',
@@ -65,6 +54,6 @@ class MoodTracking extends Model
             'lelah' => 'fas fa-tired',
         ];
 
-        return $fallbackIcons[$this->mood] ?? 'fas fa-smile';
+        return $icons[$this->mood] ?? 'fas fa-smile';
     }
 }
