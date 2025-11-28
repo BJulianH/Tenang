@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - MindWell</title>
+    <title>Login - Tenang</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -74,6 +74,7 @@
                         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                         'breathe': 'breathe 4s ease-in-out infinite',
                         'float': 'float 6s ease-in-out infinite',
+                        'shake': 'shake 0.5s ease-in-out',
                     },
                     keyframes: {
                         breathe: {
@@ -83,6 +84,11 @@
                         float: {
                             '0%, 100%': { transform: 'translateY(0px)' },
                             '50%': { transform: 'translateY(-10px)' },
+                        },
+                        shake: {
+                            '0%, 100%': { transform: 'translateX(0)' },
+                            '25%': { transform: 'translateX(-5px)' },
+                            '75%': { transform: 'translateX(5px)' },
                         }
                     }
                 }
@@ -165,6 +171,10 @@
             animation: breathe 4s ease-in-out infinite;
         }
 
+        .shake {
+            animation: shake 0.5s ease-in-out;
+        }
+
         /* Social Button Animations */
         .social-btn {
             transition: all 0.3s ease;
@@ -194,6 +204,57 @@
 
         .social-btn:hover::before {
             left: 100%;
+        }
+
+        /* Error States */
+        .input-error {
+            border-color: #ef4444 !important;
+            background-color: #fef2f2 !important;
+        }
+
+        .input-error:focus {
+            ring-color: #ef4444 !important;
+            border-color: #ef4444 !important;
+        }
+
+        .error-message {
+            color: #ef4444;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .success-message {
+            color: #10b981;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        /* Loading States */
+        .loading {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 1rem;
+            height: 1rem;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         /* Custom scrollbar */
@@ -230,17 +291,17 @@
             <!-- Header -->
             <div class="relative z-10">
                 <a href="/" class="text-2xl font-bold text-white flex items-center">
-                    <i class="fas fa-heart mr-2"></i>
-                    Mind<span class="text-secondary-300">Well</span>
+                    <i class="fas fa-peace mr-2"></i>
+                    Tenang
                 </a>
             </div>
 
             <!-- Main Content -->
             <div class="relative z-10 flex-1 flex flex-col justify-center fade-in-up">
                 <div class="max-w-md">
-                    <h1 class="text-5xl lg:text-6xl font-bold mb-6">Welcome Back</h1>
+                    <h1 class="text-5xl lg:text-6xl font-bold mb-6">Selamat Datang Kembali</h1>
                     <p class="text-xl opacity-90 mb-8">
-                        Continue your mental wellness journey with personalized tracking and mindful activities.
+                        Lanjutkan perjalanan kesehatan mentalmu dengan pelacakan personal dan aktivitas mindfulness.
                     </p>
                     
                     <!-- Features List -->
@@ -249,19 +310,19 @@
                             <div class="w-8 h-8 bg-white bg-opacity-20 rounded-full flex items-center justify-center mr-3 breathe">
                                 <i class="fas fa-heartbeat text-secondary-300"></i>
                             </div>
-                            <span>Mood Tracking & Analytics</span>
+                            <span>Pelacakan Mood & Analitik</span>
                         </div>
                         <div class="flex items-center">
                             <div class="w-8 h-8 bg-white bg-opacity-20 rounded-full flex items-center justify-center mr-3 breathe" style="animation-delay: 0.5s;">
                                 <i class="fas fa-book-open text-secondary-300"></i>
                             </div>
-                            <span>Personalized Journaling</span>
+                            <span>Journaling Personal</span>
                         </div>
                         <div class="flex items-center">
                             <div class="w-8 h-8 bg-white bg-opacity-20 rounded-full flex items-center justify-center mr-3 breathe" style="animation-delay: 1s;">
                                 <i class="fas fa-medal text-secondary-300"></i>
                             </div>
-                            <span>Wellness Challenges & Achievements</span>
+                            <span>Tantangan & Pencapaian Kesehatan</span>
                         </div>
                     </div>
                 </div>
@@ -269,7 +330,7 @@
 
             <!-- Footer -->
             <div class="relative z-10 text-center lg:text-left opacity-80 text-sm">
-                <p>© 2023 MindWell. Supporting mental wellness worldwide.</p>
+                <p>© 2024 Tenang. Menjaga kesehatan mental Indonesia.</p>
             </div>
         </div>
 
@@ -286,8 +347,8 @@
             <!-- Mobile Header (Logo di mobile) -->
             <div class="lg:hidden absolute top-8 left-8 z-20">
                 <a href="/" class="text-2xl font-bold text-primary-600 flex items-center">
-                    <i class="fas fa-heart mr-2"></i>
-                    Mind<span class="text-secondary-500">Well</span>
+                    <i class="fas fa-peace mr-2"></i>
+                    Tenang
                 </a>
             </div>
 
@@ -299,25 +360,48 @@
                         <div class="w-16 h-16 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full flex items-center justify-center mx-auto mb-4 breathe">
                             <i class="fas fa-lock text-white text-xl"></i>
                         </div>
-                        <h2 class="text-3xl font-bold text-neutral-800 mb-2">Welcome Back</h2>
-                        <p class="text-neutral-600">Sign in to continue your wellness journey</p>
+                        <h2 class="text-3xl font-bold text-neutral-800 mb-2">Selamat Datang</h2>
+                        <p class="text-neutral-600">Masuk untuk melanjutkan perjalananmu</p>
                     </div>
 
-                    <!-- Session Status -->
-                    <div class="mb-4 p-4 bg-primary-50 text-primary-700 rounded-lg text-sm border border-primary-200">
-                        <i class="fas fa-info-circle mr-2"></i>
-                        Welcome back! Please login to continue.
-                    </div>
+                    <!-- Session Messages -->
+                    @if(session('status'))
+                        <div class="mb-4 p-4 bg-green-50 text-green-700 rounded-lg text-sm border border-green-200 flex items-center">
+                            <i class="fas fa-check-circle mr-2"></i>
+                            {{ session('status') }}
+                        </div>
+                    @endif
+
+                    @if(session('error'))
+                        <div class="mb-4 p-4 bg-red-50 text-red-700 rounded-lg text-sm border border-red-200 flex items-center shake">
+                            <i class="fas fa-exclamation-triangle mr-2"></i>
+                            {{ session('error') }}
+                        </div>
+                    @endif
+
+                    @if($errors->any())
+                        <div class="mb-4 p-4 bg-red-50 text-red-700 rounded-lg text-sm border border-red-200 shake">
+                            <div class="flex items-center mb-2">
+                                <i class="fas fa-exclamation-circle mr-2"></i>
+                                <span class="font-medium">Harap perbaiki error berikut:</span>
+                            </div>
+                            <ul class="list-disc list-inside space-y-1">
+                                @foreach($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
 
                     <!-- Form menggunakan route login yang sesuai -->
-                    <form method="POST" action="{{ route('login') }}">
+                    <form method="POST" action="{{ route('login') }}" id="loginForm">
                         @csrf
 
                         <!-- Email Address -->
-                        <div class="mb-6">
+                        <div class="mb-4">
                             <label for="email" class="block text-sm font-medium text-neutral-700 mb-2">
                                 <i class="fas fa-envelope mr-2 text-primary-500"></i>
-                                Email Address
+                                Alamat Email
                             </label>
                             <div class="relative">
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -327,19 +411,26 @@
                                     id="email" 
                                     type="email" 
                                     name="email" 
+                                    value="{{ old('email') }}"
                                     required 
                                     autofocus 
                                     autocomplete="username"
-                                    class="w-full pl-10 pr-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors bg-neutral-50"
-                                    placeholder="Enter your email">
+                                    class="w-full pl-10 pr-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors bg-neutral-50 @error('email') input-error @enderror"
+                                    placeholder="Masukkan email Anda">
                             </div>
+                            @error('email')
+                                <div class="error-message">
+                                    <i class="fas fa-exclamation-circle text-xs"></i>
+                                    {{ $message }}
+                                </div>
+                            @enderror
                         </div>
 
                         <!-- Password -->
-                        <div class="mb-6">
+                        <div class="mb-4">
                             <label for="password" class="block text-sm font-medium text-neutral-700 mb-2">
                                 <i class="fas fa-lock mr-2 text-primary-500"></i>
-                                Password
+                                Kata Sandi
                             </label>
                             <div class="relative">
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -351,12 +442,18 @@
                                     name="password"
                                     required
                                     autocomplete="current-password"
-                                    class="w-full pl-10 pr-10 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors bg-neutral-50"
-                                    placeholder="Enter your password">
+                                    class="w-full pl-10 pr-10 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors bg-neutral-50 @error('password') input-error @enderror"
+                                    placeholder="Masukkan kata sandi Anda">
                                 <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center password-toggle">
                                     <i class="fas fa-eye-slash text-neutral-400 hover:text-neutral-600"></i>
                                 </button>
                             </div>
+                            @error('password')
+                                <div class="error-message">
+                                    <i class="fas fa-exclamation-circle text-xs"></i>
+                                    {{ $message }}
+                                </div>
+                            @enderror
                         </div>
 
                         <!-- Remember Me & Forgot Password -->
@@ -366,26 +463,33 @@
                                     type="checkbox" 
                                     name="remember"
                                     class="w-4 h-4 text-primary-600 border-neutral-300 rounded focus:ring-primary-500">
-                                <span class="ml-2 text-sm text-neutral-600">Remember me</span>
+                                <span class="ml-2 text-sm text-neutral-600">Ingat saya</span>
                             </label>
                             <a href="{{ route('password.request') }}" class="text-sm text-primary-600 hover:text-primary-800 font-medium transition-colors">
-                                Forgot password?
+                                Lupa kata sandi?
                             </a>
                         </div>
 
                         <!-- Submit Button -->
                         <button 
                             type="submit"
-                            class="w-full gradient-primary text-white py-3 px-4 rounded-lg font-semibold hover:opacity-90 transition-all hover:transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 mb-6">
-                            <i class="fas fa-sign-in-alt mr-2"></i>
-                            Sign In to MindWell
+                            id="submitBtn"
+                            class="w-full gradient-primary text-white py-3 px-4 rounded-lg font-semibold hover:opacity-90 transition-all hover:transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 mb-6 disabled:opacity-50 disabled:cursor-not-allowed">
+                            <span id="submitText">
+                                <i class="fas fa-sign-in-alt mr-2"></i>
+                                Masuk ke Tenang
+                            </span>
+                            <span id="submitLoading" class="hidden">
+                                <i class="fas fa-spinner loading-spinner mr-2"></i>
+                                Sedang masuk...
+                            </span>
                         </button>
                     </form>
 
                     <!-- Divider -->
                     <div class="flex items-center mb-6">
                         <div class="flex-1 border-t border-neutral-300"></div>
-                        <span class="px-3 text-neutral-500 text-sm">Or sign in with</span>
+                        <span class="px-3 text-neutral-500 text-sm">Atau masuk dengan</span>
                         <div class="flex-1 border-t border-neutral-300"></div>
                     </div>
 
@@ -393,30 +497,30 @@
                     <div class="space-y-3 mb-6">
                         <!-- Google Login Button -->
                         <a href="" class="w-full social-btn bg-white border border-neutral-300 text-neutral-700 py-3 px-4 rounded-lg font-medium hover:bg-neutral-50 flex items-center justify-center transition-all">
-                        <div class="w-5 h-5 flex items-center justify-center mr-3">
-                            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-                                <path d="M16.51 9.20455V9.10045H9.18V10.8995H13.49C13.12 12.6995 11.62 13.8995 9.18 13.8995C6.43 13.8995 4.18 11.6645 4.18 8.91445C4.18 6.16445 6.43 3.92945 9.18 3.92945C10.39 3.92945 11.5 4.34945 12.37 5.17945L14.43 3.11945C13.02 1.70445 11.18 0.999545 9.18 0.999545C4.19 0.999545 0.18 4.99955 0.18 9.99955C0.18 14.9995 4.19 18.9995 9.18 18.9995C13.69 18.9995 17.18 15.8995 17.18 10.9995C17.18 10.5995 16.86 10.2045 16.51 10.2045V9.20455Z" fill="#EA4335"/>
-                                <path d="M1.18 5.31955L3.73 7.15955C4.36 5.23955 6.58 3.92955 9.18 3.92955C10.39 3.92955 11.5 4.34955 12.37 5.17955L14.43 3.11955C13.02 1.70455 11.18 0.999545 9.18 0.999545C5.69 0.999545 2.73 2.79955 1.18 5.31955Z" fill="#FBBC05"/>
-                                <path d="M9.18 18.9995C11.11 18.9995 12.89 18.2995 14.31 17.0995L11.87 15.0495C11.06 15.6495 10.03 16.0295 9.18 16.0295C6.78 16.0295 4.76 14.4695 3.94 12.2695L1.39 14.1895C2.93 16.8995 5.83 18.9995 9.18 18.9995Z" fill="#34A853"/>
-                                <path d="M16.51 9.20455V9.10045H9.18V10.8995H13.49C13.17 12.2495 12.19 13.2995 10.95 13.8995L13.42 15.8495C15.27 14.0995 16.51 11.4995 16.51 9.20455Z" fill="#4285F4"/>
-                            </svg>
-                        </div>
-                        <span>Continue with Google</span>
-                    </a>
+                            <div class="w-5 h-5 flex items-center justify-center mr-3">
+                                <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                                    <path d="M16.51 9.20455V9.10045H9.18V10.8995H13.49C13.12 12.6995 11.62 13.8995 9.18 13.8995C6.43 13.8995 4.18 11.6645 4.18 8.91445C4.18 6.16445 6.43 3.92945 9.18 3.92945C10.39 3.92945 11.5 4.34945 12.37 5.17945L14.43 3.11945C13.02 1.70445 11.18 0.999545 9.18 0.999545C4.19 0.999545 0.18 4.99955 0.18 9.99955C0.18 14.9995 4.19 18.9995 9.18 18.9995C13.69 18.9995 17.18 15.8995 17.18 10.9995C17.18 10.5995 16.86 10.2045 16.51 10.2045V9.20455Z" fill="#EA4335"/>
+                                    <path d="M1.18 5.31955L3.73 7.15955C4.36 5.23955 6.58 3.92955 9.18 3.92955C10.39 3.92955 11.5 4.34955 12.37 5.17955L14.43 3.11955C13.02 1.70455 11.18 0.999545 9.18 0.999545C5.69 0.999545 2.73 2.79955 1.18 5.31955Z" fill="#FBBC05"/>
+                                    <path d="M9.18 18.9995C11.11 18.9995 12.89 18.2995 14.31 17.0995L11.87 15.0495C11.06 15.6495 10.03 16.0295 9.18 16.0295C6.78 16.0295 4.76 14.4695 3.94 12.2695L1.39 14.1895C2.93 16.8995 5.83 18.9995 9.18 18.9995Z" fill="#34A853"/>
+                                    <path d="M16.51 9.20455V9.10045H9.18V10.8995H13.49C13.17 12.2495 12.19 13.2995 10.95 13.8995L13.42 15.8495C15.27 14.0995 16.51 11.4995 16.51 9.20455Z" fill="#4285F4"/>
+                                </svg>
+                            </div>
+                            <span>Lanjutkan dengan Google</span>
+                        </a>
 
                         <!-- Facebook Login Button -->
                         <a href="" class="w-full social-btn bg-social-facebook text-white py-3 px-4 rounded-lg font-medium hover:bg-social-facebook_hover flex items-center justify-center transition-all">
                             <i class="fab fa-facebook-f mr-3"></i>
-                            <span>Continue with Facebook</span>
+                            <span>Lanjutkan dengan Facebook</span>
                         </a>
                     </div>
 
                     <!-- Sign Up Link -->
                     <div class="text-center">
                         <p class="text-neutral-600">
-                            Don't have an account?
+                            Belum punya akun?
                             <a href="{{ route('register') }}" class="text-primary-600 hover:text-primary-800 font-medium transition-colors">
-                                Sign up now
+                                Daftar sekarang
                             </a>
                         </p>
                     </div>
@@ -454,6 +558,57 @@
             });
         });
 
+        // Form submission handling
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            const submitBtn = document.getElementById('submitBtn');
+            const submitText = document.getElementById('submitText');
+            const submitLoading = document.getElementById('submitLoading');
+            
+            // Show loading state
+            submitBtn.disabled = true;
+            submitText.classList.add('hidden');
+            submitLoading.classList.remove('hidden');
+            
+            // Basic client-side validation
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            if (!email || !password) {
+                e.preventDefault();
+                
+                // Show error message
+                if (!email) {
+                    document.getElementById('email').classList.add('input-error', 'shake');
+                }
+                if (!password) {
+                    document.getElementById('password').classList.add('input-error', 'shake');
+                }
+                
+                // Reset loading state
+                setTimeout(() => {
+                    submitBtn.disabled = false;
+                    submitText.classList.remove('hidden');
+                    submitLoading.classList.add('hidden');
+                    
+                    // Remove shake animation after it completes
+                    setTimeout(() => {
+                        document.querySelectorAll('.shake').forEach(el => {
+                            el.classList.remove('shake');
+                        });
+                    }, 500);
+                }, 1000);
+            }
+        });
+
+        // Real-time validation
+        document.getElementById('email').addEventListener('input', function() {
+            this.classList.remove('input-error', 'shake');
+        });
+
+        document.getElementById('password').addEventListener('input', function() {
+            this.classList.remove('input-error', 'shake');
+        });
+
         // Add breathing animation to wellness elements
         document.addEventListener('DOMContentLoaded', function() {
             const wellnessIcons = document.querySelectorAll('.breathe');
@@ -472,6 +627,18 @@
                 this.style.transform = 'translateY(0)';
             });
         });
+
+        // Auto-remove success/error messages after 5 seconds
+        setTimeout(() => {
+            const messages = document.querySelectorAll('[class*="bg-"]');
+            messages.forEach(message => {
+                if (message.classList.contains('bg-green-50') || message.classList.contains('bg-red-50')) {
+                    message.style.opacity = '0';
+                    message.style.transition = 'opacity 0.5s ease';
+                    setTimeout(() => message.remove(), 500);
+                }
+            });
+        }, 5000);
     </script>
 </body>
 </html>

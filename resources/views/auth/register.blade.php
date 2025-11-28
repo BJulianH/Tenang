@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - MindWell</title>
+    <title>Daftar - Tenang</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -67,6 +67,7 @@
                         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                         'breathe': 'breathe 4s ease-in-out infinite',
                         'float': 'float 6s ease-in-out infinite',
+                        'shake': 'shake 0.5s ease-in-out',
                     },
                     keyframes: {
                         breathe: {
@@ -76,6 +77,11 @@
                         float: {
                             '0%, 100%': { transform: 'translateY(0px)' },
                             '50%': { transform: 'translateY(-10px)' },
+                        },
+                        shake: {
+                            '0%, 100%': { transform: 'translateX(0)' },
+                            '25%': { transform: 'translateX(-5px)' },
+                            '75%': { transform: 'translateX(5px)' },
                         }
                     }
                 }
@@ -158,6 +164,10 @@
             animation: breathe 4s ease-in-out infinite;
         }
 
+        .shake {
+            animation: shake 0.5s ease-in-out;
+        }
+
         /* Password strength indicator */
         .password-strength {
             height: 4px;
@@ -187,11 +197,50 @@
             background-color: #10b981 !important;
         }
 
-        /* Error message styling */
+        /* Error States */
+        .input-error {
+            border-color: #ef4444 !important;
+            background-color: #fef2f2 !important;
+        }
+
+        .input-error:focus {
+            ring-color: #ef4444 !important;
+            border-color: #ef4444 !important;
+        }
+
         .error-message {
             color: #ef4444;
             font-size: 0.875rem;
-            margin-top: 0.5rem;
+            margin-top: 0.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .success-message {
+            color: #10b981;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        /* Loading States */
+        .loading-spinner {
+            display: inline-block;
+            width: 1rem;
+            height: 1rem;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         /* Loading animation */
@@ -246,6 +295,74 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #5cb85c;
         }
+
+        /* Modal Styles */
+        .modal-overlay {
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-content {
+            transition: all 0.3s ease;
+        }
+
+        .modal-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .modal-scrollbar::-webkit-scrollbar-track {
+            background: #f8fafc;
+            border-radius: 3px;
+        }
+
+        .modal-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+
+        .modal-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Modal Animation Classes */
+        .modal-enter {
+            opacity: 0;
+            transform: translateY(-10px) scale(0.95);
+        }
+
+        .modal-enter-active {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .modal-leave {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .modal-leave-active {
+            opacity: 0;
+            transform: translateY(-10px) scale(0.95);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+
+        .overlay-enter {
+            opacity: 0;
+        }
+
+        .overlay-enter-active {
+            opacity: 1;
+            transition: opacity 0.3s ease;
+        }
+
+        .overlay-leave {
+            opacity: 1;
+        }
+
+        .overlay-leave-active {
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
     </style>
 </head>
 <body class="login-bg max-h-full overflow-hidden">
@@ -263,8 +380,8 @@
             <!-- Mobile Header -->
             <div class="lg:hidden absolute top-8 left-8 z-20">
                 <a href="/" class="text-2xl font-bold text-primary-600 flex items-center">
-                    <i class="fas fa-heart mr-2"></i>
-                    Mind<span class="text-secondary-500">Well</span>
+                    <i class="fas fa-peace mr-2"></i>
+                    Tenang
                 </a>
             </div>
 
@@ -276,66 +393,93 @@
                         <div class="w-16 h-16 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full flex items-center justify-center mx-auto mb-4 breathe">
                             <i class="fas fa-user-plus text-white text-xl"></i>
                         </div>
-                        <h2 class="text-3xl font-bold text-neutral-800 mb-2">Join MindWell</h2>
-                        <p class="text-neutral-600">Start your mental wellness journey today</p>
+                        <h2 class="text-3xl font-bold text-neutral-800 mb-2">Bergabung dengan Tenang</h2>
+                        <p class="text-neutral-600">Mulai perjalanan kesehatan mentalmu hari ini</p>
                     </div>
 
-                    <!-- Session Status -->
-                    @if (session('status'))
-                    <div class="mb-4 p-4 bg-primary-50 text-primary-700 rounded-lg text-sm border border-primary-200">
-                        <i class="fas fa-info-circle mr-2"></i>
-                        {{ session('status') }}
-                    </div>
+                    <!-- Session Messages -->
+                    @if(session('status'))
+                        <div class="mb-4 p-4 bg-green-50 text-green-700 rounded-lg text-sm border border-green-200 flex items-center">
+                            <i class="fas fa-check-circle mr-2"></i>
+                            {{ session('status') }}
+                        </div>
                     @endif
 
-                    <form method="POST" action="{{ route('register') }}">
+                    @if(session('error'))
+                        <div class="mb-4 p-4 bg-red-50 text-red-700 rounded-lg text-sm border border-red-200 flex items-center shake">
+                            <i class="fas fa-exclamation-triangle mr-2"></i>
+                            {{ session('error') }}
+                        </div>
+                    @endif
+
+                    @if($errors->any())
+                        <div class="mb-4 p-4 bg-red-50 text-red-700 rounded-lg text-sm border border-red-200 shake">
+                            <div class="flex items-center mb-2">
+                                <i class="fas fa-exclamation-circle mr-2"></i>
+                                <span class="font-medium">Harap perbaiki error berikut:</span>
+                            </div>
+                            <ul class="list-disc list-inside space-y-1">
+                                @foreach($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
+                    <form method="POST" action="{{ route('register') }}" id="registerForm">
                         @csrf
 
                         <!-- Name -->
-                        <div class="mb-6">
+                        <div class="mb-4">
                             <label for="name" class="block text-sm font-medium text-neutral-700 mb-2">
                                 <i class="fas fa-user mr-2 text-primary-500"></i>
-                                Full Name
+                                Nama Lengkap
                             </label>
                             <div class="relative">
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <i class="fas fa-user text-neutral-400"></i>
                                 </div>
-                                <input id="name" type="text" name="name" value="{{ old('name') }}" required autofocus autocomplete="name" class="w-full pl-10 pr-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors bg-neutral-50 @error('name') border-red-500 @enderror" placeholder="Enter your full name">
+                                <input id="name" type="text" name="name" value="{{ old('name') }}" required autofocus autocomplete="name" class="w-full pl-10 pr-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors bg-neutral-50 @error('name') input-error @enderror" placeholder="Masukkan nama lengkap Anda">
                             </div>
                             @error('name')
-                            <div class="error-message">{{ $message }}</div>
+                            <div class="error-message">
+                                <i class="fas fa-exclamation-circle text-xs"></i>
+                                {{ $message }}
+                            </div>
                             @enderror
                         </div>
 
                         <!-- Email Address -->
-                        <div class="mb-6">
+                        <div class="mb-4">
                             <label for="email" class="block text-sm font-medium text-neutral-700 mb-2">
                                 <i class="fas fa-envelope mr-2 text-primary-500"></i>
-                                Email Address
+                                Alamat Email
                             </label>
                             <div class="relative">
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <i class="fas fa-envelope text-neutral-400"></i>
                                 </div>
-                                <input id="email" type="email" name="email" value="{{ old('email') }}" required autocomplete="email" class="w-full pl-10 pr-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors bg-neutral-50 @error('email') border-red-500 @enderror" placeholder="Enter your email">
+                                <input id="email" type="email" name="email" value="{{ old('email') }}" required autocomplete="email" class="w-full pl-10 pr-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors bg-neutral-50 @error('email') input-error @enderror" placeholder="Masukkan email Anda">
                             </div>
                             @error('email')
-                            <div class="error-message">{{ $message }}</div>
+                            <div class="error-message">
+                                <i class="fas fa-exclamation-circle text-xs"></i>
+                                {{ $message }}
+                            </div>
                             @enderror
                         </div>
 
                         <!-- Password -->
-                        <div class="mb-6">
+                        <div class="mb-4">
                             <label for="password" class="block text-sm font-medium text-neutral-700 mb-2">
                                 <i class="fas fa-lock mr-2 text-primary-500"></i>
-                                Password
+                                Kata Sandi
                             </label>
                             <div class="relative">
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <i class="fas fa-lock text-neutral-400"></i>
                                 </div>
-                                <input id="password" type="password" name="password" required autocomplete="new-password" class="w-full pl-10 pr-10 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors bg-neutral-50 @error('password') border-red-500 @enderror" placeholder="Create a password">
+                                <input id="password" type="password" name="password" required autocomplete="new-password" class="w-full pl-10 pr-10 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors bg-neutral-50 @error('password') input-error @enderror" placeholder="Buat kata sandi">
                                 <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center password-toggle">
                                     <i class="fas fa-eye-slash text-neutral-400 hover:text-neutral-600"></i>
                                 </button>
@@ -344,44 +488,47 @@
                             <div id="password-hints" class="text-xs text-neutral-500 mt-2">
                                 <div id="length" class="flex items-center mb-1">
                                     <i class="fas fa-times text-red-500 mr-1"></i>
-                                    <span>At least 8 characters</span>
+                                    <span>Minimal 8 karakter</span>
                                 </div>
                                 <div id="uppercase" class="flex items-center mb-1">
                                     <i class="fas fa-times text-red-500 mr-1"></i>
-                                    <span>One uppercase letter</span>
+                                    <span>Satu huruf besar</span>
                                 </div>
                                 <div id="number" class="flex items-center">
                                     <i class="fas fa-times text-red-500 mr-1"></i>
-                                    <span>One number</span>
+                                    <span>Satu angka</span>
                                 </div>
                             </div>
                             @error('password')
-                            <div class="error-message">{{ $message }}</div>
+                            <div class="error-message">
+                                <i class="fas fa-exclamation-circle text-xs"></i>
+                                {{ $message }}
+                            </div>
                             @enderror
                         </div>
 
                         <!-- Confirm Password -->
-                        <div class="mb-6">
+                        <div class="mb-4">
                             <label for="password_confirmation" class="block text-sm font-medium text-neutral-700 mb-2">
                                 <i class="fas fa-lock mr-2 text-primary-500"></i>
-                                Confirm Password
+                                Konfirmasi Kata Sandi
                             </label>
                             <div class="relative">
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <i class="fas fa-lock text-neutral-400"></i>
                                 </div>
-                                <input id="password_confirmation" type="password" name="password_confirmation" required autocomplete="new-password" class="w-full pl-10 pr-10 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors bg-neutral-50" placeholder="Confirm your password">
+                                <input id="password_confirmation" type="password" name="password_confirmation" required autocomplete="new-password" class="w-full pl-10 pr-10 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors bg-neutral-50" placeholder="Konfirmasi kata sandi Anda">
                                 <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center password-confirm-toggle">
                                     <i class="fas fa-eye-slash text-neutral-400 hover:text-neutral-600"></i>
                                 </button>
                             </div>
                             <div id="password-match" class="text-xs mt-2 hidden">
                                 <i class="fas fa-check text-green-500 mr-1"></i>
-                                <span class="text-green-500">Passwords match</span>
+                                <span class="text-green-500">Kata sandi cocok</span>
                             </div>
                             <div id="password-mismatch" class="text-xs mt-2 hidden">
                                 <i class="fas fa-times text-red-500 mr-1"></i>
-                                <span class="text-red-500">Passwords do not match</span>
+                                <span class="text-red-500">Kata sandi tidak cocok</span>
                             </div>
                         </div>
 
@@ -390,27 +537,30 @@
                             <label class="flex items-start">
                                 <input type="checkbox" name="terms" class="w-4 h-4 text-primary-600 border-neutral-300 rounded focus:ring-primary-500 mt-1" required>
                                 <span class="ml-2 text-sm text-neutral-600">
-                                    I agree to the
-                                    <a href="#" class="text-primary-600 hover:text-primary-800 font-medium transition-colors">
-                                        Terms of Service
-                                    </a>
-                                    and
-                                    <a href="#" class="text-primary-600 hover:text-primary-800 font-medium transition-colors">
-                                        Privacy Policy
-                                    </a>
+                                    Saya setuju dengan
+                                    <button type="button" id="termsBtn" class="text-primary-600 hover:text-primary-700 underline font-medium transition-colors">Syarat Layanan</button>
+                                    dan
+                                    <button type="button" id="privacyBtn" class="text-primary-600 hover:text-primary-700 underline font-medium transition-colors">Kebijakan Privasi</button>
                                 </span>
                             </label>
+                            @error('terms')
+                            <div class="error-message">
+                                <i class="fas fa-exclamation-circle text-xs"></i>
+                                {{ $message }}
+                            </div>
+                            @enderror
                         </div>
 
                         <div class="flex items-center justify-between mt-4">
                             <a class="underline text-sm text-neutral-600 hover:text-neutral-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500" href="{{ route('login') }}">
-                                {{ __('Already have an account?') }}
+                                Sudah punya akun?
                             </a>
 
                             <button type="submit" id="submitBtn" class="px-6 py-3 gradient-primary text-white font-semibold rounded-lg hover:opacity-90 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed">
-                                <span id="submitText">Create Account</span>
+                                <span id="submitText">Buat Akun</span>
                                 <span id="submitLoading" class="hidden">
-                                    <span class="loading-dots">Creating Account</span>
+                                    <i class="fas fa-spinner loading-spinner mr-2"></i>
+                                    Membuat Akun...
                                 </span>
                             </button>
                         </div>
@@ -432,17 +582,17 @@
             <!-- Header -->
             <div class="relative z-10">
                 <a href="/" class="text-2xl font-bold text-white flex items-center">
-                    <i class="fas fa-heart mr-2"></i>
-                    Mind<span class="text-secondary-300">Well</span>
+                    <i class="fas fa-peace mr-2"></i>
+                    Tenang
                 </a>
             </div>
 
             <!-- Main Content -->
             <div class="relative z-10 flex-1 flex flex-col justify-center fade-in-up">
                 <div class="max-w-md">
-                    <h1 class="text-5xl lg:text-6xl font-bold mb-6">Welcome</h1>
+                    <h1 class="text-5xl lg:text-6xl font-bold mb-6">Selamat Datang</h1>
                     <p class="text-xl opacity-90 mb-8">
-                        Begin your journey to better mental health and mindfulness.
+                        Mulai perjalanan menuju kesehatan mental dan mindfulness yang lebih baik.
                     </p>
 
                     <!-- Features List -->
@@ -451,19 +601,19 @@
                             <div class="w-8 h-8 bg-white bg-opacity-20 rounded-full flex items-center justify-center mr-3 breathe">
                                 <i class="fas fa-heartbeat text-secondary-300"></i>
                             </div>
-                            <span>Daily Mood Tracking & Analytics</span>
+                            <span>Pelacakan Mood & Analitik Harian</span>
                         </div>
                         <div class="flex items-center">
                             <div class="w-8 h-8 bg-white bg-opacity-20 rounded-full flex items-center justify-center mr-3 breathe" style="animation-delay: 0.5s;">
                                 <i class="fas fa-book-open text-secondary-300"></i>
                             </div>
-                            <span>Personalized Journaling</span>
+                            <span>Journaling Personal</span>
                         </div>
                         <div class="flex items-center">
                             <div class="w-8 h-8 bg-white bg-opacity-20 rounded-full flex items-center justify-center mr-3 breathe" style="animation-delay: 1s;">
                                 <i class="fas fa-medal text-secondary-300"></i>
                             </div>
-                            <span>Wellness Challenges & Achievements</span>
+                            <span>Tantangan & Pencapaian Kesehatan</span>
                         </div>
                     </div>
                 </div>
@@ -471,24 +621,341 @@
 
             <!-- Footer -->
             <div class="relative z-10 text-center lg:text-left opacity-80 text-sm">
-                <p>© 2023 MindWell. Supporting mental wellness worldwide.</p>
+                <p>© 2024 Tenang. Menjaga kesehatan mental Indonesia.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Privacy Policy Modal -->
+    <div id="privacyModal" class="fixed inset-0 z-50 overflow-y-auto hidden">
+        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+            <!-- Background overlay -->
+            <div class="fixed inset-0 transition-opacity bg-neutral-500 bg-opacity-75 modal-overlay"></div>
+
+            <!-- Modal panel -->
+            <div class="relative inline-block w-full max-w-4xl my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl modal-content">
+                <!-- Header -->
+                <div class="px-6 py-4 bg-primary-50 border-b border-primary-100">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-primary-500 rounded-full flex items-center justify-center mr-3">
+                                <i class="fas fa-shield-alt text-white text-sm"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-neutral-800">Kebijakan Privasi</h3>
+                                <p class="text-sm text-neutral-600">Terakhir diperbarui: {{ date('d M Y') }}</p>
+                            </div>
+                        </div>
+                        <button id="closePrivacy" class="w-8 h-8 rounded-full hover:bg-neutral-100 flex items-center justify-center transition-colors">
+                            <i class="fas fa-times text-neutral-500"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Content -->
+                <div class="px-6 py-4 max-h-96 overflow-y-auto modal-scrollbar">
+                    <div class="prose prose-sm max-w-none">
+                        <h4>1. Informasi yang Kami Kumpulkan</h4>
+                        <p class="text-neutral-700 mb-4">
+                            Kami mengumpulkan informasi yang Anda berikan secara langsung saat mendaftar dan menggunakan layanan Tenang, termasuk:
+                        </p>
+                        <ul class="list-disc list-inside text-neutral-700 mb-4 space-y-1">
+                            <li>Data pribadi (nama, email)</li>
+                            <li>Data kesehatan mental (mood, journal entries)</li>
+                            <li>Data penggunaan aplikasi</li>
+                            <li>Informasi teknis (perangkat, browser, IP address)</li>
+                        </ul>
+
+                        <h4>2. Penggunaan Informasi</h4>
+                        <p class="text-neutral-700 mb-4">
+                            Informasi yang kami kumpulkan digunakan untuk:
+                        </p>
+                        <ul class="list-disc list-inside text-neutral-700 mb-4 space-y-1">
+                            <li>Menyediakan dan mempersonalisasi layanan</li>
+                            <li>Meningkatkan kualitas layanan dan pengalaman pengguna</li>
+                            <li>Analisis tren kesehatan mental yang anonym</li>
+                            <li>Komunikasi terkait layanan dan pembaruan</li>
+                            <li>Memastikan keamanan akun Anda</li>
+                        </ul>
+
+                        <h4>3. Perlindungan Data</h4>
+                        <p class="text-neutral-700 mb-4">
+                            Kami menerapkan standar keamanan tinggi untuk melindungi data Anda:
+                        </p>
+                        <ul class="list-disc list-inside text-neutral-700 mb-4 space-y-1">
+                            <li>Semua data disimpan secara terenkripsi</li>
+                            <li>Akses data dibatasi hanya untuk pihak yang berwenang</li>
+                            <li>Protokol keamanan mengikuti standar industri</li>
+                            <li>Audit keamanan berkala</li>
+                        </ul>
+
+                        <h4>4. Berbagi Informasi</h4>
+                        <p class="text-neutral-700 mb-4">
+                            Kami tidak menjual atau menyewakan data pribadi Anda. Informasi dapat dibagikan hanya dalam kondisi:
+                        </p>
+                        <ul class="list-disc list-inside text-neutral-700 mb-4 space-y-1">
+                            <li>Dengan persetujuan eksplisit dari Anda</li>
+                            <li>Untuk mematuhi kewajiban hukum</li>
+                            <li>Melindungi hak dan keselamatan pengguna lain</li>
+                            <li>Dengan penyedia layanan yang membantu operasional kami (dengan kontrak kerahasiaan)</li>
+                        </ul>
+
+                        <h4>5. Hak Anda</h4>
+                        <p class="text-neutral-700 mb-4">
+                            Anda memiliki hak untuk:
+                        </p>
+                        <ul class="list-disc list-inside text-neutral-700 mb-4 space-y-1">
+                            <li>Mengakses data pribadi Anda</li>
+                            <li>Memperbaiki data yang tidak akurat</li>
+                            <li>Menghapus data pribadi</li>
+                            <li>Membatasi pemrosesan data</li>
+                            <li>Menerima salinan data dalam format terstruktur</li>
+                        </ul>
+
+                        <h4>6. Penyimpanan Data</h4>
+                        <p class="text-neutral-700 mb-4">
+                            Data disimpan selama diperlukan untuk menyediakan layanan atau sesuai dengan ketentuan hukum. Anda dapat meminta penghapusan data kapan saja.
+                        </p>
+
+                        <h4>7. Cookies dan Teknologi Serupa</h4>
+                        <p class="text-neutral-700 mb-4">
+                            Kami menggunakan cookies untuk meningkatkan pengalaman pengguna, menganalisis traffic, dan personalisasi konten.
+                        </p>
+
+                        <h4>8. Perubahan Kebijakan</h4>
+                        <p class="text-neutral-700 mb-4">
+                            Kami dapat memperbarui kebijakan privasi ini dari waktu ke waktu. Perubahan signifikan akan diumumkan melalui aplikasi, email, atau notifikasi lainnya.
+                        </p>
+
+                        <h4>9. Kontak</h4>
+                        <p class="text-neutral-700">
+                            Untuk pertanyaan tentang kebijakan privasi atau penggunaan data, hubungi kami di <strong>privacy@tenang.com</strong>.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="px-6 py-4 bg-neutral-50 border-t border-neutral-200 flex justify-end">
+                    <button id="understandPrivacy" class="px-6 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2">
+                        Mengerti
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Terms of Service Modal -->
+    <div id="termsModal" class="fixed inset-0 z-50 overflow-y-auto hidden">
+        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+            <!-- Background overlay -->
+            <div class="fixed inset-0 transition-opacity bg-neutral-500 bg-opacity-75 modal-overlay"></div>
+
+            <!-- Modal panel -->
+            <div class="relative inline-block w-full max-w-4xl my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl modal-content">
+                <!-- Header -->
+                <div class="px-6 py-4 bg-secondary-50 border-b border-secondary-100">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-secondary-500 rounded-full flex items-center justify-center mr-3">
+                                <i class="fas fa-file-contract text-white text-sm"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-neutral-800">Syarat Layanan</h3>
+                                <p class="text-sm text-neutral-600">Terakhir diperbarui: {{ date('d M Y') }}</p>
+                            </div>
+                        </div>
+                        <button id="closeTerms" class="w-8 h-8 rounded-full hover:bg-neutral-100 flex items-center justify-center transition-colors">
+                            <i class="fas fa-times text-neutral-500"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Content -->
+                <div class="px-6 py-4 max-h-96 overflow-y-auto modal-scrollbar">
+                    <div class="prose prose-sm max-w-none">
+                        <h4>1. Penerimaan Syarat</h4>
+                        <p class="text-neutral-700 mb-4">
+                            Dengan mendaftar dan menggunakan layanan Tenang, Anda menyetujui semua syarat dan ketentuan yang tercantum di bawah ini. Jika Anda tidak setuju, harap jangan menggunakan layanan kami.
+                        </p>
+
+                        <h4>2. Akun Pengguna</h4>
+                        <p class="text-neutral-700 mb-4">
+                            Saat membuat akun, Anda setuju untuk:
+                        </p>
+                        <ul class="list-disc list-inside text-neutral-700 mb-4 space-y-1">
+                            <li>Menyediakan informasi yang akurat, lengkap, dan terkini</li>
+                            <li>Menjaga kerahasiaan informasi akun dan password</li>
+                            <li>Bertanggung jawab penuh atas semua aktivitas yang terjadi di akun Anda</li>
+                            <li>Segera melaporkan aktivitas mencurigakan atau pelanggaran keamanan</li>
+                            <li>Memastikan Anda berusia minimal 13 tahun (atau sesuai ketentuan hukum setempat)</li>
+                        </ul>
+
+                        <h4>3. Penggunaan Layanan</h4>
+                        <p class="text-neutral-700 mb-4">
+                            Anda setuju untuk menggunakan layanan Tenang secara bertanggung jawab dan tidak:
+                        </p>
+                        <ul class="list-disc list-inside text-neutral-700 mb-4 space-y-1">
+                            <li>Menyalahgunakan layanan untuk tujuan ilegal, berbahaya, atau tidak sah</li>
+                            <li>Mengganggu atau mencoba mengganggu operasional layanan</li>
+                            <li>Mencoba mengakses data pengguna lain tanpa izin</li>
+                            <li>Menyebarkan malware, virus, atau kode berbahaya</li>
+                            <li>Melakukan scraping atau pengumpulan data otomatis</li>
+                            <li>Melanggar hak kekayaan intelektual orang lain</li>
+                            <li>Menyebarkan konten yang bersifat ujaran kebencian, diskriminatif, atau tidak pantas</li>
+                        </ul>
+
+                        <h4>4. Batasan Layanan</h4>
+                        <p class="text-neutral-700 mb-4">
+                            <strong>Penting:</strong> Tenang adalah alat pendukung kesehatan mental dan bukan pengganti perawatan medis profesional. Layanan kami tidak memberikan diagnosis medis, pengobatan, atau terapi pengganti.
+                        </p>
+                        <p class="text-neutral-700 mb-4">
+                            Dalam keadaan darurat medis atau krisis kesehatan mental, segera hubungi:
+                        </p>
+                        <ul class="list-disc list-inside text-neutral-700 mb-4 space-y-1">
+                            <li>Layanan darurat setempat (119)</li>
+                            <li>Dokter atau profesional kesehatan mental</li>
+                            <li>Layanan crisis helpline</li>
+                        </ul>
+
+                        <h4>5. Hak Kekayaan Intelektual</h4>
+                        <p class="text-neutral-700 mb-4">
+                            Semua konten, fitur, fungsi, dan materi dalam aplikasi Tenang (termasuk tapi tidak terbatas pada teks, grafis, logo, dan kode) adalah milik kami atau pemberi lisensi kami dan dilindungi oleh hukum hak cipta dan hak kekayaan intelektual lainnya.
+                        </p>
+
+                        <h4>6. Konten Pengguna</h4>
+                        <p class="text-neutral-700 mb-4">
+                            Anda mempertahankan kepemilikan atas konten yang Anda buat di Tenang. Dengan mengirimkan konten, Anda memberikan kami lisensi untuk menggunakan, menampilkan, dan menyimpan konten tersebut untuk menyediakan layanan.
+                        </p>
+
+                        <h4>7. Pembatasan Tanggung Jawab</h4>
+                        <p class="text-neutral-700 mb-4">
+                            Layanan disediakan "sebagaimana adanya" tanpa jaminan apapun. Kami tidak bertanggung jawab atas:
+                        </p>
+                        <ul class="list-disc list-inside text-neutral-700 mb-4 space-y-1">
+                            <li>Kerugian tidak langsung, insidental, atau konsekuensial</li>
+                            <li>Keakuratan atau kelengkapan konten yang dihasilkan pengguna</li>
+                            <li>Interupsi atau gangguan layanan di luar kendali kami</li>
+                            <li>Tindakan atau kelalaian pengguna lain</li>
+                        </ul>
+
+                        <h4>8. Penghentian Layanan</h4>
+                        <p class="text-neutral-700 mb-4">
+                            Kami dapat menghentikan atau menangguhkan akses Anda jika:
+                        </p>
+                        <ul class="list-disc list-inside text-neutral-700 mb-4 space-y-1">
+                            <li>Melanggar syarat layanan ini</li>
+                            <li>Menimbulkan risiko atau tanggung jawab hukum bagi kami</li>
+                            <li>Pembuatan akun untuk tujuan penipuan</li>
+                            <li>Penggunaan yang tidak sah atau berbahaya</li>
+                        </ul>
+
+                        <h4>9. Perubahan Syarat</h4>
+                        <p class="text-neutral-700 mb-4">
+                            Kami berhak mengubah syarat layanan kapan saja. Perubahan akan diberitahukan melalui aplikasi, email, atau notifikasi lainnya. Penggunaan berkelanjutan setelah perubahan berarti penerimaan Anda terhadap syarat baru.
+                        </p>
+
+                        <h4>10. Hukum yang Berlaku</h4>
+                        <p class="text-neutral-700">
+                            Syarat layanan ini diatur oleh hukum Indonesia. Setiap sengketa akan diselesaikan di pengadilan yang berwenang di Indonesia.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="px-6 py-4 bg-neutral-50 border-t border-neutral-200 flex justify-end">
+                    <button id="understandTerms" class="px-6 py-2 bg-secondary-500 text-white rounded-lg hover:bg-secondary-600 transition-colors focus:outline-none focus:ring-2 focus:ring-secondary-500 focus:ring-offset-2">
+                        Mengerti
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            // Elemen password & toggle
+            // Modal Elements
+            const privacyModal = document.getElementById("privacyModal");
+            const termsModal = document.getElementById("termsModal");
+            const privacyBtn = document.getElementById("privacyBtn");
+            const termsBtn = document.getElementById("termsBtn");
+            const closePrivacy = document.getElementById("closePrivacy");
+            const closeTerms = document.getElementById("closeTerms");
+            const understandPrivacy = document.getElementById("understandPrivacy");
+            const understandTerms = document.getElementById("understandTerms");
+            const modalOverlays = document.querySelectorAll(".modal-overlay");
+
+            // Password Elements
             const passwordInput = document.getElementById("password");
             const passwordConfirmInput = document.getElementById("password_confirmation");
             const passwordToggle = document.querySelector(".password-toggle");
             const passwordConfirmToggle = document.querySelector(".password-confirm-toggle");
-
             const submitBtn = document.getElementById("submitBtn");
             const submitText = document.getElementById("submitText");
             const submitLoading = document.getElementById("submitLoading");
 
-            // Toggle visibility
+            // Modal Functions
+            function openModal(modal) {
+                modal.classList.remove("hidden");
+                document.body.style.overflow = "hidden";
+                
+                // Trigger animation
+                setTimeout(() => {
+                    const overlay = modal.querySelector(".modal-overlay");
+                    const content = modal.querySelector(".modal-content");
+                    overlay.classList.add("overlay-enter-active");
+                    content.classList.add("modal-enter-active");
+                }, 10);
+            }
+
+            function closeModal(modal) {
+                const overlay = modal.querySelector(".modal-overlay");
+                const content = modal.querySelector(".modal-content");
+                
+                overlay.classList.remove("overlay-enter-active");
+                content.classList.remove("modal-enter-active");
+                
+                overlay.classList.add("overlay-leave-active");
+                content.classList.add("modal-leave-active");
+                
+                setTimeout(() => {
+                    modal.classList.add("hidden");
+                    document.body.style.overflow = "";
+                    overlay.classList.remove("overlay-leave-active");
+                    content.classList.remove("modal-leave-active");
+                }, 200);
+            }
+
+            // Event Listeners for Modals
+            privacyBtn.addEventListener("click", () => openModal(privacyModal));
+            termsBtn.addEventListener("click", () => openModal(termsModal));
+
+            closePrivacy.addEventListener("click", () => closeModal(privacyModal));
+            closeTerms.addEventListener("click", () => closeModal(termsModal));
+            understandPrivacy.addEventListener("click", () => closeModal(privacyModal));
+            understandTerms.addEventListener("click", () => closeModal(termsModal));
+
+            // Close modal when clicking overlay
+            modalOverlays.forEach(overlay => {
+                overlay.addEventListener("click", function(e) {
+                    if (e.target === this) {
+                        const modal = this.closest('.fixed.inset-0');
+                        if (modal) closeModal(modal);
+                    }
+                });
+            });
+
+            // Close modal with Escape key
+            document.addEventListener("keydown", (e) => {
+                if (e.key === "Escape") {
+                    if (!privacyModal.classList.contains("hidden")) {
+                        closeModal(privacyModal);
+                    } else if (!termsModal.classList.contains("hidden")) {
+                        closeModal(termsModal);
+                    }
+                }
+            });
+
+            // Password Toggle Functions
             const setupToggle = (button, input) => {
                 if (!button || !input) return;
                 button.addEventListener("click", () => {
@@ -503,7 +970,7 @@
             setupToggle(passwordToggle, passwordInput);
             setupToggle(passwordConfirmToggle, passwordConfirmInput);
 
-            // Cek kekuatan password
+            // Password Strength Check
             const updateStrength = () => {
                 const bar = document.getElementById("password-strength");
                 if (!passwordInput || !bar) return;
@@ -520,9 +987,9 @@
                 const hasNum = /[0-9]/.test(pwd);
                 const hasSpec = /[!@#$%^&*(),.?":{}|<>]/.test(pwd);
 
-                len.innerHTML = `<i class="fas fa-${hasLen ? "check text-green-500" : "times text-red-500"} mr-1"></i>At least 8 characters`;
-                up.innerHTML = `<i class="fas fa-${hasUp ? "check text-green-500" : "times text-red-500"} mr-1"></i>One uppercase letter`;
-                num.innerHTML = `<i class="fas fa-${hasNum ? "check text-green-500" : "times text-red-500"} mr-1"></i>One number`;
+                len.innerHTML = `<i class="fas fa-${hasLen ? "check text-green-500" : "times text-red-500"} mr-1"></i>Minimal 8 karakter`;
+                up.innerHTML = `<i class="fas fa-${hasUp ? "check text-green-500" : "times text-red-500"} mr-1"></i>Satu huruf besar`;
+                num.innerHTML = `<i class="fas fa-${hasNum ? "check text-green-500" : "times text-red-500"} mr-1"></i>Satu angka`;
 
                 if (!pwd.length) return;
 
@@ -540,7 +1007,7 @@
                 checkMatch();
             };
 
-            // Cek apakah konfirmasi password sama
+            // Password Match Check
             const checkMatch = () => {
                 const match = document.getElementById("password-match");
                 const mismatch = document.getElementById("password-mismatch");
@@ -567,19 +1034,84 @@
             passwordInput?.addEventListener("input", updateStrength);
             passwordConfirmInput?.addEventListener("input", checkMatch);
 
-            // Loading state saat tombol submit ditekan
-            const form = document.querySelector("form");
-            form?.addEventListener("submit", (e) => {
-                const pwd = passwordInput?.value || "";
-                const conf = passwordConfirmInput?.value || "";
-                if (pwd !== conf) {
-                    e.preventDefault();
-                    alert("Please make sure your passwords match.");
-                    return;
-                }
+            // Form submission handling
+            document.getElementById('registerForm').addEventListener('submit', function(e) {
+                const submitBtn = document.getElementById('submitBtn');
+                const submitText = document.getElementById('submitText');
+                const submitLoading = document.getElementById('submitLoading');
+                
+                // Show loading state
                 submitBtn.disabled = true;
-                submitText.classList.add("hidden");
-                submitLoading.classList.remove("hidden");
+                submitText.classList.add('hidden');
+                submitLoading.classList.remove('hidden');
+                
+                // Basic client-side validation
+                const name = document.getElementById('name').value;
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                const passwordConfirm = document.getElementById('password_confirmation').value;
+                const terms = document.querySelector('input[name="terms"]').checked;
+                
+                let hasError = false;
+
+                if (!name) {
+                    document.getElementById('name').classList.add('input-error', 'shake');
+                    hasError = true;
+                }
+                if (!email) {
+                    document.getElementById('email').classList.add('input-error', 'shake');
+                    hasError = true;
+                }
+                if (!password) {
+                    document.getElementById('password').classList.add('input-error', 'shake');
+                    hasError = true;
+                }
+                if (!passwordConfirm) {
+                    document.getElementById('password_confirmation').classList.add('input-error', 'shake');
+                    hasError = true;
+                }
+                if (password !== passwordConfirm) {
+                    document.getElementById('password_confirmation').classList.add('input-error', 'shake');
+                    hasError = true;
+                }
+                if (!terms) {
+                    hasError = true;
+                }
+
+                if (hasError) {
+                    e.preventDefault();
+                    
+                    // Reset loading state
+                    setTimeout(() => {
+                        submitBtn.disabled = false;
+                        submitText.classList.remove('hidden');
+                        submitLoading.classList.add('hidden');
+                        
+                        // Remove shake animation after it completes
+                        setTimeout(() => {
+                            document.querySelectorAll('.shake').forEach(el => {
+                                el.classList.remove('shake');
+                            });
+                        }, 500);
+                    }, 1000);
+                }
+            });
+
+            // Real-time validation
+            document.getElementById('name').addEventListener('input', function() {
+                this.classList.remove('input-error', 'shake');
+            });
+
+            document.getElementById('email').addEventListener('input', function() {
+                this.classList.remove('input-error', 'shake');
+            });
+
+            document.getElementById('password').addEventListener('input', function() {
+                this.classList.remove('input-error', 'shake');
+            });
+
+            document.getElementById('password_confirmation').addEventListener('input', function() {
+                this.classList.remove('input-error', 'shake');
             });
 
             // Add breathing animation to wellness elements
@@ -587,6 +1119,18 @@
             wellnessIcons.forEach((icon, index) => {
                 icon.style.animationDelay = `${index * 0.5}s`;
             });
+
+            // Auto-remove success/error messages after 5 seconds
+            setTimeout(() => {
+                const messages = document.querySelectorAll('[class*="bg-"]');
+                messages.forEach(message => {
+                    if (message.classList.contains('bg-green-50') || message.classList.contains('bg-red-50')) {
+                        message.style.opacity = '0';
+                        message.style.transition = 'opacity 0.5s ease';
+                        setTimeout(() => message.remove(), 500);
+                    }
+                });
+            }, 5000);
         });
     </script>
 </body>
