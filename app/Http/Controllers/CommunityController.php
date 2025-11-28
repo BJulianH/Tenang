@@ -99,8 +99,14 @@ class CommunityController extends Controller
                 ->orderBy('members_count', 'desc')
                 ->limit(3)
                 ->get();
-
-        return view('community.index', compact('posts', 'trendingCommunities', 'recommendedCommunities', 'filter'));
+        $isOwnProfile = Auth::check() && Auth::id() === $user->id;
+$stats = [
+            'total_posts' => $user->posts_count,
+            'total_comments' => $user->comments_count,
+            'total_communities' => $user->communities()->count(),
+            'member_since' => $user->created_at->diffForHumans(),
+        ];
+        return view('community.index', compact('posts', 'trendingCommunities', 'recommendedCommunities', 'filter','user','isOwnProfile','stats'));
     }
 
     public function join(Community $community)

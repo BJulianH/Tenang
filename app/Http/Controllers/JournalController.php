@@ -18,7 +18,7 @@ class JournalController extends Controller
             $journal = Journal::where('user_id', $user->id)->find($request->edit);
         }
 
-        return view('journal', compact('journals', 'journal'));
+        return view('journal.index', compact('journals', 'journal'));
     }
 
     public function store(Request $request)

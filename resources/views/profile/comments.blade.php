@@ -5,113 +5,323 @@
 @section('styles')
 <style>
     .profile-header {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        position: relative;
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 0 rgba(0, 0, 0, 0.1);
+        border: 2px solid #f1f3f4;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    
-    .profile-header::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: linear-gradient(45deg, rgba(102, 126, 234, 0.9), rgba(118, 75, 162, 0.9));
+
+    .profile-header:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 6px 0 rgba(0, 0, 0, 0.1);
+        border-color: #e5e7eb;
     }
-    
+
     .profile-stats {
-        background: rgba(255, 255, 255, 0.98);
-        backdrop-filter: blur(20px);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 0 rgba(0, 0, 0, 0.1);
+        border: 2px solid #f1f3f4;
     }
-    
+
     .profile-avatar {
         border: 4px solid white;
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 4px 0 rgba(0, 0, 0, 0.1);
     }
-    
+
     .online-indicator {
         box-shadow: 0 0 0 3px white;
         animation: pulse 2s infinite;
     }
-    
+
     @keyframes pulse {
         0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
         70% { box-shadow: 0 0 0 10px rgba(34, 197, 94, 0); }
         100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
     }
-    
+
     .nav-tab {
         position: relative;
         transition: all 0.3s ease;
-        border-bottom: 2px solid transparent;
+        border-bottom: 3px solid transparent;
+        border-radius: 12px 12px 0 0;
+        padding: 12px 20px;
+        font-weight: 600;
     }
-    
+
     .nav-tab:hover {
-        color: #4f46e5;
+        color: #58cc70;
+        border-bottom-color: #c2ebd0;
+        background-color: #f8fdf8;
+        transform: translateY(-2px);
     }
-    
+
     .nav-tab.active {
-        color: #4f46e5;
-        border-bottom-color: #4f46e5;
+        color: #58cc70;
+        border-bottom-color: #58cc70;
+        background: linear-gradient(135deg, #f0f9f0, #ffffff);
+        box-shadow: 0 2px 0 rgba(88, 204, 112, 0.2);
     }
-    
+
     .comment-card {
         transition: all 0.3s ease;
-        border: 1px solid #f1f5f9;
+        border: 2px solid #f1f3f4;
         background: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 0 rgba(0, 0, 0, 0.1);
     }
-    
+
     .comment-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-        border-color: #e2e8f0;
+        transform: translateY(-4px);
+        box-shadow: 0 6px 0 rgba(0, 0, 0, 0.1);
+        border-color: #e5e7eb;
     }
-    
+
     .post-preview {
         background: linear-gradient(135deg, #f8fafc, #f1f5f9);
-        border-left: 4px solid #4f46e5;
+        border-left: 4px solid #58cc70;
+        border-radius: 12px;
+        padding: 12px 16px;
     }
-    
+
     .empty-state {
-        background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+        background: white;
         border: 2px dashed #e2e8f0;
+        border-radius: 16px;
+        box-shadow: 0 4px 0 rgba(0, 0, 0, 0.05);
     }
-    
+
     .comment-content {
         line-height: 1.6;
         color: #374151;
     }
-    
+
     .comment-actions {
         opacity: 0;
         transition: all 0.3s ease;
     }
-    
+
     .comment-card:hover .comment-actions {
         opacity: 1;
     }
-    
+
     .time-ago {
         color: #6b7280;
         font-size: 0.875rem;
     }
-    
+
     .like-count {
         transition: all 0.3s ease;
     }
-    
+
     .like-btn:hover .like-count {
         color: #dc2626;
     }
-    
+
     .community-badge {
-        background: linear-gradient(135deg, #4f46e5, #7c3aed);
+        background: linear-gradient(135deg, #58cc70, #45b259);
         color: white;
         font-size: 0.75rem;
         padding: 0.25rem 0.75rem;
         border-radius: 1rem;
+        font-weight: 600;
+    }
+
+    /* Button Styles */
+    .btn-primary {
+        background: #58cc70;
+        color: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 0 #45b259;
+        transition: all 0.2s ease;
+        font-weight: 700;
+        border: none;
+        padding: 12px 24px;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 0 #45b259;
+    }
+
+    .btn-primary:active {
+        transform: translateY(2px);
+        box-shadow: 0 2px 0 #45b259;
+    }
+
+    .btn-secondary {
+        background: #ffc800;
+        color: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 0 #e6b400;
+        transition: all 0.2s ease;
+        font-weight: 700;
+        border: none;
+        padding: 12px 24px;
+    }
+
+    .btn-secondary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 0 #e6b400;
+    }
+
+    .btn-secondary:active {
+        transform: translateY(2px);
+        box-shadow: 0 2px 0 #e6b400;
+    }
+
+    .btn-outline {
+        background: white;
+        color: #495057;
+        border: 2px solid #e9ecef;
+        border-radius: 16px;
+        box-shadow: 0 4px 0 rgba(0, 0, 0, 0.1);
+        transition: all 0.2s ease;
+        font-weight: 600;
+        padding: 12px 24px;
+    }
+
+    .btn-outline:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 0 rgba(0, 0, 0, 0.1);
+        border-color: #58cc70;
+        color: #58cc70;
+    }
+
+    /* Card Styles */
+    .card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 0 rgba(0, 0, 0, 0.1);
+        border: 2px solid #f1f3f4;
+        transition: all 0.3s ease;
+    }
+
+    .card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 6px 0 rgba(0, 0, 0, 0.1);
+    }
+
+    /* Stats Cards */
+    .stat-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 0 rgba(0, 0, 0, 0.1);
+        border: 2px solid #f1f3f4;
+        transition: all 0.3s ease;
+        padding: 20px;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 6px 0 rgba(0, 0, 0, 0.1);
+    }
+
+    /* Interactive Elements */
+    .interactive-btn {
+        transition: all 0.2s ease;
+        border-radius: 12px;
+        padding: 8px 16px;
+    }
+
+    .interactive-btn:hover {
+        transform: translateY(-2px);
+        background: #f8f9fa;
+    }
+
+    /* Like Animation */
+    .like-animation {
+        animation: like-pulse 0.6s ease;
+    }
+
+    @keyframes like-pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.3); }
+        100% { transform: scale(1); }
+    }
+
+    /* Loading Animation */
+    .loading-dots {
+        display: inline-flex;
+        gap: 4px;
+    }
+
+    .loading-dots span {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #58cc70;
+        animation: loading-bounce 1.4s infinite ease-in-out;
+    }
+
+    .loading-dots span:nth-child(1) { animation-delay: -0.32s; }
+    .loading-dots span:nth-child(2) { animation-delay: -0.16s; }
+
+    @keyframes loading-bounce {
+        0%, 80%, 100% {
+            transform: scale(0.8);
+            opacity: 0.5;
+        }
+        40% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    /* Custom Scrollbar */
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #58cc70;
+        border-radius: 10px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: #45b259;
+    }
+
+    /* Notification Styles */
+    .notification-success {
+        background: linear-gradient(135deg, #58cc70, #45b259);
+        border: 2px solid #45b259;
+        color: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 0 rgba(69, 178, 89, 0.3);
+    }
+
+    .notification-error {
+        background: linear-gradient(135deg, #ff6b6b, #e55c5c);
+        border: 2px solid #e55c5c;
+        color: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 0 rgba(229, 92, 92, 0.3);
+    }
+
+    /* Rounded corners */
+    .rounded-duo {
+        border-radius: 16px;
+    }
+
+    .rounded-duo-xl {
+        border-radius: 24px;
+    }
+
+    /* Shadows */
+    .shadow-duo {
+        box-shadow: 0 4px 0 rgba(0, 0, 0, 0.1);
+    }
+
+    .shadow-duo-lg {
+        box-shadow: 0 6px 0 rgba(0, 0, 0, 0.1);
     }
 </style>
 @endsection
@@ -119,58 +329,60 @@
 @section('content')
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <!-- Profile Header -->
-    <div class="rounded-2xl overflow-hidden profile-header mb-8">
-        <!-- Cover Image -->
-        <div class="h-64 relative">
-            @if($user->cover_image)
-            <img src="{{ asset('storage/' . $user->cover_image) }}" alt="Cover image" class="w-full h-full object-cover">
-            @endif
-            
-            <!-- Profile Stats Overlay -->
-            <div class="absolute bottom-6 left-6 right-6">
-                <div class="profile-stats rounded-2xl p-6">
-                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
-                        <div class="flex items-center gap-6 flex-1">
-                            <!-- Profile Image -->
-                            <div class="relative">
-                                <div class="w-20 h-20 rounded-full profile-avatar bg-gradient-to-r from-indigo-500 to-purple-600 flex items-center justify-center text-white text-2xl font-bold">
-                                    @if($user->profile_image)
-                                        <img src="{{ asset('storage/' . $user->profile_image) }}" alt="{{ $user->name }}" class="w-full h-full rounded-full object-cover">
-                                    @else
-                                        {{ substr($user->name, 0, 1) }}
-                                    @endif
-                                </div>
-                                @if($user->is_online)
-                                <div class="absolute bottom-2 right-2 w-4 h-4 bg-green-500 rounded-full border-2 border-white online-indicator"></div>
-                                @endif
-                            </div>
-                            
-                            <!-- User Info -->
-                            <div class="flex-1">
-                                <h1 class="text-2xl font-bold text-gray-900">{{ $user->name }}</h1>
-                                <p class="text-gray-600">@{{ $user->username }}</p>
-                                <div class="flex items-center gap-4 mt-2 text-sm text-gray-500">
-                                    <span>{{ $comments->total() }} comments</span>
-                                    <span>•</span>
-                                    <span>Joined {{ $user->created_at->format('M Y') }}</span>
-                                </div>
-                            </div>
+    <div class="profile-header mb-8">
+        <div class="p-6">
+            <div class="flex flex-col md:flex-row items-start md:items-center gap-6">
+                <!-- Profile Image -->
+                <div class="flex-shrink-0">
+                    <div class="w-20 h-20 rounded-full bg-gradient-to-r from-primary-400 to-secondary-400 flex items-center justify-center text-white font-bold text-2xl shadow-duo">
+                        @if($user->profile_image)
+                            <img src="{{ Storage::url($user->profile_image) }}" alt="{{ $user->name }}" class="w-full h-full rounded-full object-cover">
+                        @else
+                            {{ substr($user->name, 0, 1) }}
+                        @endif
+                    </div>
+                </div>
+
+                <!-- Profile Info -->
+                <div class="flex-1">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        <div>
+                            <h1 class="text-2xl font-bold text-neutral-800">{{ $user->name }}</h1>
+                            <p class="text-neutral-600 text-lg">@<span>{{ $user->username }}</span></p>
+                            @if($user->bio)
+                                <p class="text-neutral-500 mt-2 max-w-2xl">{{ $user->bio }}</p>
+                            @else
+                                <p class="text-neutral-400 mt-2 italic">No bio yet</p>
+                            @endif
                         </div>
-                        
-                        <!-- Action Buttons -->
-                        <div class="flex items-center gap-3">
-                            @if($isOwnProfile)
-                            <a href="{{ route('profile.edit') }}" class="bg-indigo-500 text-white px-4 py-2 rounded-xl hover:bg-indigo-600 transition-all font-semibold">
+
+                        @if($isOwnProfile)
+                            <a href="{{ route('profile.edit') }}" class="btn-outline px-6 py-2 rounded-duo font-bold whitespace-nowrap">
                                 <i class="fas fa-edit mr-2"></i>Edit Profile
                             </a>
-                            @else
-                            <button class="bg-indigo-500 text-white px-4 py-2 rounded-xl hover:bg-indigo-600 transition-all font-semibold">
+                        @else
+                            <button class="btn-primary px-6 py-2 rounded-duo font-bold whitespace-nowrap">
                                 <i class="fas fa-user-plus mr-2"></i>Follow
                             </button>
-                            <button class="border border-gray-300 text-gray-700 px-4 py-2 rounded-xl hover:bg-gray-50 transition-all font-semibold">
-                                <i class="fas fa-envelope mr-2"></i>Message
-                            </button>
-                            @endif
+                        @endif
+                    </div>
+
+                    <!-- Stats -->
+                    <div class="flex flex-wrap gap-6 mt-6">
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-primary-600">{{ $user->posts_count ?? 0 }}</div>
+                            <div class="text-sm text-neutral-500 font-medium">Posts</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-secondary-600">{{ $user->comments_count ?? 0 }}</div>
+                            <div class="text-sm text-neutral-500 font-medium">Comments</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-accent-purple">{{ $user->communities()->count() ?? 0 }}</div>
+                            <div class="text-sm text-neutral-500 font-medium">Communities</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-sm text-neutral-500 font-medium">Joined {{ $user->created_at->diffForHumans() }}</div>
                         </div>
                     </div>
                 </div>
@@ -182,35 +394,41 @@
         <!-- Main Content -->
         <div class="lg:w-2/3">
             <!-- Navigation Tabs -->
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-2 mb-8">
-                <div class="flex space-x-1">
+            <div class="card p-2 mb-8">
+                <div class="flex overflow-x-auto custom-scrollbar">
                     <a href="{{ route('profile.community', $user->username) }}" 
-                       class="nav-tab flex-1 text-center py-4 px-2 font-semibold text-gray-700">
-                        <i class="fas fa-file-alt mr-2"></i>Posts
+                       class="nav-tab flex items-center font-medium text-neutral-700 flex-shrink-0">
+                        <i class="fas fa-newspaper mr-2"></i>
+                        <span>Posts</span>
                     </a>
                     <a href="{{ route('profile.comments', $user->username) }}" 
-                       class="nav-tab flex-1 text-center py-4 px-2 font-semibold text-indigo-600 active">
-                        <i class="fas fa-comments mr-2"></i>Comments
+                       class="nav-tab flex items-center font-medium text-neutral-700 flex-shrink-0 active">
+                        <i class="fas fa-comments mr-2"></i>
+                        <span>Comments</span>
                     </a>
                     <a href="{{ route('profile.communities', $user->username) }}" 
-                       class="nav-tab flex-1 text-center py-4 px-2 font-semibold text-gray-700">
-                        <i class="fas fa-users mr-2"></i>Communities
+                       class="nav-tab flex items-center font-medium text-neutral-700 flex-shrink-0">
+                        <i class="fas fa-users mr-2"></i>
+                        <span>Communities</span>
                     </a>
                 </div>
             </div>
 
             <!-- Comments Header -->
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
-                <div class="flex items-center justify-between">
+            <div class="card p-6 mb-6">
+                <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                     <div>
-                        <h2 class="text-2xl font-bold text-gray-900">All Comments</h2>
-                        <p class="text-gray-600 mt-1">
+                        <h2 class="text-2xl font-bold text-neutral-800 flex items-center">
+                            <i class="fas fa-comments text-primary-500 mr-2"></i>
+                            All Comments
+                        </h2>
+                        <p class="text-neutral-600 mt-1">
                             {{ $comments->total() }} comments across {{ $comments->unique('post_id')->count() }} posts
                         </p>
                     </div>
                     <div class="flex items-center gap-3">
-                        <span class="text-sm text-gray-500">Sorted by:</span>
-                        <select class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                        <span class="text-sm text-neutral-500 font-medium">Sorted by:</span>
+                        <select class="border-2 border-neutral-300 rounded-duo px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white shadow-duo-pressed">
                             <option value="newest">Newest First</option>
                             <option value="oldest">Oldest First</option>
                             <option value="popular">Most Liked</option>
@@ -222,21 +440,21 @@
             <!-- Comments List -->
             <div class="space-y-4">
                 @forelse($comments as $comment)
-                <div class="comment-card rounded-2xl p-6">
+                <div class="comment-card p-6">
                     <!-- Comment Header -->
                     <div class="flex items-start justify-between mb-4">
                         <div class="flex items-center gap-3">
                             <div class="flex items-center gap-2">
-                                <div class="w-10 h-10 rounded-full bg-gradient-to-r from-indigo-400 to-purple-500 flex items-center justify-center text-white font-semibold text-sm">
+                                <div class="w-10 h-10 rounded-full bg-gradient-to-r from-primary-400 to-secondary-400 flex items-center justify-center text-white font-semibold text-sm shadow-duo">
                                     {{ substr($user->name, 0, 1) }}
                                 </div>
                                 <div>
                                     <div class="flex items-center gap-2">
-                                        <span class="font-semibold text-gray-900">{{ $user->name }}</span>
+                                        <span class="font-bold text-neutral-800">{{ $user->name }}</span>
                                         <span class="time-ago">{{ $comment->created_at->diffForHumans() }}</span>
                                     </div>
                                     <div class="flex items-center gap-2 mt-1">
-                                        <span class="text-sm text-gray-500">in</span>
+                                        <span class="text-sm text-neutral-500">in</span>
                                         <a href="{{ route('community.show', $comment->post->community->slug) }}" class="community-badge text-xs">
                                             {{ $comment->post->community->name }}
                                         </a>
@@ -248,7 +466,7 @@
                         <!-- Comment Actions -->
                         <div class="comment-actions flex items-center gap-2">
                             @if($isOwnProfile)
-                            <button class="text-gray-400 hover:text-red-500 transition-colors p-2 rounded-lg hover:bg-red-50"
+                            <button class="text-neutral-400 hover:text-red-500 transition-colors p-2 rounded-lg hover:bg-red-50 interactive-btn"
                                     onclick="deleteComment({{ $comment->id }})">
                                 <i class="fas fa-trash text-sm"></i>
                             </button>
@@ -258,33 +476,33 @@
 
                     <!-- Comment Content -->
                     <div class="comment-content mb-4">
-                        <p class="text-gray-800">{{ $comment->content }}</p>
+                        <p class="text-neutral-800">{{ $comment->content }}</p>
                     </div>
 
                     <!-- Comment Stats -->
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-4 text-sm text-gray-500">
-                            <button class="like-comment-btn flex items-center gap-2 hover:text-red-500 transition-colors {{ $comment->isLikedBy(auth()->user()) ? 'text-red-500' : '' }}"
+                    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                        <div class="flex items-center gap-4 text-sm text-neutral-500">
+                            <button class="like-comment-btn flex items-center gap-2 hover:text-red-500 transition-colors {{ $comment->isLikedBy(auth()->user()) ? 'text-red-500' : '' }} interactive-btn"
                                     data-comment-id="{{ $comment->id }}">
                                 <i class="fas fa-heart {{ $comment->isLikedBy(auth()->user()) ? 'fas' : 'far' }}"></i>
-                                <span class="like-count">{{ $comment->likes_count }}</span>
+                                <span class="like-count font-medium">{{ $comment->likes_count }}</span>
                             </button>
                             
                             <span class="flex items-center gap-2">
                                 <i class="fas fa-reply"></i>
-                                <span>{{ $comment->replies_count }} replies</span>
+                                <span class="font-medium">{{ $comment->replies_count }} replies</span>
                             </span>
                         </div>
 
                         <!-- Post Preview -->
                         <a href="{{ route('posts.show', $comment->post) }}" 
-                           class="post-preview px-4 py-2 rounded-lg text-sm hover:bg-indigo-50 transition-colors">
+                           class="post-preview hover:bg-primary-50 transition-colors">
                             <div class="flex items-center gap-2">
-                                <i class="fas fa-external-link-alt text-indigo-500"></i>
-                                <span class="font-medium text-gray-700">View Post</span>
+                                <i class="fas fa-external-link-alt text-primary-500"></i>
+                                <span class="font-bold text-neutral-700">View Post</span>
                             </div>
                             @if($comment->post->title)
-                            <div class="text-xs text-gray-500 mt-1 truncate max-w-xs">
+                            <div class="text-xs text-neutral-500 mt-1 truncate max-w-xs">
                                 "{{ Str::limit($comment->post->title, 60) }}"
                             </div>
                             @endif
@@ -293,24 +511,24 @@
 
                     <!-- Replies Section -->
                     @if($comment->replies_count > 0)
-                    <div class="mt-4 pl-4 border-l-2 border-gray-200">
+                    <div class="mt-4 pl-4 border-l-2 border-neutral-200">
                         <div class="space-y-3">
                             @foreach($comment->replies->take(2) as $reply)
                             <div class="flex items-start gap-3 py-2">
-                                <div class="w-8 h-8 rounded-full bg-gradient-to-r from-gray-400 to-gray-500 flex items-center justify-center text-white text-xs font-semibold flex-shrink-0">
+                                <div class="w-8 h-8 rounded-full bg-gradient-to-r from-primary-300 to-secondary-300 flex items-center justify-center text-white text-xs font-semibold flex-shrink-0 shadow-duo">
                                     {{ substr($reply->user->name, 0, 1) }}
                                 </div>
                                 <div class="flex-1">
                                     <div class="flex items-center gap-2 mb-1">
-                                        <span class="font-medium text-sm text-gray-900">{{ $reply->user->name }}</span>
-                                        <span class="text-xs text-gray-500">{{ $reply->created_at->diffForHumans() }}</span>
+                                        <span class="font-bold text-sm text-neutral-800">{{ $reply->user->name }}</span>
+                                        <span class="text-xs text-neutral-500">{{ $reply->created_at->diffForHumans() }}</span>
                                     </div>
-                                    <p class="text-sm text-gray-700">{{ $reply->content }}</p>
+                                    <p class="text-sm text-neutral-700">{{ $reply->content }}</p>
                                     <div class="flex items-center gap-3 mt-2">
-                                        <button class="like-comment-btn flex items-center gap-1 text-xs text-gray-500 hover:text-red-500 transition-colors"
+                                        <button class="like-comment-btn flex items-center gap-1 text-xs text-neutral-500 hover:text-red-500 transition-colors interactive-btn"
                                                 data-comment-id="{{ $reply->id }}">
                                             <i class="fas fa-heart {{ $reply->isLikedBy(auth()->user()) ? 'fas text-red-500' : 'far' }}"></i>
-                                            <span class="like-count">{{ $reply->likes_count }}</span>
+                                            <span class="like-count font-medium">{{ $reply->likes_count }}</span>
                                         </button>
                                     </div>
                                 </div>
@@ -318,7 +536,7 @@
                             @endforeach
                             
                             @if($comment->replies_count > 2)
-                            <button class="text-sm text-indigo-600 hover:text-indigo-700 font-medium flex items-center gap-1">
+                            <button class="text-sm text-primary-600 hover:text-primary-700 font-bold flex items-center gap-1 interactive-btn">
                                 <i class="fas fa-chevron-down"></i>
                                 Show {{ $comment->replies_count - 2 }} more replies
                             </button>
@@ -328,12 +546,12 @@
                     @endif
                 </div>
                 @empty
-                <div class="empty-state rounded-2xl p-12 text-center">
-                    <div class="w-24 h-24 bg-gradient-to-r from-gray-200 to-gray-300 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <i class="fas fa-comments text-3xl text-gray-400"></i>
+                <div class="empty-state p-12 text-center">
+                    <div class="w-24 h-24 bg-gradient-to-r from-neutral-200 to-neutral-300 rounded-full flex items-center justify-center mx-auto mb-6 shadow-duo">
+                        <i class="fas fa-comments text-3xl text-neutral-400"></i>
                     </div>
-                    <h3 class="text-2xl font-bold text-gray-600 mb-3">No comments yet</h3>
-                    <p class="text-gray-500 text-lg max-w-md mx-auto">
+                    <h3 class="text-2xl font-bold text-neutral-600 mb-3">No comments yet</h3>
+                    <p class="text-neutral-500 text-lg max-w-md mx-auto">
                         @if($isOwnProfile)
                             Start engaging with the community by commenting on posts!
                         @else
@@ -342,7 +560,7 @@
                     </p>
                     @if($isOwnProfile)
                     <div class="mt-6">
-                        <a href="{{ route('community.index') }}" class="inline-flex items-center bg-indigo-500 text-white px-6 py-3 rounded-xl hover:bg-indigo-600 transition-all font-semibold">
+                        <a href="{{ route('community.index') }}" class="btn-primary px-6 py-3 rounded-duo font-bold inline-flex items-center">
                             <i class="fas fa-comment mr-2"></i>Explore Posts to Comment
                         </a>
                     </div>
@@ -362,29 +580,29 @@
         <!-- Sidebar -->
         <div class="lg:w-1/3 space-y-6">
             <!-- Comment Statistics -->
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                <h3 class="font-bold text-xl text-gray-900 mb-4 flex items-center">
-                    <i class="fas fa-chart-bar text-indigo-500 mr-3"></i>
+            <div class="card p-6">
+                <h3 class="font-bold text-xl text-neutral-800 mb-4 flex items-center">
+                    <i class="fas fa-chart-bar text-primary-500 mr-3"></i>
                     Comment Stats
                 </h3>
                 <div class="space-y-4">
-                    <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                        <span class="text-gray-700 font-medium">Total Comments</span>
-                        <span class="text-2xl font-bold text-indigo-600">{{ $comments->total() }}</span>
+                    <div class="flex justify-between items-center p-3 bg-neutral-50 rounded-duo border-2 border-neutral-200">
+                        <span class="text-neutral-700 font-bold">Total Comments</span>
+                        <span class="text-2xl font-bold text-primary-600">{{ $comments->total() }}</span>
                     </div>
-                    <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                        <span class="text-gray-700 font-medium">Posts Commented On</span>
-                        <span class="text-2xl font-bold text-indigo-600">{{ $comments->unique('post_id')->count() }}</span>
+                    <div class="flex justify-between items-center p-3 bg-neutral-50 rounded-duo border-2 border-neutral-200">
+                        <span class="text-neutral-700 font-bold">Posts Commented On</span>
+                        <span class="text-2xl font-bold text-primary-600">{{ $comments->unique('post_id')->count() }}</span>
                     </div>
-                    <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                        <span class="text-gray-700 font-medium">Average Likes</span>
-                        <span class="text-2xl font-bold text-indigo-600">
+                    <div class="flex justify-between items-center p-3 bg-neutral-50 rounded-duo border-2 border-neutral-200">
+                        <span class="text-neutral-700 font-bold">Average Likes</span>
+                        <span class="text-2xl font-bold text-primary-600">
                             {{ number_format($comments->avg('likes_count') ?? 0, 1) }}
                         </span>
                     </div>
-                    <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                        <span class="text-gray-700 font-medium">Most Liked Comment</span>
-                        <span class="text-2xl font-bold text-indigo-600">
+                    <div class="flex justify-between items-center p-3 bg-neutral-50 rounded-duo border-2 border-neutral-200">
+                        <span class="text-neutral-700 font-bold">Most Liked Comment</span>
+                        <span class="text-2xl font-bold text-primary-600">
                             {{ $comments->max('likes_count') ?? 0 }}
                         </span>
                     </div>
@@ -392,25 +610,25 @@
             </div>
 
             <!-- Recent Activity -->
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                <h3 class="font-bold text-xl text-gray-900 mb-4 flex items-center">
-                    <i class="fas fa-clock text-indigo-500 mr-3"></i>
+            <div class="card p-6">
+                <h3 class="font-bold text-xl text-neutral-800 mb-4 flex items-center">
+                    <i class="fas fa-clock text-primary-500 mr-3"></i>
                     Recent Activity
                 </h3>
                 <div class="space-y-3">
                     @foreach($comments->take(5) as $recentComment)
-                    <div class="flex items-start gap-3 p-3 hover:bg-gray-50 rounded-lg transition-colors">
-                        <div class="w-8 h-8 rounded-full bg-gradient-to-r from-indigo-400 to-purple-500 flex items-center justify-center text-white text-xs font-semibold flex-shrink-0">
+                    <div class="flex items-start gap-3 p-3 hover:bg-neutral-50 rounded-duo transition-colors">
+                        <div class="w-8 h-8 rounded-full bg-gradient-to-r from-primary-400 to-secondary-400 flex items-center justify-center text-white text-xs font-semibold flex-shrink-0 shadow-duo">
                             <i class="fas fa-comment"></i>
                         </div>
                         <div class="flex-1 min-w-0">
-                            <p class="text-sm text-gray-700 line-clamp-2">
+                            <p class="text-sm text-neutral-700 line-clamp-2">
                                 {{ Str::limit($recentComment->content, 80) }}
                             </p>
                             <div class="flex items-center gap-2 mt-1">
-                                <span class="text-xs text-gray-500">{{ $recentComment->created_at->diffForHumans() }}</span>
-                                <span class="text-xs text-gray-400">•</span>
-                                <span class="text-xs text-indigo-600 font-medium">
+                                <span class="text-xs text-neutral-500">{{ $recentComment->created_at->diffForHumans() }}</span>
+                                <span class="text-xs text-neutral-400">•</span>
+                                <span class="text-xs text-primary-600 font-bold">
                                     {{ $recentComment->post->community->name }}
                                 </span>
                             </div>
@@ -421,9 +639,9 @@
             </div>
 
             <!-- Top Communities -->
-            <div class="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl shadow-sm border border-indigo-100 p-6">
-                <h3 class="font-bold text-xl text-gray-900 mb-4 flex items-center">
-                    <i class="fas fa-fire text-indigo-500 mr-3"></i>
+            <div class="card p-6 bg-gradient-to-br from-primary-50 to-secondary-50 border-2 border-primary-100">
+                <h3 class="font-bold text-xl text-neutral-800 mb-4 flex items-center">
+                    <i class="fas fa-fire text-primary-500 mr-3"></i>
                     Top Communities
                 </h3>
                 <div class="space-y-3">
@@ -441,21 +659,21 @@
                     
                     @foreach($topCommunities as $data)
                     <a href="{{ route('community.show', $data['community']->slug) }}" 
-                       class="flex items-center gap-3 p-3 bg-white rounded-lg hover:shadow-md transition-all">
-                        <div class="w-10 h-10 rounded-xl bg-gradient-to-r from-indigo-100 to-purple-100 flex items-center justify-center text-indigo-600">
+                       class="flex items-center gap-3 p-3 bg-white rounded-duo border-2 border-neutral-200 hover:border-primary-300 transition-all">
+                        <div class="w-10 h-10 rounded-duo bg-gradient-to-r from-primary-100 to-secondary-100 flex items-center justify-center text-primary-600 shadow-duo-pressed">
                             @if($data['community']->profile_image)
                                 <img src="{{ asset('storage/' . $data['community']->profile_image) }}" 
                                      alt="{{ $data['community']->name }}" 
-                                     class="w-full h-full rounded-xl object-cover">
+                                     class="w-full h-full rounded-duo object-cover">
                             @else
                                 <i class="fas fa-users text-sm"></i>
                             @endif
                         </div>
                         <div class="flex-1 min-w-0">
-                            <div class="font-semibold text-gray-900 text-sm truncate">
+                            <div class="font-bold text-neutral-800 text-sm truncate">
                                 {{ $data['community']->name }}
                             </div>
-                            <div class="text-xs text-gray-500">
+                            <div class="text-xs text-neutral-500">
                                 {{ $data['comment_count'] }} comments
                             </div>
                         </div>
@@ -478,6 +696,10 @@
             const isLiked = btn.classList.contains('text-red-500');
             const url = isLiked ? `/community/comments/${commentId}/unlike` : `/community/comments/${commentId}/like`;
             
+            // Add immediate visual feedback
+            const likeIcon = btn.querySelector('i');
+            likeIcon.classList.add('like-animation');
+
             fetch(url, {
                 method: 'POST',
                 headers: {
@@ -488,24 +710,19 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    const likeIcon = btn.querySelector('i');
                     const likeCount = btn.querySelector('.like-count');
                     
                     if (data.action === 'added') {
                         btn.classList.add('text-red-500');
                         likeIcon.classList.replace('far', 'fas');
-                        likeIcon.classList.add('like-animation');
                     } else {
                         btn.classList.remove('text-red-500');
                         likeIcon.classList.replace('fas', 'far');
                     }
                     
                     likeCount.textContent = data.likes_count;
-                    
-                    // Remove animation
-                    setTimeout(() => {
-                        likeIcon.classList.remove('like-animation');
-                    }, 600);
+                    likeCount.classList.add('pulse-gentle');
+                    setTimeout(() => likeCount.classList.remove('pulse-gentle'), 600);
                     
                     showNotification(data.message, 'success');
                 } else {
@@ -515,6 +732,11 @@
             .catch(error => {
                 console.error('Error:', error);
                 showNotification('Error processing like', 'error');
+            })
+            .finally(() => {
+                setTimeout(() => {
+                    likeIcon.classList.remove('like-animation');
+                }, 600);
             });
         }
     });
@@ -550,7 +772,7 @@
     }
 
     // Sort functionality
-    document.querySelector('select').addEventListener('change', function(e) {
+    document.querySelector('select')?.addEventListener('change', function(e) {
         const sortBy = e.target.value;
         const url = new URL(window.location.href);
         url.searchParams.set('sort', sortBy);
@@ -572,30 +794,28 @@
         }
     });
 
-    // Notification function
+    // Enhanced notification system
     function showNotification(message, type = 'info') {
         const notification = document.createElement('div');
-        notification.className = `fixed top-6 right-6 z-50 p-4 rounded-xl shadow-lg text-white max-w-sm transform translate-x-full transition-all duration-300 ${
-            type === 'success' ? 'bg-green-500 shadow-green-200' :
-            type === 'error' ? 'bg-red-500 shadow-red-200' :
-            'bg-blue-500 shadow-blue-200'
+        notification.className = `fixed top-4 right-4 z-50 p-4 rounded-duo shadow-lg text-white max-w-sm transform translate-x-full transition-transform duration-300 font-bold ${
+            type === 'success' ? 'notification-success' :
+            type === 'error' ? 'notification-error' :
+            'bg-blue-500'
         }`;
         notification.innerHTML = `
-            <div class="flex items-center space-x-3">
-                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-triangle' : 'info-circle'} text-lg"></i>
-                <span class="font-medium">${message}</span>
+            <div class="flex items-center">
+                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-triangle' : 'info-circle'} mr-3 text-lg"></i>
+                <span>${message}</span>
             </div>
         `;
-        
+
         document.body.appendChild(notification);
-        
+
         setTimeout(() => {
             notification.classList.remove('translate-x-full');
-            notification.classList.add('translate-x-0');
         }, 100);
-        
+
         setTimeout(() => {
-            notification.classList.remove('translate-x-0');
             notification.classList.add('translate-x-full');
             setTimeout(() => {
                 if (document.body.contains(notification)) {
@@ -615,6 +835,30 @@
             } else {
                 tab.classList.remove('active');
             }
+        });
+
+        // Add Duolingo-style interactions
+        document.querySelectorAll('.btn-primary, .btn-secondary, .btn-outline, .card, .comment-card').forEach(element => {
+            element.addEventListener('mousedown', function() {
+                this.style.transform = 'translateY(2px)';
+                if (this.classList.contains('btn-primary') || this.classList.contains('btn-secondary')) {
+                    this.style.boxShadow = '0 2px 0 rgba(0, 0, 0, 0.1)';
+                }
+            });
+            
+            element.addEventListener('mouseup', function() {
+                this.style.transform = 'translateY(0)';
+                if (this.classList.contains('btn-primary') || this.classList.contains('btn-secondary')) {
+                    this.style.boxShadow = '0 4px 0 rgba(0, 0, 0, 0.1)';
+                }
+            });
+            
+            element.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+                if (this.classList.contains('btn-primary') || this.classList.contains('btn-secondary')) {
+                    this.style.boxShadow = '0 4px 0 rgba(0, 0, 0, 0.1)';
+                }
+            });
         });
     });
 </script>

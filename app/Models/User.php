@@ -181,4 +181,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(UserQuest::class)->forToday();
     }
+public function hasSocialLinks()
+{
+    return $this->facebook_url || 
+           $this->twitter_url || 
+           $this->instagram_url || 
+           $this->linkedin_url || 
+           $this->github_url;
+}
 }

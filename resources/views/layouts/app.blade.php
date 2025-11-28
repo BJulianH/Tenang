@@ -176,22 +176,25 @@
         }
 
         .card {
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 4px 0 rgba(0, 0, 0, 0.1);
-            transition: all 0.2s ease;
-            border: 3px solid white;
-        }
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 0 rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+    border: 3px solid #f1f3f4; /* abu abu tipis */
+}
 
-        .card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 0 rgba(0, 0, 0, 0.1);
-        }
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 0 rgba(0, 0, 0, 0.1);
+    border-color: #e5e7eb; /* sedikit lebih gelap saat hover */
+}
 
-        .card:active {
-            transform: translateY(2px);
-            box-shadow: 0 2px 0 rgba(0, 0, 0, 0.1);
-        }
+.card:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.1);
+    border-color: #dfe3e6; /* klik = lebih solid */
+}
+
 
         .app-button {
             background: #58cc70;
@@ -520,48 +523,47 @@
 
             <!-- Navigation Menu -->
             <div class="flex-1 py-4 flex flex-col justify-center align-middle">
-                <ul class="space-y-3 px-4">
-                    <li>
-                        <a href="{{ route('dashboard') }}" 
-                           class="sidebar-item active flex flex-col items-center p-3 text-neutral-800 rounded-duo lg:flex-col lg:justify-center">
-                            <i class="fas fa-home w-6 text-center text-xl "></i>
-                            <span class="sidebar-text mt-2 font-bold text-sm lg:mt-0">Dashboard</span>
-                        </a>
-                    </li>
+    <ul class="space-y-3 px-4">
 
-                    <li>
-                        <a href="{{ route('journal.index') }}" 
-                           class="sidebar-item flex flex-col items-center p-3 text-neutral-800 rounded-duo lg:flex-col lg:justify-center">
-                            <i class="fas fa-book w-6 text-center text-xl "></i>
-                            <span class="sidebar-text mt-2 font-bold text-sm lg:mt-0">Journal</span>
-                        </a>
-                    </li>
+        <li>
+            <a href="{{ route('dashboard') }}" 
+                class="sidebar-item flex flex-col items-center p-3 rounded-duo text-neutral-800 
+                {{ request()->routeIs('dashboard') ? 'active font-bold text-primary-600' : '' }}">
+                <i class="fas fa-home w-6 text-center text-xl"></i>
+                <span class="sidebar-text mt-2 text-sm">Dashboard</span>
+            </a>
+        </li>
 
-                    <li>
-                        <a href="" 
-                           class="sidebar-item flex flex-col items-center p-3 text-neutral-800 rounded-duo lg:flex-col lg:justify-center">
-                            <i class="fas fa-chart-line w-6 text-center text-xl "></i>
-                            <span class="sidebar-text mt-2 font-bold text-sm lg:mt-0">Progress</span>
-                        </a>
-                    </li>
+        <li>
+            <a href="{{ route('journal.index') }}"
+                class="sidebar-item flex flex-col items-center p-3 rounded-duo text-neutral-800 
+                {{ request()->routeIs('journal.*') ? 'active font-bold text-primary-600' : '' }}">
+                <i class="fas fa-book w-6 text-center text-xl"></i>
+                <span class="sidebar-text mt-2 text-sm">Journal</span>
+            </a>
+        </li>
 
-                    <li>
-                        <a href="" 
-                           class="sidebar-item flex flex-col items-center p-3 text-neutral-800 rounded-duo lg:flex-col lg:justify-center">
-                            <i class="fas fa-users w-6 text-center text-xl "></i>
-                            <span class="sidebar-text mt-2 font-bold text-sm lg:mt-0">Community</span>
-                        </a>
-                    </li>
+        <li>
+            <a href="{{ route('community.index') }}" 
+                class="sidebar-item flex flex-col items-center p-3 rounded-duo text-neutral-800 
+                {{ request()->routeIs('community.*') ? 'active font-bold text-primary-600' : '' }}">
+                <i class="fas fa-users w-6 text-center text-xl"></i>
+                <span class="sidebar-text mt-2 text-sm">Community</span>
+            </a>
+        </li>
 
-                    <li>
-                        <a href="" 
-                           class="sidebar-item flex flex-col items-center p-3 text-neutral-800 rounded-duo lg:flex-col lg:justify-center">
-                            <i class="fas fa-cog w-6 text-center text-xl "></i>
-                            <span class="sidebar-text mt-2 font-bold text-sm lg:mt-0">Settings</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
+        <li>
+            <a href="#" 
+                class="sidebar-item flex flex-col items-center p-3 rounded-duo text-neutral-800 
+                {{ request()->routeIs('settings.*') ? 'active font-bold text-primary-600' : '' }}">
+                <i class="fas fa-cog w-6 text-center text-xl"></i>
+                <span class="sidebar-text mt-2 text-sm">Settings</span>
+            </a>
+        </li>
+
+    </ul>
+</div>
+
 
             
         </div>
