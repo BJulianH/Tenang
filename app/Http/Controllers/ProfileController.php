@@ -100,48 +100,61 @@ class ProfileController extends Controller
     }
 
     public function updateAvatar(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'avatar' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()
-                ->with('error', 'File harus berupa gambar (JPEG, PNG, JPG, GIF, WEBP) dengan ukuran maksimal 2MB.')
-                ->with('active_tab', 'edit-profile');
-        }
-
-        $user = Auth::user();
-
-        try {
-            if ($request->hasFile('avatar')) {
-                // Hapus avatar lama jika ada
-                if ($user->avatar && Storage::exists('public/avatars/' . $user->avatar)) {
-                    Storage::delete('public/avatars/' . $user->avatar);
-                }
-
-                // Generate nama file yang unik
-                $avatarName = $user->id . '_avatar_' . time() . '.' . $request->avatar->getClientOriginalExtension();
-                
-                // Simpan avatar baru
-                $request->avatar->storeAs('public/avatars', $avatarName);
-
-                $user->update([
-                    'avatar' => $avatarName
-                ]);
-
+        {
+            $validator = Validator::make($request->all(), [
+                'avatar' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            ]);
+        
+            if ($validator->fails()) {
                 return redirect()->back()
-                    ->with('success', 'Foto profil berhasil diubah!')
+                    ->with('error', 'File harus berupa gambar (JPEG, PNG, JPG, GIF, WEBP) dengan ukuran maksimal 2MB.')
                     ->with('active_tab', 'edit-profile');
             }
-        } catch (\Exception $e) {
+        
+            $user = Auth::user();
+        
+            try {
+                if ($request->hasFile('avatar')) {
+                    // Pastikan folder avatars exists
+                    if (!Storage::disk('public')->exists('avatars')) {
+                        Storage::disk('public')->makeDirectory('avatars');
+                    }
+                
+                    // Hapus avatar lama jika ada
+                    if ($user->avatar && Storage::disk('public')->exists('avatars/' . $user->avatar)) {
+                        Storage::disk('public')->delete('avatars/' . $user->avatar);
+                    }
+                
+                    // Generate nama file yang unik
+                    $avatarName = $user->id . '_avatar_' . time() . '.' . $request->avatar->getClientOriginalExtension();
+                    
+                    // Simpan avatar baru
+                    $path = $request->avatar->storeAs('avatars', $avatarName, 'public');
+                
+                    // Debug: cek apakah file benar-benar tersimpan
+                    \Log::info('Avatar saved:', [
+                        'path' => $path,
+                        'full_path' => storage_path('app/public/' . $path),
+                        'exists' => Storage::disk('public')->exists($path)
+                    ]);
+                
+                    $user->update([
+                        'avatar' => $avatarName
+                    ]);
+                
+                    return redirect()->back()
+                        ->with('success', 'Foto profil berhasil diubah!')
+                        ->with('active_tab', 'edit-profile');
+                }
+            } catch (\Exception $e) {
+                \Log::error('Avatar upload error: ' . $e->getMessage());
+                return redirect()->back()
+                    ->with('error', 'Gagal mengubah foto profil: ' . $e->getMessage())
+                    ->with('active_tab', 'edit-profile');
+            }
+        
             return redirect()->back()
-                ->with('error', 'Gagal mengubah foto profil: ' . $e->getMessage())
+                ->with('error', 'Tidak ada file yang diunggah.')
                 ->with('active_tab', 'edit-profile');
         }
-
-        return redirect()->back()
-            ->with('error', 'Tidak ada file yang diunggah.')
-            ->with('active_tab', 'edit-profile');
-    }
 }
