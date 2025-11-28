@@ -3,9 +3,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Post extends Model
 {
@@ -79,10 +80,10 @@ class Post extends Model
         return $this->belongsToMany(Tag::class, 'post_tags');
     }
 
-    public function reports()
-    {
-        return $this->morphMany(Report::class, 'reportable');
-    }
+public function reports()
+{
+    return $this->morphMany(Report::class, 'reportable');
+}
 
     // Cek apakah user sudah like post ini
     public function isLikedBy(User $user)
@@ -155,7 +156,7 @@ class Post extends Model
     // Accessor untuk excerpt
     public function getExcerptAttribute()
     {
-        return str_limit(strip_tags($this->content), 150);
+        return Str::limit(strip_tags($this->content), 150);
     }
 
     // Accessor untuk mood dengan icon

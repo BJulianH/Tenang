@@ -88,4 +88,8 @@ class Comment extends Model
     {
         return Str::limit(strip_tags($this->content), 100);
     }
+    public function reports()
+{
+    return $this->morphMany(Report::class, 'reportable');
+}
 }

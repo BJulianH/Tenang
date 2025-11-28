@@ -110,12 +110,12 @@
                     <div class="flex items-center space-x-4">
                         <span class="text-sm text-gray-600">Last login: {{ auth()->user()->last_login_at?->diffForHumans() ?? 'Never' }}</span>
                         
-                        <form method="POST" action="{{ route('logout') }}">
+                        {{-- <form method="POST" action="{{ route('logout') }}">
                             @csrf
                             <button type="submit" class="text-gray-600 hover:text-gray-800 transition-colors">
                                 <i class="fas fa-sign-out-alt"></i>
                             </button>
-                        </form>
+                        </form> --}}
                     </div>
                 </div>
             </header>

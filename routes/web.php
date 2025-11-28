@@ -3,20 +3,26 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\NoiseController;
+use App\Http\Controllers\QuestController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\JournalController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\AdminPostController;
+use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\CommunityController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\NoiseTypeController;
+use App\Http\Controllers\AdminReportController;
+use App\Http\Controllers\AdminCommunityController;
 use App\Http\Controllers\CommunityProfileController;
 
 // Landing Page
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('/voice-chat-gemini', function () {
     return view('voice-chat-gemini');
 });
@@ -91,6 +97,23 @@ Route::prefix('community')->group(function () {
         });
     });
 });
+Route::prefix('quests')->group(function () {
+    Route::get('/', [QuestController::class, 'index']);
+    Route::get('/available', [QuestController::class, 'availableQuests']);
+    
+    Route::post('/assign-random', [QuestController::class, 'assignRandomQuests']);
+    Route::post('/choose', [QuestController::class, 'chooseQuests']);
+
+    Route::post('/{userQuest}/complete', [QuestController::class, 'completeQuest']);
+    Route::post('/{userQuest}/claim', [QuestController::class, 'claimRewards']);
+
+    Route::patch('/{userQuest}/progress', [QuestController::class, 'updateProgress']);
+    Route::patch('/{userQuest}/add-progress', [QuestController::class, 'addProgress']);
+
+    Route::get('/stats', [QuestController::class, 'stats']);
+    Route::post('/reset', [QuestController::class, 'resetQuests']);
+});
+
 Route::prefix('noises')->name('noises.')->group(function () {
     // Main noise routes
     Route::get('/', [NoiseController::class, 'index'])->name('index');
@@ -131,17 +154,30 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/posts/{post}', [AdminPostController::class, 'show'])->name('admin.posts.show');
     Route::put('/posts/{post}', [AdminPostController::class, 'update'])->name('admin.posts.update');
     Route::delete('/posts/{post}', [AdminPostController::class, 'destroy'])->name('admin.posts.destroy');
-    
+    Route::post('/{post}/approve', [AdminPostController::class, 'approve'])->name('admin.posts.approve');
+    Route::post('/{post}/disapprove', [AdminPostController::class, 'disapprove'])->name('admin.posts.disapprove');
+Route::post('/{post}/feature', [AdminPostController::class, 'feature'])->name('admin.posts.feature');
+    Route::post('/{post}/unfeature', [AdminPostController::class, 'unfeature'])->name('admin.posts.unfeature');
+    Route::post('/bulk-action', [AdminPostController::class, 'bulkAction'])->name('admin.posts.bulk-action');
+
     // Communities Management
-    Route::get('/communities', [AdminCommunityController::class, 'index'])->name('admin.communities.index');
-    Route::get('/communities/{community}', [AdminCommunityController::class, 'show'])->name('admin.communities.show');
-    Route::put('/communities/{community}', [AdminCommunityController::class, 'update'])->name('admin.communities.update');
-    Route::delete('/communities/{community}', [AdminCommunityController::class, 'destroy'])->name('admin.communities.destroy');
-    
+   Route::get('/communities', [AdminCommunityController::class, 'index'])->name('admin.communities.index');
+Route::get('/communities/create', [AdminCommunityController::class, 'create'])->name('admin.communities.create');
+Route::post('/communities', [AdminCommunityController::class, 'store'])->name('admin.communities.store');
+Route::get('/communities/{community}', [AdminCommunityController::class, 'show'])->name('admin.communities.show');
+Route::put('/communities/{community}', [AdminCommunityController::class, 'update'])->name('admin.communities.update');
+Route::delete('/communities/{community}', [AdminCommunityController::class, 'destroy'])->name('admin.communities.destroy');
+Route::get('/communities/{community}/members', [AdminCommunityController::class, 'getMembers'])->name('admin.communities.members');
+Route::post('/communities/{community}/moderators', [AdminCommunityController::class, 'addModerator'])->name('admin.communities.moderators.add');
+Route::delete('/communities/{community}/moderators/{user}', [AdminCommunityController::class, 'removeModerator'])->name('admin.communities.moderators.remove');
+Route::put('/communities/{community}/members/{user}/role', [AdminCommunityController::class, 'updateMemberRole'])->name('admin.communities.members.role');
+Route::delete('/communities/{community}/members/{user}', [AdminCommunityController::class, 'removeMember'])->name('admin.communities.members.remove');
+Route::post('/communities/bulk-action', [AdminCommunityController::class, 'bulkAction'])->name('admin.communities.bulk-action');
     // Reports Management
     Route::get('/reports', [AdminReportController::class, 'index'])->name('admin.reports.index');
     Route::put('/reports/{report}/resolve', [AdminReportController::class, 'resolve'])->name('admin.reports.resolve');
 });
+
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/journal', [JournalController::class, 'index'])->name('journal.index');
@@ -155,7 +191,7 @@ Route::get('/profile', function(){
     return view('profile.profile');
 })->name('profile');
 
-Route::get('/profile/edit', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
-Route::put('/profile/update', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
-Route::put('/profile/password', [App\Http\Controllers\ProfileController::class, 'updatePassword'])->name('profile.password.update');
-Route::put('/profile/avatar', [App\Http\Controllers\ProfileController::class, 'updateAvatar'])->name('profile.avatar.update');
+Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
+Route::put('/profile/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.avatar.update');

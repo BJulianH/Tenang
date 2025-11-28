@@ -172,4 +172,13 @@ class User extends Authenticatable
     {
         return $this->hasMany(Journal::class);
     }
+     public function userQuests()
+    {
+        return $this->hasMany(UserQuest::class);
+    }
+
+    public function todayQuests()
+    {
+        return $this->hasMany(UserQuest::class)->forToday();
+    }
 }
