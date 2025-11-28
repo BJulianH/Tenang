@@ -186,7 +186,6 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/journal/{journal}', [JournalController::class, 'destroy'])->name('journal.destroy');
 });
 
-
 Route::get('/profile', function(){
     return view('profile.profile');
 })->name('profile');

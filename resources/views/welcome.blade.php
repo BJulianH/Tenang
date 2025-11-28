@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MindWell - Your Mental Wellness Companion</title>
+    <title>Tenang - Teman Kesehatan Mental Anda</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -228,6 +228,29 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
+
+        /* Error/Success Messages */
+        .alert-success {
+            background-color: #d1fae5;
+            border-color: #a7f3d0;
+            color: #065f46;
+        }
+
+        .alert-error {
+            background-color: #fee2e2;
+            border-color: #fecaca;
+            color: #dc2626;
+        }
+
+        .shake {
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
     </style>
 </head>
 <body class="gradient-calm min-h-screen">
@@ -235,27 +258,56 @@
         <!-- Header -->
         <header class="flex justify-between items-center mb-16">
             <div class="text-2xl font-bold text-primary-700 flex items-center">
-                <i class="fas fa-heart mr-2 text-primary-500"></i>
-                Mind<span class="text-secondary-500">Well</span>
+                <i class="fas fa-peace mr-2 text-primary-500"></i>
+                Tenang
             </div>
             <nav class="hidden md:flex space-x-8">
-                <a href="#" class="nav-item text-neutral-700 hover:text-primary-600 font-medium transition-colors">Home</a>
-                <a href="#" class="nav-item text-neutral-700 hover:text-primary-600 font-medium transition-colors">Features</a>
-                <a href="#" class="nav-item text-neutral-700 hover:text-primary-600 font-medium transition-colors">Journal</a>
-                <a href="#" class="nav-item text-neutral-700 hover:text-primary-600 font-medium transition-colors">Resources</a>
-                <a href="#" class="nav-item text-neutral-700 hover:text-primary-600 font-medium transition-colors">About</a>
+                <a href="#" class="text-neutral-700 hover:text-primary-600 font-medium transition-colors">Beranda</a>
+                <a href="#" class="text-neutral-700 hover:text-primary-600 font-medium transition-colors">Fitur</a>
+                <a href="#" class="text-neutral-700 hover:text-primary-600 font-medium transition-colors">Journal</a>
+                <a href="#" class="text-neutral-700 hover:text-primary-600 font-medium transition-colors">Sumber Daya</a>
+                <a href="#" class="text-neutral-700 hover:text-primary-600 font-medium transition-colors">Tentang</a>
             </nav>
             <div class="flex space-x-4">
                 <a href="{{ route('login') }}" class="px-4 py-2 text-primary-600 font-medium border border-primary-500 rounded-lg transition-all duration-300 hover:bg-primary-50">
-                    Log In
+                    Masuk
                 </a>
                 <a href="{{ route('register') }}">
                     <button class="px-4 py-2 gradient-primary text-white font-medium rounded-lg hover:opacity-90 transition-all">
-                        Get Started
+                        Mulai Sekarang
                     </button>
                 </a>
             </div>
         </header>
+
+        <!-- Session Messages -->
+        @if(session('status'))
+            <div class="mb-6 p-4 alert-success rounded-lg border flex items-center fade-in-up">
+                <i class="fas fa-check-circle mr-2"></i>
+                {{ session('status') }}
+            </div>
+        @endif
+
+        @if(session('error'))
+            <div class="mb-6 p-4 alert-error rounded-lg border flex items-center shake">
+                <i class="fas fa-exclamation-triangle mr-2"></i>
+                {{ session('error') }}
+            </div>
+        @endif
+
+        @if($errors->any())
+            <div class="mb-6 p-4 alert-error rounded-lg border shake">
+                <div class="flex items-center mb-2">
+                    <i class="fas fa-exclamation-circle mr-2"></i>
+                    <span class="font-medium">Harap perbaiki error berikut:</span>
+                </div>
+                <ul class="list-disc list-inside space-y-1">
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 
         <!-- Main Content -->
         <main class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center min-h-[70vh]">
@@ -263,31 +315,31 @@
             <div class="space-y-8 fade-in-left">
                 <div class="space-y-4">
                     <h1 class="text-5xl lg:text-6xl font-bold text-neutral-800 leading-tight">
-                        Your Mental
-                        <span class="gradient-text">Wellness</span>
-                        Companion
+                        Teman Kesehatan
+                        <span class="gradient-text">Mental</span>
+                        Anda
                     </h1>
                     <h2 class="text-2xl lg:text-3xl text-secondary-600 font-medium">
-                        Journey to mindfulness starts here
+                        Perjalanan menuju mindfulness dimulai di sini
                     </h2>
                 </div>
 
                 <p class="text-lg text-neutral-600 leading-relaxed">
-                    Track your mood, journal your thoughts, and discover personalized wellness activities. 
-                    MindWell helps you build healthy habits and find balance in your daily life through 
-                    mindful practices and supportive tools.
+                    Lacak mood Anda, tuliskan pikiran dalam journal, dan temukan aktivitas kesehatan yang dipersonalisasi. 
+                    Tenang membantu Anda membangun kebiasaan sehat dan menemukan keseimbangan dalam kehidupan sehari-hari 
+                    melalui praktik mindfulness dan alat pendukung.
                 </p>
 
                 <div class="flex flex-col sm:flex-row gap-4 pt-4">
                     <a href="{{ route('register') }}">
                         <button class="px-8 py-4 gradient-primary text-white font-bold rounded-lg hover:opacity-90 transition-all hover:transform hover:scale-105 flex items-center">
-                            Start Your Journey
-                            <i class="fas fa-heart ml-3"></i>
+                            Mulai Perjalanan Anda
+                            <i class="fas fa-peace ml-3"></i>
                         </button>
                     </a>
                     <button class="px-8 py-4 bg-white text-primary-600 border border-primary-500 font-bold rounded-lg hover:bg-primary-50 transition-all flex items-center">
                         <i class="fas fa-play-circle mr-3"></i>
-                        Watch Demo
+                        Lihat Demo
                     </button>
                 </div>
 
@@ -295,15 +347,15 @@
                 <div class="grid grid-cols-3 gap-6 pt-8">
                     <div class="text-center">
                         <div class="text-2xl font-bold text-primary-600">10K+</div>
-                        <div class="text-sm text-neutral-500">Active Users</div>
+                        <div class="text-sm text-neutral-500">Pengguna Aktif</div>
                     </div>
                     <div class="text-center">
                         <div class="text-2xl font-bold text-secondary-600">95%</div>
-                        <div class="text-sm text-neutral-500">Report Improvement</div>
+                        <div class="text-sm text-neutral-500">Melaporkan Perbaikan</div>
                     </div>
                     <div class="text-center">
                         <div class="text-2xl font-bold text-primary-500">4.9★</div>
-                        <div class="text-sm text-neutral-500">User Rating</div>
+                        <div class="text-sm text-neutral-500">Rating Pengguna</div>
                     </div>
                 </div>
             </div>
@@ -319,8 +371,8 @@
                                 <div class="w-12 h-12 bg-primary-500 rounded-full flex items-center justify-center mb-4 breathe">
                                     <i class="fas fa-heart text-white text-lg"></i>
                                 </div>
-                                <h3 class="font-bold text-primary-700 mb-2">Mood Tracking</h3>
-                                <p class="text-sm text-primary-600">Daily emotional check-ins</p>
+                                <h3 class="font-bold text-primary-700 mb-2">Pelacakan Mood</h3>
+                                <p class="text-sm text-primary-600">Check-in emosional harian</p>
                             </div>
                             
                             <!-- Journal Card -->
@@ -329,7 +381,7 @@
                                     <i class="fas fa-book text-white text-lg"></i>
                                 </div>
                                 <h3 class="font-bold text-secondary-700 mb-2">Journal</h3>
-                                <p class="text-sm text-secondary-600">Express your thoughts</p>
+                                <p class="text-sm text-secondary-600">Ekspresikan pikiran Anda</p>
                             </div>
                             
                             <!-- Meditation Card -->
@@ -337,8 +389,8 @@
                                 <div class="w-12 h-12 bg-primary-600 rounded-full flex items-center justify-center mb-4 breathe" style="animation-delay: 1s;">
                                     <i class="fas fa-wind text-white text-lg"></i>
                                 </div>
-                                <h3 class="font-bold text-primary-800 mb-2">Meditation</h3>
-                                <p class="text-sm text-primary-700">Mindful breathing exercises</p>
+                                <h3 class="font-bold text-primary-800 mb-2">Meditasi</h3>
+                                <p class="text-sm text-primary-700">Latihan pernapasan mindfulness</p>
                             </div>
                             
                             <!-- Progress Card -->
@@ -347,7 +399,7 @@
                                     <i class="fas fa-chart-line text-white text-lg"></i>
                                 </div>
                                 <h3 class="font-bold text-secondary-800 mb-2">Progress</h3>
-                                <p class="text-sm text-secondary-700">Track your wellness journey</p>
+                                <p class="text-sm text-secondary-700">Lacak perjalanan kesehatan Anda</p>
                             </div>
                         </div>
                     </div>
@@ -366,24 +418,73 @@
                 <div class="w-14 h-14 bg-primary-100 rounded-2xl flex items-center justify-center mb-4">
                     <i class="fas fa-brain text-primary-600 text-xl"></i>
                 </div>
-                <h3 class="text-xl font-bold text-neutral-800 mb-3">Mindful Tracking</h3>
-                <p class="text-neutral-600">Monitor your emotional wellbeing with daily check-ins and personalized insights.</p>
+                <h3 class="text-xl font-bold text-neutral-800 mb-3">Pelacakan Mindfulness</h3>
+                <p class="text-neutral-600">Pantau kesejahteraan emosional Anda dengan check-in harian dan insight yang dipersonalisasi.</p>
             </div>
             
             <div class="bg-white rounded-2xl p-6 card-shadow border border-neutral-200 hover-lift fade-in-up" style="animation-delay: 0.2s;">
                 <div class="w-14 h-14 bg-secondary-100 rounded-2xl flex items-center justify-center mb-4">
                     <i class="fas fa-tasks text-secondary-600 text-xl"></i>
                 </div>
-                <h3 class="text-xl font-bold text-neutral-800 mb-3">Wellness Challenges</h3>
-                <p class="text-neutral-600">Engage in daily activities designed to boost your mental health and build resilience.</p>
+                <h3 class="text-xl font-bold text-neutral-800 mb-3">Tantangan Kesehatan</h3>
+                <p class="text-neutral-600">Ikuti aktivitas harian yang dirancang untuk meningkatkan kesehatan mental dan membangun ketahanan.</p>
             </div>
             
             <div class="bg-white rounded-2xl p-6 card-shadow border border-neutral-200 hover-lift fade-in-up" style="animation-delay: 0.4s;">
                 <div class="w-14 h-14 bg-primary-100 rounded-2xl flex items-center justify-center mb-4">
                     <i class="fas fa-users text-primary-600 text-xl"></i>
                 </div>
-                <h3 class="text-xl font-bold text-neutral-800 mb-3">Support Community</h3>
-                <p class="text-neutral-600">Connect with others on similar journeys in a safe, supportive environment.</p>
+                <h3 class="text-xl font-bold text-neutral-800 mb-3">Komunitas Support</h3>
+                <p class="text-neutral-600">Terhubung dengan orang lain dalam perjalanan serupa di lingkungan yang aman dan mendukung.</p>
+            </div>
+        </section>
+
+        <!-- Testimonials -->
+        <section class="mt-20">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-neutral-800 mb-4">Apa Kata Pengguna Kami</h2>
+                <p class="text-neutral-600 max-w-2xl mx-auto">Bergabung dengan ribuan orang yang telah menemukan kedamaian dan keseimbangan dengan Tenang</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white rounded-2xl p-6 card-shadow border border-neutral-200 fade-in-up">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center mr-4">
+                            <i class="fas fa-user text-primary-600"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-neutral-800">Sarah</h4>
+                            <p class="text-sm text-neutral-500">Pengguna selama 6 bulan</p>
+                        </div>
+                    </div>
+                    <p class="text-neutral-600">"Tenang membantu saya memahami pola mood dan mengelola stres dengan lebih baik. Journaling feature sangat membantu!"</p>
+                </div>
+                
+                <div class="bg-white rounded-2xl p-6 card-shadow border border-neutral-200 fade-in-up" style="animation-delay: 0.2s;">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-secondary-100 rounded-full flex items-center justify-center mr-4">
+                            <i class="fas fa-user text-secondary-600"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-neutral-800">Budi</h4>
+                            <p class="text-sm text-neutral-500">Pengguna selama 3 bulan</p>
+                        </div>
+                    </div>
+                    <p class="text-neutral-600">"Sebagai mahasiswa, Tenang membantu saya menjaga keseimbangan antara akademik dan kesehatan mental."</p>
+                </div>
+                
+                <div class="bg-white rounded-2xl p-6 card-shadow border border-neutral-200 fade-in-up" style="animation-delay: 0.4s;">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center mr-4">
+                            <i class="fas fa-user text-primary-600"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-neutral-800">Dewi</h4>
+                            <p class="text-sm text-neutral-500">Pengguna selama 1 tahun</p>
+                        </div>
+                    </div>
+                    <p class="text-neutral-600">"Meditasi harian dan tantangan kesehatan dari Tenang telah mengubah hidup saya. Sangat recommended!"</p>
+                </div>
             </div>
         </section>
     </div>
@@ -414,6 +515,16 @@
             document.querySelectorAll('.fade-in-up, .fade-in-down, .fade-in-left, .fade-in-right').forEach(el => {
                 observer.observe(el);
             });
+
+            // Auto-remove success/error messages after 5 seconds
+            setTimeout(() => {
+                const messages = document.querySelectorAll('.alert-success, .alert-error');
+                messages.forEach(message => {
+                    message.style.opacity = '0';
+                    message.style.transition = 'opacity 0.5s ease';
+                    setTimeout(() => message.remove(), 500);
+                });
+            }, 5000);
         });
     </script>
 </body>
