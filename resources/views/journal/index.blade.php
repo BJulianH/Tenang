@@ -3,21 +3,54 @@
 @section('title', 'Journal - Tenang')
 
 @section('content')
-    <div class="mb-8">
-        <h1 class="text-3xl font-bold text-neutral-800">My Journal</h1>
-        <p class="text-neutral-600 text-lg">Express your thoughts and feelings</p>
+    <!-- Mood Selection Modal -->
+    <div id="moodModal" class="fixed inset-0 z-50 flex items-center justify-center hidden">
+        <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+        <div class="relative bg-white rounded-duo-xl p-6 mx-4 max-w-md w-full card">
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-smile text-white text-2xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-neutral-800 mb-2">How are you feeling?</h3>
+                <p class="text-neutral-600">Please select your current mood before saving</p>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 mb-6">
+                @php
+                    $moods = [
+                        '😊 Happy' => 'bg-green-100 border-green-400 hover:bg-green-200',
+                        '😢 Sad' => 'bg-blue-100 border-blue-400 hover:bg-blue-200',
+                        '😴 Tired' => 'bg-purple-100 border-purple-400 hover:bg-purple-200',
+                        '😌 Calm' => 'bg-teal-100 border-teal-400 hover:bg-teal-200',
+                        '😠 Angry' => 'bg-red-100 border-red-400 hover:bg-red-200',
+                        '😨 Anxious' => 'bg-yellow-100 border-yellow-400 hover:bg-yellow-200',
+                        '😃 Excited' => 'bg-orange-100 border-orange-400 hover:bg-orange-200',
+                        '😔 Depressed' => 'bg-gray-100 border-gray-400 hover:bg-gray-200'
+                    ];
+                @endphp
+                
+                @foreach($moods as $mood => $classes)
+                    <button type="button" 
+                            class="mood-option-modal p-3 rounded-duo border-2 border-transparent {{ $classes }} transition-all duration-200 font-medium"
+                            data-mood="{{ $mood }}">
+                        {{ $mood }}
+                    </button>
+                @endforeach
+            </div>
+
+            <div class="flex space-x-3">
+                <button type="button" id="cancelMood" class="flex-1 app-button-secondary py-3 rounded-duo font-bold">
+                    Cancel
+                </button>
+            </div>
+        </div>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <!-- Left Column - Journal Editor -->
         <div class="lg:col-span-2">
             <div class="card rounded-duo-xl p-6">
-                <h2 class="text-xl font-bold text-neutral-800 mb-4 flex items-center">
-                    <i class="fas fa-edit text-primary-500 mr-3"></i>
-                    {{ isset($journal) ? 'Edit Journal Entry' : 'New Journal Entry' }}
-                </h2>
-                
-                <form action="{{ isset($journal) ? route('journal.update', $journal) : route('journal.store') }}" method="POST">
+                <form action="{{ isset($journal) ? route('journal.update', $journal) : route('journal.store') }}" method="POST" id="journalForm">
                     @csrf
                     @if(isset($journal))
                         @method('PUT')
@@ -29,6 +62,7 @@
                             <i class="fas fa-smile text-secondary-500 mr-2"></i>
                             How are you feeling today?
                         </label>
+
                         <div class="flex space-x-3 overflow-x-auto pb-4 scrollbar-hide">
                             @php
                                 $moods = [
@@ -44,100 +78,154 @@
                             @endphp
                             
                             @foreach($moods as $mood => $classes)
-                                <label class="flex-shrink-0 cursor-pointer transform transition-transform hover:scale-105">
+                                <label class="flex-shrink-0 cursor-pointer transform transition-transform hover:scale-105 mood-option">
                                     <input type="radio" name="mood" value="{{ $mood }}" 
-                                           class="hidden peer" 
-                                           {{ (isset($journal) && $journal->mood == $mood) ? 'checked' : '' }}>
+                                            class="hidden peer" 
+                                            {{ (isset($journal) && $journal->mood == $mood) ? 'checked' : '' }}
+                                            {{ old('mood') == $mood ? 'checked' : '' }}>
                                     <div class="px-4 py-3 rounded-duo border-2 border-neutral-300 {{ $classes }} text-sm font-medium transition-all duration-200 shadow-duo-pressed peer-checked:shadow-duo">
                                         {{ $mood }}
                                     </div>
                                 </label>
                             @endforeach
                         </div>
+                        <div class="flex items-center mt-2 text-sm text-neutral-500">
+                            <i class="fas fa-info-circle mr-2"></i>
+                            Select a mood to track your emotional state
+                        </div>
                     </div>
 
                     <!-- Title -->
                     <div class="mb-6">
+                        <label class="block text-sm font-medium text-neutral-700 mb-2">
+                            Journal Title
+                        </label>
+
                         <div class="relative">
-                            <input type="text" name="title" placeholder="Give your journal a title..." 
-                                   value="{{ $journal->title ?? old('title') }}"
-                                   class="w-full px-4 py-4 border-2 border-neutral-300 rounded-duo focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-lg font-bold bg-white shadow-duo-pressed focus:shadow-duo transition-all duration-200">
+                            <input type="text" name="title" placeholder="Give your journal a title (optional)..." 
+                                    value="{{ $journal->title ?? old('title') }}"
+                                    class="w-full px-4 py-4 border-2 border-neutral-300 rounded-duo focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-lg font-bold bg-white shadow-duo-pressed focus:shadow-duo transition-all duration-200"
+                                    maxlength="255">
                             <i class="fas fa-heading text-neutral-400 absolute right-4 top-4"></i>
+                            <div class="absolute bottom-2 right-4 text-xs text-neutral-500" id="titleCounter">
+                                {{ strlen($journal->title ?? old('title') ?? '') }}/255
+                            </div>
                         </div>
                     </div>
 
                     <!-- Rich Text Editor -->
                     <div class="mb-6">
+                        <label class="block text-sm font-medium text-neutral-700 mb-2">
+                            Journal Content
+                        </label>
+
                         <!-- Toolbar -->
                         <div class="flex flex-wrap gap-2 mb-3 p-3 bg-neutral-50 rounded-duo border-2 border-neutral-200 shadow-duo-pressed">
-                            <button type="button" onclick="formatText('bold')" class="p-2 rounded-duo hover:bg-white hover:shadow-duo transition-all duration-200" title="Bold">
+                            <button type="button" onclick="formatText('bold')" class="p-2 rounded-duo hover:bg-white hover:shadow-duo transition-all duration-200 toolbar-button" title="Bold">
                                 <i class="fas fa-bold text-neutral-700"></i>
                             </button>
-                            <button type="button" onclick="formatText('italic')" class="p-2 rounded-duo hover:bg-white hover:shadow-duo transition-all duration-200" title="Italic">
+                            <button type="button" onclick="formatText('italic')" class="p-2 rounded-duo hover:bg-white hover:shadow-duo transition-all duration-200 toolbar-button" title="Italic">
                                 <i class="fas fa-italic text-neutral-700"></i>
                             </button>
-                            <button type="button" onclick="formatText('underline')" class="p-2 rounded-duo hover:bg-white hover:shadow-duo transition-all duration-200" title="Underline">
+                            <button type="button" onclick="formatText('underline')" class="p-2 rounded-duo hover:bg-white hover:shadow-duo transition-all duration-200 toolbar-button" title="Underline">
                                 <i class="fas fa-underline text-neutral-700"></i>
                             </button>
-                            <button type="button" onclick="formatText('strikeThrough')" class="p-2 rounded-duo hover:bg-white hover:shadow-duo transition-all duration-200" title="Strikethrough">
+                            <button type="button" onclick="formatText('strikeThrough')" class="p-2 rounded-duo hover:bg-white hover:shadow-duo transition-all duration-200 toolbar-button" title="Strikethrough">
                                 <i class="fas fa-strikethrough text-neutral-700"></i>
                             </button>
                             <div class="w-px h-6 bg-neutral-300 mx-1 my-auto"></div>
-                            <button type="button" onclick="formatText('justifyLeft')" class="p-2 rounded-duo hover:bg-white hover:shadow-duo transition-all duration-200" title="Align Left">
+                            <button type="button" onclick="formatText('justifyLeft')" class="p-2 rounded-duo hover:bg-white hover:shadow-duo transition-all duration-200 toolbar-button" title="Align Left">
                                 <i class="fas fa-align-left text-neutral-700"></i>
                             </button>
-                            <button type="button" onclick="formatText('justifyCenter')" class="p-2 rounded-duo hover:bg-white hover:shadow-duo transition-all duration-200" title="Align Center">
+                            <button type="button" onclick="formatText('justifyCenter')" class="p-2 rounded-duo hover:bg-white hover:shadow-duo transition-all duration-200 toolbar-button" title="Align Center">
                                 <i class="fas fa-align-center text-neutral-700"></i>
                             </button>
-                            <button type="button" onclick="formatText('justifyRight')" class="p-2 rounded-duo hover:bg-white hover:shadow-duo transition-all duration-200" title="Align Right">
+                            <button type="button" onclick="formatText('justifyRight')" class="p-2 rounded-duo hover:bg-white hover:shadow-duo transition-all duration-200 toolbar-button" title="Align Right">
                                 <i class="fas fa-align-right text-neutral-700"></i>
                             </button>
                             <div class="w-px h-6 bg-neutral-300 mx-1 my-auto"></div>
-                            <button type="button" onclick="formatText('insertUnorderedList')" class="p-2 rounded-duo hover:bg-white hover:shadow-duo transition-all duration-200" title="Bullet List">
+                            <button type="button" onclick="formatText('insertUnorderedList')" class="p-2 rounded-duo hover:bg-white hover:shadow-duo transition-all duration-200 toolbar-button" title="Bullet List">
                                 <i class="fas fa-list-ul text-neutral-700"></i>
                             </button>
-                            <button type="button" onclick="formatText('insertOrderedList')" class="p-2 rounded-duo hover:bg-white hover:shadow-duo transition-all duration-200" title="Numbered List">
+                            <button type="button" onclick="formatText('insertOrderedList')" class="p-2 rounded-duo hover:bg-white hover:shadow-duo transition-all duration-200 toolbar-button" title="Numbered List">
                                 <i class="fas fa-list-ol text-neutral-700"></i>
                             </button>
                             <div class="w-px h-6 bg-neutral-300 mx-1 my-auto"></div>
-                            <button type="button" onclick="clearFormatting()" class="p-2 rounded-duo hover:bg-white hover:shadow-duo transition-all duration-200 text-sm font-medium text-neutral-700" title="Clear Formatting">
+                            <button type="button" onclick="clearFormatting()" class="p-2 rounded-duo hover:bg-white hover:shadow-duo transition-all duration-200 text-sm font-medium text-neutral-700 toolbar-button" title="Clear Formatting">
                                 Clear
                             </button>
                         </div>
 
                         <!-- Content Editable Area -->
                         <div id="editor" 
-                             class="min-h-64 p-4 border-2 border-neutral-300 rounded-duo focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white shadow-duo-pressed focus:shadow-duo transition-all duration-200"
-                             contenteditable="true"
-                             oninput="updateContent()"
-                             onfocus="handleEditorFocus()"
-                             onblur="handleEditorBlur()">
+                                class="min-h-64 p-4 border-2 border-neutral-300 rounded-duo focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white shadow-duo-pressed focus:shadow-duo transition-all duration-200"
+                                contenteditable="true"
+                                oninput="updateContent()"
+                                onfocus="handleEditorFocus()"
+                                onblur="handleEditorBlur()">
                             @if(isset($journal) && $journal->content)
                                 {!! $journal->content !!}
+                            @elseif(old('content'))
+                                {!! old('content') !!}
                             @else
-                                <div class="text-neutral-400 italic" id="placeholder">Start writing your thoughts here... ✍️</div>
+                                <div class="text-neutral-400 italic" id="placeholder">Write your thoughts freely... ✍️</div>
                             @endif
                         </div>
                         
                         <!-- Hidden input for form submission -->
-                        <textarea name="content" id="content" class="hidden" required>
+                        <textarea name="content" id="content" class="hidden">
                             @if(isset($journal) && $journal->content)
                                 {!! $journal->content !!}
+                            @elseif(old('content'))
+                                {!! old('content') !!}
                             @endif
                         </textarea>
+
+                        <!-- Character counter for content -->
+                        <div class="flex justify-between items-center mt-2">
+                            <div class="text-xs text-neutral-500" id="contentCounter">
+                                <span id="contentLength">0</span> characters written
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Action Buttons -->
-                    <div class="flex justify-end space-x-3">
-                        @if(isset($journal))
-                            <a href="{{ route('journal.index') }}" class="app-button-secondary px-6 py-3 rounded-duo font-bold transition-all duration-200">
-                                <i class="fas fa-times mr-2"></i>Cancel
-                            </a>
-                        @endif
-                        <button type="submit" class="app-button px-6 py-3 rounded-duo font-bold transition-all duration-200">
-                            <i class="fas fa-save mr-2"></i>
-                            {{ isset($journal) ? 'Update Entry' : 'Save Entry' }}
-                        </button>
+                    <div class="flex justify-between items-center pt-4 border-t border-neutral-200">
+                        <div class="text-sm text-neutral-500">
+                            <i class="fas fa-pencil-alt mr-1"></i>
+                            Write as much or as little as you want
+                        </div>
+                        <div class="flex space-x-3">
+                            @if(isset($journal))
+                                <a href="{{ route('journal.index') }}" class="app-button-secondary px-6 py-3 rounded-duo font-bold transition-all duration-200 flex items-center group">
+                                    <i class="fas fa-times mr-2 group-hover:scale-110 transition-transform"></i>
+                                    Cancel
+                                </a>
+                            @else
+                                <button type="button" onclick="clearForm()" class="app-button-secondary px-6 py-3 rounded-duo font-bold transition-all duration-200 flex items-center group">
+                                    <i class="fas fa-eraser mr-2 group-hover:scale-110 transition-transform"></i>
+                                    Clear
+                                </button>
+                            @endif
+                            
+                            <!-- Save Button -->
+                            <button type="button" 
+                                    class="save-button px-8 py-3 rounded-duo font-bold transition-all duration-300 flex items-center group relative overflow-hidden"
+                                    id="submitButton">
+                                <span class="flex items-center">
+                                    <i class="fas fa-save mr-2 group-hover:scale-110 transition-transform"></i>
+                                    <span id="buttonText">{{ isset($journal) ? 'Update Entry' : 'Save Entry' }}</span>
+                                </span>
+                                
+                                <!-- Loading Spinner -->
+                                <div id="buttonLoading" class="hidden absolute inset-0 bg-primary-600 rounded-duo flex items-center justify-center">
+                                    <div class="flex items-center space-x-2">
+                                        <div class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                        <span class="text-white font-medium">Saving...</span>
+                                    </div>
+                                </div>
+                            </button>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -160,14 +248,16 @@
                 <div class="space-y-4 max-h-96 overflow-y-auto pr-2 custom-scrollbar">
                     @forelse($journals as $entry)
                         <div class="p-4 border-2 border-neutral-200 rounded-duo hover:border-primary-300 hover:shadow-duo transition-all duration-200 group cursor-pointer transform hover:scale-[1.02]" 
-                             data-journal-id="{{ $entry->id }}"
-                             onclick="window.location='{{ route('journal.index', ['edit' => $entry->id]) }}'">
+                                data-journal-id="{{ $entry->id }}"
+                                onclick="window.location='{{ route('journal.index', ['edit' => $entry->id]) }}'">
                             <div class="flex justify-between items-start mb-2">
-                                <h3 class="font-bold text-neutral-800 truncate text-lg">{{ $entry->title }}</h3>
+                                <h3 class="font-bold text-neutral-800 truncate text-lg">
+                                    {{ $entry->title ?: 'Untitled Entry' }}
+                                </h3>
                                 <div class="flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                     <a href="{{ route('journal.index', ['edit' => $entry->id]) }}" 
-                                       class="p-2 text-neutral-500 hover:text-primary-600 hover:bg-primary-50 rounded-duo transition-all duration-200"
-                                       title="Edit">
+                                        class="p-2 text-neutral-500 hover:text-primary-600 hover:bg-primary-50 rounded-duo transition-all duration-200"
+                                        title="Edit">
                                         <i class="fas fa-edit text-sm"></i>
                                     </a>
                                     <form action="{{ route('journal.destroy', $entry) }}" method="POST" class="inline" onclick="event.stopPropagation()">
@@ -175,7 +265,7 @@
                                         @method('DELETE')
                                         <button type="submit" 
                                                 class="p-2 text-neutral-500 hover:text-red-600 hover:bg-red-50 rounded-duo transition-all duration-200"
-                                                onclick="return confirm('Are you sure you want to delete this entry?')"
+                                                onclick="return confirmDelete()"
                                                 title="Delete">
                                             <i class="fas fa-trash text-sm"></i>
                                         </button>
@@ -183,11 +273,15 @@
                                 </div>
                             </div>
                             <div class="text-neutral-600 line-clamp-2 journal-preview mb-2">
-                                {!! strip_tags($entry->content) !!}
+                                @if($entry->content)
+                                    {!! strip_tags($entry->content) !!}
+                                @else
+                                    <span class="text-neutral-400 italic">No content</span>
+                                @endif
                             </div>
                             <div class="flex justify-between items-center mt-3 pt-2 border-t border-neutral-100">
                                 <span class="text-xs font-medium px-2 py-1 bg-neutral-100 rounded-full text-neutral-600">
-                                    {{ $entry->mood }}
+                                    {{ $entry->mood ?: 'No mood' }}
                                 </span>
                                 <span class="text-xs text-neutral-500 font-medium">
                                     <i class="far fa-clock mr-1"></i>
@@ -216,35 +310,15 @@
                 <div class="space-y-4">
                     <div class="flex items-start p-3 bg-yellow-50 rounded-duo border border-yellow-200">
                         <i class="fas fa-heart text-yellow-500 mt-1 mr-3 text-lg"></i>
-                        <p class="text-neutral-700 font-medium">Be honest and write without judgment</p>
+                        <p class="text-neutral-700 font-medium">Write freely without pressure - every thought matters</p>
                     </div>
                     <div class="flex items-start p-3 bg-blue-50 rounded-duo border border-blue-200">
                         <i class="fas fa-edit text-blue-500 mt-1 mr-3 text-lg"></i>
-                        <p class="text-neutral-700 font-medium">Use formatting to emphasize important thoughts</p>
+                        <p class="text-neutral-700 font-medium">You can always come back and edit later</p>
                     </div>
                     <div class="flex items-start p-3 bg-green-50 rounded-duo border border-green-200">
                         <i class="fas fa-brain text-green-500 mt-1 mr-3 text-lg"></i>
-                        <p class="text-neutral-700 font-medium">Reflect on both positive and challenging experiences</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Quick Stats -->
-            <div class="card rounded-duo-xl p-6">
-                <h2 class="text-xl font-bold text-neutral-800 mb-4 flex items-center">
-                    <i class="fas fa-chart-bar text-accent-blue mr-3"></i>
-                    Writing Stats
-                </h2>
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="text-center p-3 bg-primary-50 rounded-duo border border-primary-200">
-                        <div class="text-2xl font-bold text-primary-600">{{ $journals->count() }}</div>
-                        <div class="text-sm text-neutral-600 font-medium">Total Entries</div>
-                    </div>
-                    <div class="text-center p-3 bg-secondary-50 rounded-duo border border-secondary-200">
-                        <div class="text-2xl font-bold text-secondary-600">
-                            {{ $journals->count() > 0 ? $journals->sortByDesc('created_at')->first()->created_at->diffForHumans() : 'N/A' }}
-                        </div>
-                        <div class="text-sm text-neutral-600 font-medium">Last Entry</div>
+                        <p class="text-neutral-700 font-medium">Even short entries can be meaningful</p>
                     </div>
                 </div>
             </div>
@@ -262,7 +336,115 @@
     line-height: 1.5;
 }
 
-/* Style untuk content editable */
+/* Save Button Styles */
+.save-button {
+    background: linear-gradient(135deg, #58cc70 0%, #45b259 100%);
+    color: white;
+    box-shadow: 0 4px 0 #3a9549;
+    border: none;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.save-button:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 0 #3a9549;
+    background: linear-gradient(135deg, #67d47f 0%, #4fc262 100%);
+}
+
+.save-button:active:not(:disabled) {
+    transform: translateY(1px);
+    box-shadow: 0 2px 0 #3a9549;
+}
+
+.save-button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: 0 4px 0 #3a9549;
+}
+
+/* Modal Styles */
+#moodModal {
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.mood-option-modal {
+    transition: all 0.2s ease;
+}
+
+.mood-option-modal:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 0 rgba(0, 0, 0, 0.1);
+}
+
+.mood-option-modal:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.1);
+}
+
+/* Notification Styles - Top Center Below Navbar */
+.notification-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    padding-top: 6rem; /* Space below navbar */
+    pointer-events: none;
+}
+
+.notification {
+    animation: slideInDown 0.3s ease-out;
+    pointer-events: auto;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    border-radius: 16px;
+    transform-origin: top center;
+}
+
+.notification.fade-out {
+    animation: slideOutUp 0.3s ease-in forwards;
+}
+
+@keyframes slideInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideOutUp {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-100%);
+    }
+}
+
+/* Content Editable Styles */
 #editor:focus {
     outline: none;
 }
@@ -301,11 +483,7 @@
     margin: 0.25rem 0;
 }
 
-.placeholder {
-    color: #9CA3AF;
-}
-
-/* Custom scrollbar untuk journal list */
+/* Scrollbar Styles */
 .custom-scrollbar::-webkit-scrollbar {
     width: 6px;
 }
@@ -324,7 +502,6 @@
     background: #45b259;
 }
 
-/* Hide scrollbar for mood selector */
 .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;
@@ -334,7 +511,7 @@
     display: none;
 }
 
-/* Animation untuk journal entries */
+/* Animations */
 @keyframes fadeInUp {
     from {
         opacity: 0;
@@ -350,7 +527,14 @@
     animation: fadeInUp 0.5s ease-out;
 }
 
-/* Hover effects untuk mood buttons */
+/* Toolbar Button Active State */
+.toolbar-button.active {
+    background: #58cc70;
+    color: white;
+    box-shadow: 0 2px 0 #45b259;
+}
+
+/* Mood Option Hover Effects */
 .mood-option {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -358,30 +542,155 @@
 .mood-option:hover {
     transform: translateY(-2px);
 }
-
-/* Style untuk toolbar buttons aktif */
-.toolbar-button.active {
-    background: #58cc70;
-    color: white;
-}
-
-/* Gradient border untuk card yang aktif */
-.card-active {
-    background: linear-gradient(135deg, #58cc70, #ffc800) padding-box,
-                linear-gradient(135deg, #58cc70, #ffc800) border-box;
-    border: 2px solid transparent;
-}
 </style>
 @endsection
 
 @section('scripts')
 <script>
+// Global variables
+let isSubmitting = false;
+let pendingFormSubmission = false;
+
+// Notification system - Top Center Below Navbar
+function showNotification(message, type = 'info') {
+    // Create notification overlay if it doesn't exist
+    let notificationOverlay = document.getElementById('notificationOverlay');
+    if (!notificationOverlay) {
+        notificationOverlay = document.createElement('div');
+        notificationOverlay.id = 'notificationOverlay';
+        notificationOverlay.className = 'notification-overlay';
+        document.body.appendChild(notificationOverlay);
+    }
+    
+    const styles = {
+        success: 'bg-green-50 border-green-300 text-green-700 border-2',
+        error: 'bg-red-50 border-red-300 text-red-700 border-2',
+        info: 'bg-blue-50 border-blue-300 text-blue-700 border-2'
+    };
+    
+    const icons = {
+        success: 'fa-check-circle',
+        error: 'fa-exclamation-triangle',
+        info: 'fa-info-circle'
+    };
+    
+    const titles = {
+        success: 'Success!',
+        error: 'Error!',
+        info: 'Notice'
+    };
+    
+    const notification = document.createElement('div');
+    notification.className = `notification p-4 ${styles[type]}`;
+    notification.innerHTML = `
+        <div class="flex items-center">
+            <div class="w-12 h-12 rounded-full flex items-center justify-center mr-4 ${
+                type === 'success' ? 'bg-green-100' : 
+                type === 'error' ? 'bg-red-100' : 'bg-blue-100'
+            }">
+                <i class="fas ${icons[type]} text-xl ${
+                    type === 'success' ? 'text-green-600' : 
+                    type === 'error' ? 'text-red-600' : 'text-blue-600'
+                }"></i>
+            </div>
+            <div class="flex-1">
+                <h3 class="font-bold text-lg">${titles[type]}</h3>
+                <p class="font-medium">${message}</p>
+            </div>
+            <button type="button" onclick="this.parentElement.parentElement.parentElement.remove()" class="ml-4 text-gray-400 hover:text-gray-600 transition-colors">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    `;
+    
+    notificationOverlay.appendChild(notification);
+    
+    // Auto remove after 2 seconds
+    setTimeout(() => {
+        if (notification.parentElement) {
+            notification.classList.add('fade-out');
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+                // Remove overlay if no more notifications
+                if (notificationOverlay.children.length === 0) {
+                    notificationOverlay.remove();
+                }
+            }, 300);
+        }
+    }, 2000);
+}
+
+// Mood Modal Functions
+function showMoodModal() {
+    const modal = document.getElementById('moodModal');
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+}
+
+function hideMoodModal() {
+    const modal = document.getElementById('moodModal');
+    modal.classList.add('hidden');
+    document.body.style.overflow = '';
+}
+
+function selectMoodFromModal(mood) {
+    // Find and check the corresponding radio button
+    const radioInput = document.querySelector(`input[name="mood"][value="${mood}"]`);
+    if (radioInput) {
+        radioInput.checked = true;
+        
+        // Trigger change event to update UI
+        radioInput.dispatchEvent(new Event('change'));
+        
+        showNotification(`Mood set to: ${mood}`, 'success');
+    }
+    
+    hideMoodModal();
+    
+    // If there was a pending form submission, submit it now
+    if (pendingFormSubmission) {
+        submitForm();
+        pendingFormSubmission = false;
+    }
+}
+
+// Form submission handling
+function submitForm() {
+    const submitButton = document.getElementById('submitButton');
+    const form = document.getElementById('journalForm');
+    
+    if (isSubmitting) {
+        return;
+    }
+    
+    // Show loading state
+    isSubmitting = true;
+    setButtonState(submitButton, 'loading');
+    
+    // Submit the form
+    form.submit();
+}
+
+function handleSaveClick() {
+    const moodSelected = document.querySelector('input[name="mood"]:checked');
+    
+    if (!moodSelected) {
+        // Show mood selection modal
+        pendingFormSubmission = true;
+        showMoodModal();
+    } else {
+        // Submit form directly
+        submitForm();
+    }
+}
+
 function formatText(command, value = null) {
     document.getElementById('editor').focus();
     document.execCommand(command, false, value);
     updateContent();
     
-    // Add active state to toolbar button
     const buttons = document.querySelectorAll('.toolbar-button');
     buttons.forEach(btn => btn.classList.remove('active'));
     event.target.classList.add('active');
@@ -401,22 +710,25 @@ function clearFormatting() {
 function updateContent() {
     const editor = document.getElementById('editor');
     const content = document.getElementById('content');
+    const contentLength = document.getElementById('contentLength');
     
-    // Hapus placeholder jika ada
     const placeholder = document.getElementById('placeholder');
-    if (placeholder && editor.textContent.trim() !== 'Start writing your thoughts here... ✍️') {
+    if (placeholder && editor.textContent.trim() !== 'Write your thoughts freely... ✍️') {
         placeholder.remove();
     }
     
     content.value = editor.innerHTML;
+    
+    const textContent = editor.textContent || editor.innerText;
+    const charCount = textContent.replace(/\s+/g, ' ').trim().length;
+    contentLength.textContent = charCount;
 }
 
 function handleEditorFocus() {
     const editor = document.getElementById('editor');
     const placeholder = document.getElementById('placeholder');
     
-    // Jika konten hanya berisi placeholder, kosongkan editor
-    if (placeholder && editor.textContent.trim() === 'Start writing your thoughts here... ✍️') {
+    if (placeholder && editor.textContent.trim() === 'Write your thoughts freely... ✍️') {
         editor.innerHTML = '';
         editor.classList.remove('text-neutral-400', 'italic');
     }
@@ -425,25 +737,121 @@ function handleEditorFocus() {
 function handleEditorBlur() {
     const editor = document.getElementById('editor');
     
-    // Jika editor kosong, tambahkan placeholder kembali
     if (!editor.textContent.trim()) {
-        editor.innerHTML = '<div class="text-neutral-400 italic" id="placeholder">Start writing your thoughts here... ✍️</div>';
+        editor.innerHTML = '<div class="text-neutral-400 italic" id="placeholder">Write your thoughts freely... ✍️</div>';
     }
 }
 
-// Initialize editor content
+function clearForm() {
+    if (confirm('Are you sure you want to clear all fields?')) {
+        document.getElementById('journalForm').reset();
+        document.getElementById('editor').innerHTML = '<div class="text-neutral-400 italic" id="placeholder">Write your thoughts freely... ✍️</div>';
+        document.getElementById('content').value = '';
+        document.getElementById('titleCounter').textContent = '0/255';
+        document.getElementById('contentLength').textContent = '0';
+        
+        document.querySelectorAll('input[name="mood"]').forEach(radio => {
+            radio.checked = false;
+        });
+        
+        showNotification('Form cleared successfully!', 'success');
+    }
+}
+
+function confirmDelete() {
+    return confirm('Are you sure you want to delete this journal entry?');
+}
+
+function setButtonState(button, state) {
+    const buttonText = document.getElementById('buttonText');
+    const buttonLoading = document.getElementById('buttonLoading');
+    
+    button.disabled = state === 'loading';
+    
+    if (state === 'loading') {
+        buttonText.classList.add('hidden');
+        buttonLoading.classList.remove('hidden');
+    } else {
+        buttonText.classList.remove('hidden');
+        buttonLoading.classList.add('hidden');
+    }
+}
+
+// Initialize
 document.addEventListener('DOMContentLoaded', function() {
     const editor = document.getElementById('editor');
     const content = document.getElementById('content');
+    const titleInput = document.querySelector('input[name="title"]');
+    const titleCounter = document.getElementById('titleCounter');
+    const saveButton = document.getElementById('submitButton');
     
-    // Pastikan content hidden field terisi dengan benar
-    if (!editor.textContent.trim() || editor.textContent.trim() === 'Start writing your thoughts here... ✍️') {
+    // Show any session messages as temporary notifications
+    @if(session('success'))
+        showNotification('{{ session('success') }}', 'success');
+    @endif
+
+    @if(session('error'))
+        showNotification('{{ session('error') }}', 'error');
+    @endif
+
+    @if($errors->any())
+        @foreach($errors->all() as $error)
+            showNotification('{{ $error }}', 'error');
+        @endforeach
+    @endif
+    
+    // Initialize title counter
+    if (titleInput) {
+        titleCounter.textContent = `${titleInput.value.length}/255`;
+        titleInput.addEventListener('input', function() {
+            titleCounter.textContent = `${this.value.length}/255`;
+        });
+    }
+    
+    // Initialize content
+    if (!editor.textContent.trim() || editor.textContent.trim() === 'Write your thoughts freely... ✍️') {
         content.value = '';
     } else {
         content.value = editor.innerHTML;
+        updateContent();
     }
     
-    // Update content on paste
+    // Mood modal event listeners
+    document.querySelectorAll('.mood-option-modal').forEach(button => {
+        button.addEventListener('click', function() {
+            const mood = this.getAttribute('data-mood');
+            selectMoodFromModal(mood);
+        });
+    });
+
+    document.getElementById('cancelMood').addEventListener('click', function() {
+        hideMoodModal();
+        pendingFormSubmission = false;
+    });
+
+    // Close modal when clicking outside
+    document.getElementById('moodModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            hideMoodModal();
+            pendingFormSubmission = false;
+        }
+    });
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            const modal = document.getElementById('moodModal');
+            if (!modal.classList.contains('hidden')) {
+                hideMoodModal();
+                pendingFormSubmission = false;
+            }
+        }
+    });
+
+    // Save button click handler
+    saveButton.addEventListener('click', handleSaveClick);
+    
+    // Editor event listeners
     editor.addEventListener('paste', function(e) {
         e.preventDefault();
         const text = (e.clipboardData || window.clipboardData).getData('text/plain');
@@ -451,16 +859,15 @@ document.addEventListener('DOMContentLoaded', function() {
         updateContent();
     });
     
-    // Handle keyboard events untuk mencegah penghapusan placeholder yang tidak diinginkan
     editor.addEventListener('keydown', function(e) {
         const placeholder = document.getElementById('placeholder');
-        if (placeholder && editor.textContent.trim() === 'Start writing your thoughts here... ✍️' && e.key.length === 1) {
+        if (placeholder && editor.textContent.trim() === 'Write your thoughts freely... ✍️' && e.key.length === 1) {
             editor.innerHTML = '';
             editor.classList.remove('text-neutral-400', 'italic');
         }
     });
 
-    // Add animation to mood selection
+    // Mood selection animation
     const moodOptions = document.querySelectorAll('input[name="mood"]');
     moodOptions.forEach(option => {
         option.addEventListener('change', function() {
@@ -484,31 +891,11 @@ document.addEventListener('DOMContentLoaded', function() {
             journalEntry.scrollIntoView({ behavior: 'smooth', block: 'center' });
             journalEntry.classList.add('ring-4', 'ring-primary-500', 'ring-opacity-50');
             
-            // Remove highlight after 3 seconds
             setTimeout(() => {
                 journalEntry.classList.remove('ring-4', 'ring-primary-500', 'ring-opacity-50');
             }, 3000);
         }
     });
 @endif
-
-// Add click animation to cards
-document.addEventListener('DOMContentLoaded', function() {
-    const cards = document.querySelectorAll('.card, .gamification-badge, .sidebar-item');
-    
-    cards.forEach(card => {
-        card.addEventListener('mousedown', function() {
-            this.style.transform = 'scale(0.98)';
-        });
-        
-        card.addEventListener('mouseup', function() {
-            this.style.transform = 'scale(1)';
-        });
-        
-        card.addEventListener('mouseleave', function() {
-            this.style.transform = 'scale(1)';
-        });
-    });
-});
 </script>
 @endsection

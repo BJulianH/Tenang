@@ -13,76 +13,125 @@
             theme: {
                 extend: {
                     colors: {
-                        // Primary Green Palette - calming and soothing
+                        // Duolingo-inspired color palette
                         primary: {
-                            50: '#f0f9f0',
-                            100: '#dcf2dc',
-                            200: '#bce5bc',
-                            300: '#8fd18f',
-                            400: '#5cb85c',
-                            500: '#4caf50', // Main brand color
-                            600: '#3d8b40',
-                            700: '#2e6b34',
-                            800: '#25572a',
-                            900: '#1e4621',
+                            50: '#e6f7ea',
+                            100: '#c2ebd0',
+                            200: '#9bdfb5',
+                            300: '#70d399',
+                            400: '#4dc982',
+                            500: '#58cc70',
+                            600: '#45b259',
+                            700: '#339847',
+                            800: '#237e36',
+                            900: '#156427',
                         },
-                        // Secondary Teal Palette - complementary calming colors
                         secondary: {
-                            50: '#f0fdfa',
-                            100: '#ccfbef',
-                            200: '#99f6e0',
-                            300: '#5eead4',
-                            400: '#2dd4bf',
-                            500: '#14b8a6',
-                            600: '#0d9488',
-                            700: '#0f766e',
-                            800: '#115e59',
-                            900: '#134e4a',
+                            50: '#fff9e6',
+                            100: '#ffefbf',
+                            200: '#ffe599',
+                            300: '#ffdb70',
+                            400: '#ffd14c',
+                            500: '#ffc800', // Duolingo yellow
+                            600: '#e6b400',
+                            700: '#cc9f00',
+                            800: '#b38b00',
+                            900: '#997700',
                         },
-                        // Accent colors for gamification
                         accent: {
-                            gold: '#ffd700',
-                            silver: '#c0c0c0',
-                            bronze: '#cd7f32',
-                            diamond: '#b9f2ff',
+                            blue: '#4a8cff',
+                            red: '#ff6b6b',
+                            purple: '#9b59b6',
+                            orange: '#ff9f43',
                         },
-                        // Neutral colors for text and backgrounds
                         neutral: {
-                            50: '#fafdf9',
-                            100: '#f5f9f3',
-                            200: '#e8f0e5',
-                            300: '#d4e2d0',
-                            400: '#aec5a8',
-                            500: '#8ba886',
-                            600: '#6a8a65',
-                            700: '#546e50',
-                            800: '#40573d',
-                            900: '#2f3f2d',
+                            50: '#f8f9fa',
+                            100: '#e9ecef',
+                            200: '#dee2e6',
+                            300: '#ced4da',
+                            400: '#adb5bd',
+                            500: '#6c757d',
+                            600: '#495057',
+                            700: '#343a40',
+                            800: '#212529',
+                            900: '#121416',
                         }
                     },
                     fontFamily: {
-                        'sans': ['Inter', 'ui-sans-serif', 'system-ui'],
+                        'sans': ['Nunito', 'Inter', 'ui-sans-serif', 'system-ui'],
+                        'duo': ['Nunito', 'sans-serif'],
                     },
                     animation: {
                         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'bounce-gentle': 'bounce-gentle 2s infinite',
+                        'wiggle': 'wiggle 1s ease-in-out infinite',
+                        'celebrate': 'celebrate 0.6s ease-out',
+                        'slide-in': 'slideIn 0.3s ease-out',
+                        'fadeInUp': 'fadeInUp 0.8s ease-out',
                         'breathe': 'breathe 4s ease-in-out infinite',
                         'float': 'float 6s ease-in-out infinite',
                         'shake': 'shake 0.5s ease-in-out',
                     },
                     keyframes: {
-                        breathe: {
-                            '0%, 100%': { transform: 'scale(1)' },
-                            '50%': { transform: 'scale(1.05)' },
+                        'bounce-gentle': {
+                            '0%, 100%': { 
+                                transform: 'translateY(0)',
+                                animationTimingFunction: 'cubic-bezier(0.8, 0, 1, 1)'
+                            },
+                            '50%': { 
+                                transform: 'translateY(-8px)',
+                                animationTimingFunction: 'cubic-bezier(0, 0, 0.2, 1)'
+                            },
                         },
-                        float: {
+                        'wiggle': {
+                            '0%, 100%': { transform: 'rotate(-5deg)' },
+                            '50%': { transform: 'rotate(5deg)' },
+                        },
+                        'celebrate': {
+                            '0%': { transform: 'scale(1)' },
+                            '50%': { transform: 'scale(1.2)' },
+                            '100%': { transform: 'scale(1)' },
+                        },
+                        'slideIn': {
+                            '0%': { transform: 'translateX(-100%)' },
+                            '100%': { transform: 'translateX(0)' },
+                        },
+                        'fadeInUp': {
+                            'from': {
+                                opacity: '0',
+                                transform: 'translateY(30px)',
+                            },
+                            'to': {
+                                opacity: '1',
+                                transform: 'translateY(0)',
+                            }
+                        },
+                        'float': {
                             '0%, 100%': { transform: 'translateY(0px)' },
                             '50%': { transform: 'translateY(-10px)' },
                         },
-                        shake: {
+                        'breathe': {
+                            '0%, 100%': { transform: 'scale(1)' },
+                            '50%': { transform: 'scale(1.05)' },
+                        },
+                        'shake': {
                             '0%, 100%': { transform: 'translateX(0)' },
                             '25%': { transform: 'translateX(-5px)' },
                             '75%': { transform: 'translateX(5px)' },
                         }
+                    },
+                    borderRadius: {
+                        'duo': '16px',
+                        'duo-lg': '24px',
+                        'duo-xl': '32px',
+                    },
+                    boxShadow: {
+                        'duo': '0 4px 0 rgba(0, 0, 0, 0.1)',
+                        'duo-lg': '0 6px 0 rgba(0, 0, 0, 0.1)',
+                        'duo-pressed': '0 2px 0 rgba(0, 0, 0, 0.1)',
+                    },
+                    screens: {
+                        'xs': '475px',
                     }
                 }
             }
@@ -90,66 +139,77 @@
     </script>
 
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #fafdf9; /* neutral-50 */
+            font-family: 'Nunito', sans-serif;
         }
 
-        .login-bg {
-            background: linear-gradient(135deg, #f0f9f0 0%, #dcf2dc 100%);
+        .card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 0 rgba(0, 0, 0, 0.1);
+            transition: all 0.2s ease;
+            border: 3px solid #f1f3f4;
         }
 
-        .card-shadow {
-            box-shadow: 0 4px 6px -1px rgba(46, 107, 52, 0.1), 0 2px 4px -1px rgba(46, 107, 52, 0.06);
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 0 rgba(0, 0, 0, 0.1);
+            border-color: #e5e7eb;
         }
 
-        .glass-effect {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(220, 242, 220, 0.3);
+        .card:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 rgba(0, 0, 0, 0.1);
+            border-color: #dfe3e6;
         }
 
-        .gradient-primary {
-            background: linear-gradient(135deg, #4caf50 0%, #2e6b34 100%);
+        .app-button {
+            background: #58cc70;
+            color: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 0 #45b259;
+            transition: all 0.2s ease;
+            font-weight: 700;
+            border: none;
+            padding: 12px 24px;
         }
 
-        .gradient-secondary {
-            background: linear-gradient(135deg, #14b8a6 0%, #0f766e 100%);
+        .app-button:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 6px 0 #45b259;
         }
 
-        .gradient-calm {
-            background: linear-gradient(135deg, #f0f9f0 0%, #dcf2dc 100%);
+        .app-button:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #45b259;
         }
 
-        /* Animations */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .app-button-secondary {
+            background: #ffc800;
+            box-shadow: 0 4px 0 #e6b400;
         }
 
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-10px);
-            }
+        .app-button-secondary:hover {
+            box-shadow: 0 6px 0 #e6b400;
         }
 
-        .fade-in-up {
-            animation: fadeInUp 0.8s ease-out;
+        .app-button-secondary:active {
+            box-shadow: 0 2px 0 #e6b400;
         }
 
-        .float {
-            animation: float 6s ease-in-out infinite;
+        .app-button:disabled {
+            background: #9ca3af;
+            box-shadow: 0 4px 0 #6b7280;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .app-button:disabled:hover {
+            transform: none;
+            box-shadow: 0 4px 0 #6b7280;
         }
 
         .hover-lift {
@@ -158,6 +218,14 @@
 
         .hover-lift:hover {
             transform: translateY(-5px);
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .float {
+            animation: float 6s ease-in-out infinite;
         }
 
         .breathe {
@@ -243,57 +311,48 @@
             }
         }
 
-        /* Loading animation */
-        .loading-dots {
-            display: inline-block;
-        }
-
-        .loading-dots:after {
-            content: '...';
-            animation: dots 1.5s steps(4, end) infinite;
-        }
-
-        @keyframes dots {
-            0%, 20% {
-                color: rgba(0, 0, 0, 0);
-                text-shadow:
-                    .25em 0 0 rgba(0, 0, 0, 0),
-                    .5em 0 0 rgba(0, 0, 0, 0);
-            }
-            40% {
-                color: white;
-                text-shadow:
-                    .25em 0 0 rgba(0, 0, 0, 0),
-                    .5em 0 0 rgba(0, 0, 0, 0);
-            }
-            60% {
-                text-shadow:
-                    .25em 0 0 white,
-                    .5em 0 0 rgba(0, 0, 0, 0);
-            }
-            80%, 100% {
-                text-shadow:
-                    .25em 0 0 white,
-                    .5em 0 0 white;
-            }
-        }
-
         /* Custom scrollbar */
         ::-webkit-scrollbar {
-            width: 6px;
+            width: 8px;
         }
 
         ::-webkit-scrollbar-track {
-            background: #f0f9f0;
+            background: #f1f1f1;
+            border-radius: 10px;
         }
 
         ::-webkit-scrollbar-thumb {
-            background: #8fd18f;
-            border-radius: 3px;
+            background: #58cc70;
+            border-radius: 10px;
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: #5cb85c;
+            background: #45b259;
+        }
+
+        /* Gradient Text */
+        .gradient-text {
+            background: linear-gradient(135deg, #58cc70 0%, #ffc800 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Error/Success Messages */
+        .alert-success {
+            background-color: #d1fae5;
+            border-color: #a7f3d0;
+            color: #065f46;
+            border-radius: 12px;
+            box-shadow: 0 2px 0 rgba(0, 0, 0, 0.05);
+        }
+
+        .alert-error {
+            background-color: #fee2e2;
+            border-color: #fecaca;
+            color: #dc2626;
+            border-radius: 12px;
+            box-shadow: 0 2px 0 rgba(0, 0, 0, 0.05);
         }
 
         /* Modal Styles */
@@ -363,18 +422,134 @@
             opacity: 0;
             transition: opacity 0.2s ease;
         }
+
+        /* Dot pattern background */
+        .striped-dotted-main {
+            background-color: #f8f9fa; 
+            background-image: 
+                radial-gradient(#808080b7 2px, transparent 2px);
+            background-size: 40px 40px, 60px 60px; 
+            background-position: 0 0, 20px 20px;
+            border-radius: 30px; 
+            border: 3px solid rgb(182, 182,  182);
+            box-shadow: 0 6px 0 rgba(182, 182, 182);
+        }
+
+        /* Form input styles */
+        .form-input {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 0 rgba(0, 0, 0, 0.05);
+            border: 2px solid #e9ecef;
+            transition: all 0.2s ease;
+        }
+
+        .form-input:focus {
+            border-color: #58cc70;
+            box-shadow: 0 0 0 3px rgba(88, 204, 112, 0.1);
+        }
+
+        /* Scroll indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            color: #6b7280;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .scroll-indicator.hidden {
+            opacity: 0;
+            transform: translateX(-50%) translateY(10px);
+        }
+
+        /* Progress bar for modal reading */
+        .reading-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: #e5e7eb;
+        }
+
+        .reading-progress-fill {
+            height: 100%;
+            background: #58cc70;
+            border-radius: 0 2px 2px 0;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        /* Checkbox animation */
+        .checkbox-confirmed {
+            animation: celebrate 0.6s ease-out;
+        }
     </style>
 </head>
-<body class="login-bg max-h-full overflow-hidden">
+<body class="bg-neutral-50 max-h-full overflow-hidden">
+    <!-- Loading Section -->
+        <div id="loading-section" class="fixed inset-0 z-50 flex items-center justify-center bg-white transition-all duration-500">
+        <div class="text-center">
+            <!-- Container dengan efek kartu Duolingo -->
+            <div class="bg-white rounded-duo-xl p-8 shadow-duo-lg border-4 border-primary-100 transform transition-all duration-300 hover:scale-105">
+                <!-- Gif dengan frame dekoratif -->
+                <div class="relative mb-6">
+                    <div class="absolute -inset-4 bg-gradient-to-r from-primary-200 to-secondary-200 rounded-full blur-sm opacity-50 animate-pulse"></div>
+                    <div class="relative bg-white rounded-full p-3 shadow-duo border-2 border-primary-300">
+                        <img src="{{ asset('assets/video/icon.gif') }}" alt="Loading" class="mx-auto w-28 h-28 rounded-full">
+                    </div>
+                </div>
+                
+                <!-- Teks loading dengan animasi -->
+                <div class="space-y-4">
+                    <h3 class="text-2xl font-bold text-neutral-800">MindWell</h3>
+                    <p class="text-neutral-600 font-medium flex items-center justify-center space-x-2">
+                        <span>Loading your journey</span>
+                        <span class="loading-dots">
+                            <span class="dot">.</span>
+                            <span class="dot">.</span>
+                            <span class="dot">.</span>
+                        </span>
+                    </p>
+                    
+                    <!-- Progress bar Duolingo style -->
+                    <div class="w-48 mx-auto mt-4">
+                        <div class="duo-progress bg-neutral-200 rounded-full h-3">
+                            <div class="duo-progress-fill bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full h-3 progress-animation"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Quote motivasional -->
+                    <p class="text-sm text-neutral-500 mt-4 italic max-w-xs">
+                        "Every step forward is progress"
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Elemen dekoratif floating -->
+            <div class="absolute top-1/4 left-1/4 w-8 h-8 bg-accent-blue rounded-full opacity-20 animate-bounce-gentle"></div>
+            <div class="absolute bottom-1/4 right-1/4 w-6 h-6 bg-accent-purple rounded-full opacity-20 animate-bounce-gentle" style="animation-delay: 0.3s"></div>
+            <div class="absolute top-1/3 right-1/3 w-4 h-4 bg-accent-red rounded-full opacity-20 animate-bounce-gentle" style="animation-delay: 0.6s"></div>
+        </div>
+    </div>
+    
     <div class="flex flex-col lg:flex-row h-screen">
         <!-- Left Panel - Register Form -->
         <div class="w-full lg:w-1/2 flex items-center justify-center p-8 lg:p-12 relative order-2 lg:order-1">
             <!-- Background untuk mobile -->
-            <div class="lg:hidden absolute inset-0 gradient-primary -z-10 opacity-10">
-                <div class="absolute top-10 left-10 w-20 h-20 bg-white rounded-full"></div>
-                <div class="absolute top-40 right-20 w-16 h-16 bg-white rounded-full"></div>
-                <div class="absolute bottom-20 left-20 w-24 h-24 bg-white rounded-full"></div>
-                <div class="absolute bottom-40 right-10 w-12 h-12 bg-white rounded-full"></div>
+            <div class="lg:hidden absolute inset-0 bg-gradient-to-br from-primary-100 to-secondary-100 -z-10 opacity-30">
+                <div class="absolute top-10 left-10 w-20 h-20 bg-white rounded-full animate-bounce-gentle"></div>
+                <div class="absolute top-40 right-20 w-16 h-16 bg-white rounded-full animate-bounce-gentle" style="animation-delay: 0.5s;"></div>
+                <div class="absolute bottom-20 left-20 w-24 h-24 bg-white rounded-full animate-bounce-gentle" style="animation-delay: 1s;"></div>
+                <div class="absolute bottom-40 right-10 w-12 h-12 bg-white rounded-full animate-bounce-gentle" style="animation-delay: 1.5s;"></div>
             </div>
 
             <!-- Mobile Header -->
@@ -387,7 +562,7 @@
 
             <div class="w-full max-w-md z-10">
                 <!-- Register Form Container -->
-                <div class="bg-white rounded-2xl p-8 card-shadow fade-in-up border border-neutral-200">
+                <div class="card p-8 fade-in-up">
                     <!-- Form Header -->
                     <div class="text-center mb-8">
                         <div class="w-16 h-16 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full flex items-center justify-center mx-auto mb-4 breathe">
@@ -399,21 +574,21 @@
 
                     <!-- Session Messages -->
                     @if(session('status'))
-                        <div class="mb-4 p-4 bg-green-50 text-green-700 rounded-lg text-sm border border-green-200 flex items-center">
+                        <div class="mb-4 p-4 alert-success rounded-lg text-sm flex items-center">
                             <i class="fas fa-check-circle mr-2"></i>
                             {{ session('status') }}
                         </div>
                     @endif
 
                     @if(session('error'))
-                        <div class="mb-4 p-4 bg-red-50 text-red-700 rounded-lg text-sm border border-red-200 flex items-center shake">
+                        <div class="mb-4 p-4 alert-error rounded-lg text-sm flex items-center shake">
                             <i class="fas fa-exclamation-triangle mr-2"></i>
                             {{ session('error') }}
                         </div>
                     @endif
 
                     @if($errors->any())
-                        <div class="mb-4 p-4 bg-red-50 text-red-700 rounded-lg text-sm border border-red-200 shake">
+                        <div class="mb-4 p-4 alert-error rounded-lg text-sm shake">
                             <div class="flex items-center mb-2">
                                 <i class="fas fa-exclamation-circle mr-2"></i>
                                 <span class="font-medium">Harap perbaiki error berikut:</span>
@@ -439,7 +614,7 @@
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <i class="fas fa-user text-neutral-400"></i>
                                 </div>
-                                <input id="name" type="text" name="name" value="{{ old('name') }}" required autofocus autocomplete="name" class="w-full pl-10 pr-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors bg-neutral-50 @error('name') input-error @enderror" placeholder="Masukkan nama lengkap Anda">
+                                <input id="name" type="text" name="name" value="{{ old('name') }}" required autofocus autocomplete="name" class="w-full pl-10 pr-4 py-3 form-input @error('name') input-error @enderror" placeholder="Masukkan nama lengkap Anda">
                             </div>
                             @error('name')
                             <div class="error-message">
@@ -459,7 +634,7 @@
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <i class="fas fa-envelope text-neutral-400"></i>
                                 </div>
-                                <input id="email" type="email" name="email" value="{{ old('email') }}" required autocomplete="email" class="w-full pl-10 pr-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors bg-neutral-50 @error('email') input-error @enderror" placeholder="Masukkan email Anda">
+                                <input id="email" type="email" name="email" value="{{ old('email') }}" required autocomplete="email" class="w-full pl-10 pr-4 py-3 form-input @error('email') input-error @enderror" placeholder="Masukkan email Anda">
                             </div>
                             @error('email')
                             <div class="error-message">
@@ -479,7 +654,7 @@
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <i class="fas fa-lock text-neutral-400"></i>
                                 </div>
-                                <input id="password" type="password" name="password" required autocomplete="new-password" class="w-full pl-10 pr-10 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors bg-neutral-50 @error('password') input-error @enderror" placeholder="Buat kata sandi">
+                                <input id="password" type="password" name="password" required autocomplete="new-password" class="w-full pl-10 pr-10 py-3 form-input @error('password') input-error @enderror" placeholder="Buat kata sandi">
                                 <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center password-toggle">
                                     <i class="fas fa-eye-slash text-neutral-400 hover:text-neutral-600"></i>
                                 </button>
@@ -517,7 +692,7 @@
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <i class="fas fa-lock text-neutral-400"></i>
                                 </div>
-                                <input id="password_confirmation" type="password" name="password_confirmation" required autocomplete="new-password" class="w-full pl-10 pr-10 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors bg-neutral-50" placeholder="Konfirmasi kata sandi Anda">
+                                <input id="password_confirmation" type="password" name="password_confirmation" required autocomplete="new-password" class="w-full pl-10 pr-10 py-3 form-input" placeholder="Konfirmasi kata sandi Anda">
                                 <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center password-confirm-toggle">
                                     <i class="fas fa-eye-slash text-neutral-400 hover:text-neutral-600"></i>
                                 </button>
@@ -535,12 +710,18 @@
                         <!-- Terms and Conditions -->
                         <div class="mb-6">
                             <label class="flex items-start">
-                                <input type="checkbox" name="terms" class="w-4 h-4 text-primary-600 border-neutral-300 rounded focus:ring-primary-500 mt-1" required>
+                                <input type="checkbox" name="terms" id="termsCheckbox" class="w-4 h-4 text-primary-600 border-neutral-300 rounded focus:ring-primary-500 mt-1" required disabled>
                                 <span class="ml-2 text-sm text-neutral-600">
                                     Saya setuju dengan
                                     <button type="button" id="termsBtn" class="text-primary-600 hover:text-primary-700 underline font-medium transition-colors">Syarat Layanan</button>
                                     dan
                                     <button type="button" id="privacyBtn" class="text-primary-600 hover:text-primary-700 underline font-medium transition-colors">Kebijakan Privasi</button>
+                                    <span id="termsStatus" class="text-xs text-orange-500 ml-2 hidden">
+                                        (Harap baca kedua dokumen terlebih dahulu)
+                                    </span>
+                                    <span id="termsConfirmed" class="text-xs text-green-500 ml-2 hidden">
+                                        <i class="fas fa-check mr-1"></i>Sudah dibaca dan disetujui
+                                    </span>
                                 </span>
                             </label>
                             @error('terms')
@@ -556,7 +737,7 @@
                                 Sudah punya akun?
                             </a>
 
-                            <button type="submit" id="submitBtn" class="px-6 py-3 gradient-primary text-white font-semibold rounded-lg hover:opacity-90 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed">
+                            <button type="submit" id="submitBtn" class="app-button px-6 py-3 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
                                 <span id="submitText">Buat Akun</span>
                                 <span id="submitLoading" class="hidden">
                                     <i class="fas fa-spinner loading-spinner mr-2"></i>
@@ -570,9 +751,9 @@
         </div>
 
         <!-- Right Panel - Visualization (Hidden on mobile) -->
-        <div class="hidden lg:flex lg:w-1/2 gradient-primary text-white p-8 lg:p-12 flex-col justify-between relative overflow-hidden order-1 lg:order-2">
+        <div class="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-primary-500 to-secondary-500 text-white p-8 lg:p-12 flex-col justify-between relative overflow-hidden order-1 lg:order-2">
             <!-- Background decorative elements -->
-            <div class="absolute top-0 left-0 w-full h-full opacity-10">
+            <div class="absolute top-0 left-0 w-full h-full opacity-20">
                 <div class="absolute top-10 left-10 w-20 h-20 bg-white rounded-full float"></div>
                 <div class="absolute top-40 right-20 w-16 h-16 bg-white rounded-full float" style="animation-delay: 2s;"></div>
                 <div class="absolute bottom-20 left-20 w-24 h-24 bg-white rounded-full float" style="animation-delay: 4s;"></div>
@@ -599,19 +780,19 @@
                     <div class="space-y-4">
                         <div class="flex items-center">
                             <div class="w-8 h-8 bg-white bg-opacity-20 rounded-full flex items-center justify-center mr-3 breathe">
-                                <i class="fas fa-heartbeat text-secondary-300"></i>
+                                <i class="fas fa-heartbeat text-white"></i>
                             </div>
                             <span>Pelacakan Mood & Analitik Harian</span>
                         </div>
                         <div class="flex items-center">
                             <div class="w-8 h-8 bg-white bg-opacity-20 rounded-full flex items-center justify-center mr-3 breathe" style="animation-delay: 0.5s;">
-                                <i class="fas fa-book-open text-secondary-300"></i>
+                                <i class="fas fa-book-open text-white"></i>
                             </div>
                             <span>Journaling Personal</span>
                         </div>
                         <div class="flex items-center">
                             <div class="w-8 h-8 bg-white bg-opacity-20 rounded-full flex items-center justify-center mr-3 breathe" style="animation-delay: 1s;">
-                                <i class="fas fa-medal text-secondary-300"></i>
+                                <i class="fas fa-medal text-white"></i>
                             </div>
                             <span>Tantangan & Pencapaian Kesehatan</span>
                         </div>
@@ -633,9 +814,9 @@
             <div class="fixed inset-0 transition-opacity bg-neutral-500 bg-opacity-75 modal-overlay"></div>
 
             <!-- Modal panel -->
-            <div class="relative inline-block w-full max-w-4xl my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl modal-content">
+            <div class="relative inline-block w-full max-w-4xl my-8 overflow-hidden text-left align-middle transition-all transform card modal-content">
                 <!-- Header -->
-                <div class="px-6 py-4 bg-primary-50 border-b border-primary-100">
+                <div class="px-6 py-4 bg-primary-50 border-b border-primary-200">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center">
                             <div class="w-10 h-10 bg-primary-500 rounded-full flex items-center justify-center mr-3">
@@ -653,7 +834,7 @@
                 </div>
 
                 <!-- Content -->
-                <div class="px-6 py-4 max-h-96 overflow-y-auto modal-scrollbar">
+                <div class="px-6 py-4 max-h-96 overflow-y-auto modal-scrollbar" id="privacyContent">
                     <div class="prose prose-sm max-w-none">
                         <h4>1. Informasi yang Kami Kumpulkan</h4>
                         <p class="text-neutral-700 mb-4">
@@ -731,13 +912,39 @@
                         <p class="text-neutral-700">
                             Untuk pertanyaan tentang kebijakan privasi atau penggunaan data, hubungi kami di <strong>privacy@tenang.com</strong>.
                         </p>
+
+                        <!-- Extra content to ensure scrolling is needed -->
+                        <div class="mt-8 pt-8 border-t border-neutral-200">
+                            <h4>10. Komitmen Kami</h4>
+                            <p class="text-neutral-700 mb-4">
+                                Kami berkomitmen untuk melindungi privasi Anda dan memastikan bahwa data pribadi Anda dikelola dengan transparansi dan tanggung jawab.
+                            </p>
+                            <p class="text-neutral-700">
+                                Dengan menggunakan layanan Tenang, Anda mempercayai kami dengan informasi pribadi Anda, dan kami sangat serius dalam menjaga kepercayaan tersebut.
+                            </p>
+                        </div>
                     </div>
+                </div>
+
+                <!-- Reading Progress -->
+                <div class="reading-progress">
+                    <div id="privacyProgress" class="reading-progress-fill"></div>
+                </div>
+
+                <!-- Scroll Indicator -->
+                <div id="privacyScrollIndicator" class="scroll-indicator">
+                    <i class="fas fa-arrow-down mr-2"></i>
+                    Scroll ke bawah untuk melanjutkan membaca
                 </div>
 
                 <!-- Footer -->
                 <div class="px-6 py-4 bg-neutral-50 border-t border-neutral-200 flex justify-end">
-                    <button id="understandPrivacy" class="px-6 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2">
-                        Mengerti
+                    <button id="understandPrivacy" class="app-button px-6 py-2" disabled>
+                        <span id="privacyButtonText">Mengerti</span>
+                        <span id="privacyButtonLoading" class="hidden">
+                            <i class="fas fa-spinner loading-spinner mr-2"></i>
+                            Memproses...
+                        </span>
                     </button>
                 </div>
             </div>
@@ -751,9 +958,9 @@
             <div class="fixed inset-0 transition-opacity bg-neutral-500 bg-opacity-75 modal-overlay"></div>
 
             <!-- Modal panel -->
-            <div class="relative inline-block w-full max-w-4xl my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl modal-content">
+            <div class="relative inline-block w-full max-w-4xl my-8 overflow-hidden text-left align-middle transition-all transform card modal-content">
                 <!-- Header -->
-                <div class="px-6 py-4 bg-secondary-50 border-b border-secondary-100">
+                <div class="px-6 py-4 bg-secondary-50 border-b border-secondary-200">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center">
                             <div class="w-10 h-10 bg-secondary-500 rounded-full flex items-center justify-center mr-3">
@@ -771,7 +978,7 @@
                 </div>
 
                 <!-- Content -->
-                <div class="px-6 py-4 max-h-96 overflow-y-auto modal-scrollbar">
+                <div class="px-6 py-4 max-h-96 overflow-y-auto modal-scrollbar" id="termsContent">
                     <div class="prose prose-sm max-w-none">
                         <h4>1. Penerimaan Syarat</h4>
                         <p class="text-neutral-700 mb-4">
@@ -858,13 +1065,39 @@
                         <p class="text-neutral-700">
                             Syarat layanan ini diatur oleh hukum Indonesia. Setiap sengketa akan diselesaikan di pengadilan yang berwenang di Indonesia.
                         </p>
+
+                        <!-- Extra content to ensure scrolling is needed -->
+                        <div class="mt-8 pt-8 border-t border-neutral-200">
+                            <h4>11. Komitmen Kami</h4>
+                            <p class="text-neutral-700 mb-4">
+                                Kami berkomitmen untuk memberikan pengalaman yang aman, mendukung, dan bermanfaat bagi semua pengguna Tenang.
+                            </p>
+                            <p class="text-neutral-700">
+                                Dengan menyetujui syarat layanan ini, Anda menjadi bagian dari komunitas yang peduli dengan kesehatan mental dan kesejahteraan bersama.
+                            </p>
+                        </div>
                     </div>
+                </div>
+
+                <!-- Reading Progress -->
+                <div class="reading-progress">
+                    <div id="termsProgress" class="reading-progress-fill"></div>
+                </div>
+
+                <!-- Scroll Indicator -->
+                <div id="termsScrollIndicator" class="scroll-indicator">
+                    <i class="fas fa-arrow-down mr-2"></i>
+                    Scroll ke bawah untuk melanjutkan membaca
                 </div>
 
                 <!-- Footer -->
                 <div class="px-6 py-4 bg-neutral-50 border-t border-neutral-200 flex justify-end">
-                    <button id="understandTerms" class="px-6 py-2 bg-secondary-500 text-white rounded-lg hover:bg-secondary-600 transition-colors focus:outline-none focus:ring-2 focus:ring-secondary-500 focus:ring-offset-2">
-                        Mengerti
+                    <button id="understandTerms" class="app-button-secondary px-6 py-2" disabled>
+                        <span id="termsButtonText">Mengerti</span>
+                        <span id="termsButtonLoading" class="hidden">
+                            <i class="fas fa-spinner loading-spinner mr-2"></i>
+                            Memproses...
+                        </span>
                     </button>
                 </div>
             </div>
@@ -872,7 +1105,25 @@
     </div>
 
     <script>
+        // Loading section functionality
+        function hideLoading() {
+            const loadingSection = document.getElementById('loading-section');
+            loadingSection.style.opacity = '0';
+            loadingSection.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                loadingSection.style.display = 'none';
+            }, 500);
+        }
+
+        window.addEventListener('load', function() {
+            setTimeout(hideLoading, 1500);
+        });
+
         document.addEventListener("DOMContentLoaded", () => {
+            // State management
+            let privacyRead = false;
+            let termsRead = false;
+
             // Modal Elements
             const privacyModal = document.getElementById("privacyModal");
             const termsModal = document.getElementById("termsModal");
@@ -884,19 +1135,45 @@
             const understandTerms = document.getElementById("understandTerms");
             const modalOverlays = document.querySelectorAll(".modal-overlay");
 
+            // Form Elements
+            const termsCheckbox = document.getElementById("termsCheckbox");
+            const termsStatus = document.getElementById("termsStatus");
+            const termsConfirmed = document.getElementById("termsConfirmed");
+            const submitBtn = document.getElementById("submitBtn");
+
             // Password Elements
             const passwordInput = document.getElementById("password");
             const passwordConfirmInput = document.getElementById("password_confirmation");
             const passwordToggle = document.querySelector(".password-toggle");
             const passwordConfirmToggle = document.querySelector(".password-confirm-toggle");
-            const submitBtn = document.getElementById("submitBtn");
             const submitText = document.getElementById("submitText");
             const submitLoading = document.getElementById("submitLoading");
+
+            // Update form state based on reading status
+            function updateFormState() {
+                if (privacyRead && termsRead) {
+                    termsCheckbox.disabled = false;
+                    termsCheckbox.checked = true;
+                    termsStatus.classList.add('hidden');
+                    termsConfirmed.classList.remove('hidden');
+                    termsCheckbox.classList.add('checkbox-confirmed');
+                    submitBtn.disabled = false;
+                } else {
+                    termsStatus.classList.remove('hidden');
+                    termsConfirmed.classList.add('hidden');
+                }
+            }
 
             // Modal Functions
             function openModal(modal) {
                 modal.classList.remove("hidden");
                 document.body.style.overflow = "hidden";
+                
+                // Reset scroll position
+                const content = modal.querySelector('.modal-scrollbar');
+                if (content) {
+                    content.scrollTop = 0;
+                }
                 
                 // Trigger animation
                 setTimeout(() => {
@@ -925,14 +1202,100 @@
                 }, 200);
             }
 
+            // Scroll detection for modals
+            function setupScrollDetection(modal, progressBar, scrollIndicator, understandButton, type) {
+                const content = modal.querySelector('.modal-scrollbar');
+                if (!content) return;
+
+                content.addEventListener('scroll', function() {
+                    const scrollTop = content.scrollTop;
+                    const scrollHeight = content.scrollHeight;
+                    const clientHeight = content.clientHeight;
+                    const scrollPercentage = (scrollTop / (scrollHeight - clientHeight)) * 100;
+
+                    // Update progress bar
+                    if (progressBar) {
+                        progressBar.style.width = `${Math.min(scrollPercentage, 100)}%`;
+                    }
+
+                    // Hide scroll indicator when near bottom
+                    if (scrollIndicator) {
+                        if (scrollPercentage > 80) {
+                            scrollIndicator.classList.add('hidden');
+                        } else {
+                            scrollIndicator.classList.remove('hidden');
+                        }
+                    }
+
+                    // Enable understand button when scrolled to bottom
+                    if (understandButton && scrollPercentage >= 95) {
+                        understandButton.disabled = false;
+                    }
+                });
+            }
+
             // Event Listeners for Modals
-            privacyBtn.addEventListener("click", () => openModal(privacyModal));
-            termsBtn.addEventListener("click", () => openModal(termsModal));
+            privacyBtn.addEventListener("click", () => {
+                openModal(privacyModal);
+                setupScrollDetection(privacyModal, 
+                    document.getElementById('privacyProgress'),
+                    document.getElementById('privacyScrollIndicator'),
+                    understandPrivacy,
+                    'privacy'
+                );
+            });
+
+            termsBtn.addEventListener("click", () => {
+                openModal(termsModal);
+                setupScrollDetection(termsModal,
+                    document.getElementById('termsProgress'),
+                    document.getElementById('termsScrollIndicator'),
+                    understandTerms,
+                    'terms'
+                );
+            });
 
             closePrivacy.addEventListener("click", () => closeModal(privacyModal));
             closeTerms.addEventListener("click", () => closeModal(termsModal));
-            understandPrivacy.addEventListener("click", () => closeModal(privacyModal));
-            understandTerms.addEventListener("click", () => closeModal(termsModal));
+
+            // Understand button handlers
+            understandPrivacy.addEventListener("click", () => {
+                privacyRead = true;
+                updateFormState();
+                closeModal(privacyModal);
+                
+                // Show confirmation animation
+                const buttonText = document.getElementById('privacyButtonText');
+                const buttonLoading = document.getElementById('privacyButtonLoading');
+                
+                buttonText.classList.add('hidden');
+                buttonLoading.classList.remove('hidden');
+                
+                setTimeout(() => {
+                    buttonLoading.classList.add('hidden');
+                    buttonText.classList.remove('hidden');
+                    understandPrivacy.disabled = true;
+                }, 1000);
+            });
+
+            understandTerms.addEventListener("click", () => {
+                termsRead = true;
+                updateFormState();
+                closeModal(termsModal);
+                
+                // Show confirmation animation
+                const buttonText = document.getElementById('termsButtonText');
+                const buttonLoading = document.getElementById('termsButtonLoading');
+                
+                buttonText.classList.add('hidden');
+                buttonLoading.classList.remove('hidden');
+                
+                setTimeout(() => {
+                    buttonLoading.classList.add('hidden');
+                    buttonText.classList.remove('hidden');
+                    understandTerms.disabled = true;
+                }, 1000);
+            });
 
             // Close modal when clicking overlay
             modalOverlays.forEach(overlay => {
@@ -1122,15 +1485,40 @@
 
             // Auto-remove success/error messages after 5 seconds
             setTimeout(() => {
-                const messages = document.querySelectorAll('[class*="bg-"]');
+                const messages = document.querySelectorAll('[class*="alert-"]');
                 messages.forEach(message => {
-                    if (message.classList.contains('bg-green-50') || message.classList.contains('bg-red-50')) {
-                        message.style.opacity = '0';
-                        message.style.transition = 'opacity 0.5s ease';
-                        setTimeout(() => message.remove(), 500);
-                    }
+                    message.style.opacity = '0';
+                    message.style.transition = 'opacity 0.5s ease';
+                    setTimeout(() => message.remove(), 500);
                 });
             }, 5000);
+
+            // Add Duolingo-style interactions to all duo elements
+            document.querySelectorAll('.app-button, .card, .form-input').forEach(element => {
+                element.addEventListener('mousedown', function() {
+                    if (this.classList.contains('app-button') || this.classList.contains('card')) {
+                        this.style.transform = 'translateY(2px)';
+                        this.style.boxShadow = '0 2px 0 rgba(0, 0, 0, 0.1)';
+                    }
+                });
+                
+                element.addEventListener('mouseup', function() {
+                    if (this.classList.contains('app-button') || this.classList.contains('card')) {
+                        this.style.transform = 'translateY(0)';
+                        this.style.boxShadow = this.classList.contains('app-button') ? '0 4px 0 #45b259' : '0 4px 0 rgba(0, 0, 0, 0.1)';
+                    }
+                });
+                
+                element.addEventListener('mouseleave', function() {
+                    if (this.classList.contains('app-button') || this.classList.contains('card')) {
+                        this.style.transform = 'translateY(0)';
+                        this.style.boxShadow = this.classList.contains('app-button') ? '0 4px 0 #45b259' : '0 4px 0 rgba(0, 0, 0, 0.1)';
+                    }
+                });
+            });
+
+            // Initialize form state
+            updateFormState();
         });
     </script>
 </body>
