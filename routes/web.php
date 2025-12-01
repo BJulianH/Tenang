@@ -39,9 +39,15 @@ Route::get('/register', function () {
 
 Route::post('/register', [AuthController::class, 'register'])->name('register.post');
 
+
+
+
+// forgot password
 Route::get('/forgot-password', function () {
     return view('auth.forgot-password');
 })->name('password.request');
+
+Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink'])->name('password.email');
 
 Route::get('/reset-password/{token}', function ($token) {
     return view('auth.reset-password', ['token' => $token]);
@@ -50,6 +56,8 @@ Route::get('/reset-password/{token}', function ($token) {
 Route::get('/verify-email', function () {
     return view('auth.verify-email');
 })->middleware('auth')->name('verification.notice');
+
+
 
 Route::prefix('community')->group(function () {
     // Community routes
@@ -161,7 +169,7 @@ Route::post('/{post}/feature', [AdminPostController::class, 'feature'])->name('a
     Route::post('/bulk-action', [AdminPostController::class, 'bulkAction'])->name('admin.posts.bulk-action');
 
     // Communities Management
-   Route::get('/communities', [AdminCommunityController::class, 'index'])->name('admin.communities.index');
+Route::get('/communities', [AdminCommunityController::class, 'index'])->name('admin.communities.index');
 Route::get('/communities/create', [AdminCommunityController::class, 'create'])->name('admin.communities.create');
 Route::post('/communities', [AdminCommunityController::class, 'store'])->name('admin.communities.store');
 Route::get('/communities/{community}', [AdminCommunityController::class, 'show'])->name('admin.communities.show');
@@ -194,3 +202,4 @@ Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.e
 Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
 Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
 Route::put('/profile/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.avatar.update');
+

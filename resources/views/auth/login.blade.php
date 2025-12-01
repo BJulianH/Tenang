@@ -427,7 +427,7 @@
 </head>
 <body class="bg-neutral-50 max-h-full overflow-hidden">
     <!-- Loading Section -->
-    <div id="loading-section" class="fixed inset-0 z-50 flex items-center justify-center bg-white transition-all duration-500">
+        <div id="loading-section" class="fixed inset-0 z-50 flex items-center justify-center bg-white transition-all duration-500">
         <div class="text-center">
             <!-- Container dengan efek kartu Duolingo -->
             <div class="bg-white rounded-duo-xl p-8 shadow-duo-lg border-4 border-primary-100 transform transition-all duration-300 hover:scale-105">
@@ -435,17 +435,15 @@
                 <div class="relative mb-6">
                     <div class="absolute -inset-4 bg-gradient-to-r from-primary-200 to-secondary-200 rounded-full blur-sm opacity-50 animate-pulse"></div>
                     <div class="relative bg-white rounded-full p-3 shadow-duo border-2 border-primary-300">
-                        <div class="mx-auto w-28 h-28 rounded-full bg-primary-100 flex items-center justify-center">
-                            <i class="fas fa-lock text-primary-500 text-4xl"></i>
-                        </div>
+                        <img src="{{ asset('assets/video/icon.gif') }}" alt="Loading" class="mx-auto w-28 h-28 rounded-full">
                     </div>
                 </div>
                 
                 <!-- Teks loading dengan animasi -->
                 <div class="space-y-4">
-                    <h3 class="text-2xl font-bold text-neutral-800">Tenang</h3>
+                    <h3 class="text-2xl font-bold text-neutral-800">MindWell</h3>
                     <p class="text-neutral-600 font-medium flex items-center justify-center space-x-2">
-                        <span>Memuat sesi Anda</span>
+                        <span>Loading your journey</span>
                         <span class="loading-dots">
                             <span class="dot">.</span>
                             <span class="dot">.</span>
@@ -462,7 +460,7 @@
                     
                     <!-- Quote motivasional -->
                     <p class="text-sm text-neutral-500 mt-4 italic max-w-xs">
-                        "Kesehatan mental dimulai dengan langkah kecil"
+                        "Every step forward is progress"
                     </p>
                 </div>
             </div>
@@ -473,7 +471,7 @@
             <div class="absolute top-1/3 right-1/3 w-4 h-4 bg-accent-red rounded-full opacity-20 animate-bounce-gentle" style="animation-delay: 0.6s"></div>
         </div>
     </div>
-
+    
     <div class="flex flex-col lg:flex-row h-screen">
         <!-- Left Panel - Visualization (Hidden on mobile) -->
         <div class="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-primary-500 to-secondary-500 text-white p-8 lg:p-12 flex-col justify-between relative overflow-hidden">
