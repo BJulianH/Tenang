@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', $community->name . ' - Community Details - MindWell Admin')
+@section('title', $community->name . ' - Community Details - Tenang Admin')
 @section('page_title', 'Community Details: ' . $community->name)
 
 @section('content')

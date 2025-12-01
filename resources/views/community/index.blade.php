@@ -1,7 +1,7 @@
 {{-- resources/views/community/index.blade.php --}}
 @extends('layouts.app')
 
-@section('title', 'Community Feed - MindWell')
+@section('title', 'Community Feed - Tenang')
 
 @section('styles')
 <style>

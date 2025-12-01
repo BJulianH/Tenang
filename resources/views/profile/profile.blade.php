@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Profil - MindWell')
+@section('title', 'Profil - Tenang')
 
 @section('styles')
 <style>

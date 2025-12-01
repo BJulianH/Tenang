@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DailyQuest;
+use Carbon\Carbon;
 use App\Models\UserQuest;
+use App\Models\DailyQuest;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class QuestController extends Controller
 {
@@ -141,7 +142,6 @@ class QuestController extends Controller
         ]);
     }
 
-    // Complete a quest manually
     public function completeQuest(UserQuest $userQuest)
     {
         // Check if user owns this quest
@@ -156,13 +156,17 @@ class QuestController extends Controller
         DB::transaction(function () use ($userQuest) {
             $userQuest->markCompleted();
             
-            // Reward user
+            // Reward user - HANYA coins dan diamonds
             $user = $userQuest->user;
             $quest = $userQuest->dailyQuest;
 
             $user->increment('coins', $quest->coins);
             $user->increment('diamonds', $quest->diamonds);
-            $user->increment('points', $quest->points);
+            
+            // Update achievement progress setelah menyelesaikan quest
+            $this->updateAchievementProgress($user, 'quests_completed', 1);
+            $this->updateAchievementProgress($user, 'coins_earned', $quest->coins);
+            $this->updateAchievementProgress($user, 'diamonds_earned', $quest->diamonds);
         });
 
         return response()->json([
@@ -171,7 +175,6 @@ class QuestController extends Controller
             'rewards' => [
                 'coins' => $userQuest->dailyQuest->coins,
                 'diamonds' => $userQuest->dailyQuest->diamonds,
-                'points' => $userQuest->dailyQuest->points,
             ]
         ]);
     }
@@ -269,9 +272,6 @@ class QuestController extends Controller
                 'diamonds' => $todayQuests->whereIn('status', ['completed', 'claimed'])->sum(function ($quest) {
                     return $quest->dailyQuest->diamonds;
                 }),
-                'points' => $todayQuests->whereIn('status', ['completed', 'claimed'])->sum(function ($quest) {
-                    return $quest->dailyQuest->points;
-                }),
             ]
         ];
     }
@@ -302,5 +302,365 @@ class QuestController extends Controller
             'message' => 'Quests reset successfully',
             'quests' => $newQuests
         ]);
+    }
+
+    public function indexView()
+    {
+        $todayQuests = UserQuest::with('dailyQuest')
+            ->where('user_id', auth()->id())
+            ->whereDate('assigned_date', today())
+            ->orderBy('status')
+            ->orderBy('created_at')
+            ->get();
+
+        $weeklyStats = $this->getWeeklyQuestStats();
+        $monthlyStats = $this->getMonthlyQuestStats();
+        $achievementStats = $this->getAchievementStats();
+
+        return view('quests.index', compact(
+            'todayQuests', 
+            'weeklyStats', 
+            'monthlyStats',
+            'achievementStats'
+        ));
+    }
+
+    // Halaman achievements tanpa model Achievement
+    public function achievements()
+    {
+        $achievementStats = $this->getAchievementStats();
+        $userAchievements = $this->getUserAchievements();
+
+        return view('quests.achievements', compact(
+            'achievementStats',
+            'userAchievements'
+        ));
+    }
+
+    // Stats mingguan untuk quest
+    private function getWeeklyQuestStats()
+    {
+        $startOfWeek = Carbon::now()->startOfWeek();
+        $endOfWeek = Carbon::now()->endOfWeek();
+
+        return [
+            'total_quests' => UserQuest::where('user_id', auth()->id())
+                ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
+                ->count(),
+            'completed_quests' => UserQuest::where('user_id', auth()->id())
+                ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
+                ->whereIn('status', ['completed', 'claimed'])
+                ->count(),
+            'total_coins' => UserQuest::where('user_id', auth()->id())
+                ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
+                ->whereIn('status', ['completed', 'claimed'])
+                ->with('dailyQuest')
+                ->get()
+                ->sum(function($userQuest) {
+                    return $userQuest->dailyQuest->coins;
+                }),
+            'total_diamonds' => UserQuest::where('user_id', auth()->id())
+                ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
+                ->whereIn('status', ['completed', 'claimed'])
+                ->with('dailyQuest')
+                ->get()
+                ->sum(function($userQuest) {
+                    return $userQuest->dailyQuest->diamonds;
+                }),
+        ];
+    }
+
+    // Stats bulanan untuk quest
+    private function getMonthlyQuestStats()
+    {
+        $startOfMonth = Carbon::now()->startOfMonth();
+        $endOfMonth = Carbon::now()->endOfMonth();
+
+        return [
+            'total_quests' => UserQuest::where('user_id', auth()->id())
+                ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+                ->count(),
+            'completed_quests' => UserQuest::where('user_id', auth()->id())
+                ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+                ->whereIn('status', ['completed', 'claimed'])
+                ->count(),
+            'completion_rate' => UserQuest::where('user_id', auth()->id())
+                ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+                ->count() > 0 ? 
+                round((UserQuest::where('user_id', auth()->id())
+                    ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+                    ->whereIn('status', ['completed', 'claimed'])
+                    ->count() / UserQuest::where('user_id', auth()->id())
+                    ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+                    ->count()) * 100) : 0,
+        ];
+    }
+
+    // Stats achievements tanpa model Achievement
+    private function getAchievementStats()
+    {
+        $user = auth()->user();
+        
+        // Ambil data dari user atau cache
+        $questsCompleted = $user->quests_completed ?? 0;
+        $coinsEarned = $user->coins_earned ?? 0;
+        $diamondsEarned = $user->diamonds_earned ?? 0;
+        $loginStreak = $user->login_streak ?? 0;
+
+        // Hitung achievement yang sudah unlocked
+        $unlockedAchievements = $this->calculateUnlockedAchievements($user);
+
+        return [
+            'quests_completed' => $questsCompleted,
+            'coins_earned' => $coinsEarned,
+            'diamonds_earned' => $diamondsEarned,
+            'login_streak' => $loginStreak,
+            'unlocked_achievements' => $unlockedAchievements,
+            'total_achievements' => 12, // Total predefined achievements
+            'completion_percentage' => 12 > 0 ? round(($unlockedAchievements / 12) * 100) : 0,
+        ];
+    }
+
+    // Get user achievements progress
+    private function getUserAchievements()
+    {
+        $user = auth()->user();
+        
+        // Define achievements tanpa model
+        $achievements = [
+            // Quest achievements
+            [
+                'id' => 1,
+                'title' => 'First Quest',
+                'description' => 'Complete your first quest',
+                'type' => 'quests_completed',
+                'requirement' => 1,
+                'reward_coins' => 100,
+                'reward_diamonds' => 10,
+                'icon' => '🎯'
+            ],
+            [
+                'id' => 2,
+                'title' => 'Quest Beginner',
+                'description' => 'Complete 10 quests',
+                'type' => 'quests_completed',
+                'requirement' => 10,
+                'reward_coins' => 500,
+                'reward_diamonds' => 25,
+                'icon' => '⚔️'
+            ],
+            [
+                'id' => 3,
+                'title' => 'Quest Master',
+                'description' => 'Complete 50 quests',
+                'type' => 'quests_completed',
+                'requirement' => 50,
+                'reward_coins' => 2000,
+                'reward_diamonds' => 100,
+                'icon' => '🏆'
+            ],
+            // Coin achievements
+            [
+                'id' => 4,
+                'title' => 'Coin Collector',
+                'description' => 'Earn 1000 coins',
+                'type' => 'coins_earned',
+                'requirement' => 1000,
+                'reward_coins' => 200,
+                'reward_diamonds' => 20,
+                'icon' => '🪙'
+            ],
+            [
+                'id' => 5,
+                'title' => 'Rich Explorer',
+                'description' => 'Earn 5000 coins',
+                'type' => 'coins_earned',
+                'requirement' => 5000,
+                'reward_coins' => 1000,
+                'reward_diamonds' => 50,
+                'icon' => '💰'
+            ],
+            // Diamond achievements
+            [
+                'id' => 6,
+                'title' => 'Diamond Hunter',
+                'description' => 'Earn 100 diamonds',
+                'type' => 'diamonds_earned',
+                'requirement' => 100,
+                'reward_coins' => 500,
+                'reward_diamonds' => 25,
+                'icon' => '💎'
+            ],
+            // Streak achievements
+            [
+                'id' => 7,
+                'title' => 'Dedicated',
+                'description' => '7-day login streak',
+                'type' => 'login_streak',
+                'requirement' => 7,
+                'reward_coins' => 300,
+                'reward_diamonds' => 30,
+                'icon' => '🔥'
+            ],
+            [
+                'id' => 8,
+                'title' => 'Consistent',
+                'description' => '30-day login streak',
+                'type' => 'login_streak',
+                'requirement' => 30,
+                'reward_coins' => 1500,
+                'reward_diamonds' => 75,
+                'icon' => '🌟'
+            ],
+            // Special achievements
+            [
+                'id' => 9,
+                'title' => 'Perfect Day',
+                'description' => 'Complete all daily quests in one day',
+                'type' => 'perfect_days',
+                'requirement' => 1,
+                'reward_coins' => 500,
+                'reward_diamonds' => 50,
+                'icon' => '⭐'
+            ],
+            [
+                'id' => 10,
+                'title' => 'Week Warrior',
+                'description' => 'Complete 35 quests in a week',
+                'type' => 'weekly_quests',
+                'requirement' => 35,
+                'reward_coins' => 1000,
+                'reward_diamonds' => 100,
+                'icon' => '⚡'
+            ],
+            [
+                'id' => 11,
+                'title' => 'Month Master',
+                'description' => 'Complete 100 quests in a month',
+                'type' => 'monthly_quests',
+                'requirement' => 100,
+                'reward_coins' => 3000,
+                'reward_diamonds' => 150,
+                'icon' => '👑'
+            ],
+            [
+                'id' => 12,
+                'title' => 'Quest Legend',
+                'description' => 'Complete 500 quests total',
+                'type' => 'quests_completed',
+                'requirement' => 500,
+                'reward_coins' => 5000,
+                'reward_diamonds' => 250,
+                'icon' => '🎖️'
+            ]
+        ];
+
+        // Add progress and unlocked status to each achievement
+        foreach ($achievements as &$achievement) {
+            $achievement['progress'] = $this->getAchievementProgress($user, $achievement);
+            $achievement['is_unlocked'] = $achievement['progress'] >= $achievement['requirement'];
+            $achievement['progress_percentage'] = min(100, ($achievement['progress'] / $achievement['requirement']) * 100);
+        }
+
+        return $achievements;
+    }
+
+    // Calculate achievement progress
+    private function getAchievementProgress($user, $achievement)
+    {
+        switch ($achievement['type']) {
+            case 'quests_completed':
+                return $user->quests_completed ?? 0;
+            case 'coins_earned':
+                return $user->coins_earned ?? 0;
+            case 'diamonds_earned':
+                return $user->diamonds_earned ?? 0;
+            case 'login_streak':
+                return $user->login_streak ?? 0;
+            case 'perfect_days':
+                return $user->perfect_days ?? 0;
+            case 'weekly_quests':
+                return $this->getWeeklyQuestCount($user);
+            case 'monthly_quests':
+                return $this->getMonthlyQuestCount($user);
+            default:
+                return 0;
+        }
+    }
+
+    // Calculate unlocked achievements count
+    private function calculateUnlockedAchievements($user)
+    {
+        $achievements = $this->getUserAchievements();
+        $unlocked = 0;
+
+        foreach ($achievements as $achievement) {
+            if ($achievement['is_unlocked']) {
+                $unlocked++;
+            }
+        }
+
+        return $unlocked;
+    }
+
+    // Update achievement progress
+    private function updateAchievementProgress($user, $type, $amount)
+    {
+        // Update user's achievement progress
+        switch ($type) {
+            case 'quests_completed':
+                $user->increment('quests_completed', $amount);
+                break;
+            case 'coins_earned':
+                $user->increment('coins_earned', $amount);
+                break;
+            case 'diamonds_earned':
+                $user->increment('diamonds_earned', $amount);
+                break;
+        }
+
+        // Check for new unlocked achievements
+        $this->checkNewAchievements($user);
+    }
+
+    // Check for newly unlocked achievements
+    private function checkNewAchievements($user)
+    {
+        $achievements = $this->getUserAchievements();
+        $newlyUnlocked = [];
+
+        foreach ($achievements as $achievement) {
+            $progress = $this->getAchievementProgress($user, $achievement);
+            
+            if ($progress >= $achievement['requirement']) {
+                // Check if this is newly unlocked (you might want to track claimed achievements)
+                $newlyUnlocked[] = $achievement;
+            }
+        }
+
+        return $newlyUnlocked;
+    }
+
+    // Helper methods for achievement calculations
+    private function getWeeklyQuestCount($user)
+    {
+        $startOfWeek = Carbon::now()->startOfWeek();
+        $endOfWeek = Carbon::now()->endOfWeek();
+
+        return UserQuest::where('user_id', $user->id)
+            ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
+            ->whereIn('status', ['completed', 'claimed'])
+            ->count();
+    }
+
+    private function getMonthlyQuestCount($user)
+    {
+        $startOfMonth = Carbon::now()->startOfMonth();
+        $endOfMonth = Carbon::now()->endOfMonth();
+
+        return UserQuest::where('user_id', $user->id)
+            ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+            ->whereIn('status', ['completed', 'claimed'])
+            ->count();
     }
 }

@@ -22,6 +22,9 @@ use App\Http\Controllers\CommunityProfileController;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/main', function () {
+    return view('main.index ');
+});
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('/voice-chat-gemini', function () {
     return view('voice-chat-gemini');
@@ -98,20 +101,22 @@ Route::prefix('community')->group(function () {
     });
 });
 Route::prefix('quests')->group(function () {
-    Route::get('/', [QuestController::class, 'index']);
-    Route::get('/available', [QuestController::class, 'availableQuests']);
+    Route::get('/me', [QuestController::class, 'indexView'])->name('quests.index.view');
+    Route::get('/achievements', [QuestController::class, 'achievements'])->name('quests.achievements');
+    Route::get('/', [QuestController::class, 'index'])->name('quests.index');
+    Route::get('/available', [QuestController::class, 'availableQuests'])->name('quests.available');
     
-    Route::post('/assign-random', [QuestController::class, 'assignRandomQuests']);
-    Route::post('/choose', [QuestController::class, 'chooseQuests']);
+    Route::post('/assign-random', [QuestController::class, 'assignRandomQuests'])->name('quests.assign-random');
+    Route::post('/choose', [QuestController::class, 'chooseQuests'])->name('quests.choose');
 
-    Route::post('/{userQuest}/complete', [QuestController::class, 'completeQuest']);
-    Route::post('/{userQuest}/claim', [QuestController::class, 'claimRewards']);
+    Route::post('/{userQuest}/complete', [QuestController::class, 'completeQuest'])->name('quests.complete');
+    Route::post('/{userQuest}/claim', [QuestController::class, 'claimRewards'])->name('quests.claim');
 
-    Route::patch('/{userQuest}/progress', [QuestController::class, 'updateProgress']);
-    Route::patch('/{userQuest}/add-progress', [QuestController::class, 'addProgress']);
+    Route::patch('/{userQuest}/progress', [QuestController::class, 'updateProgress'])->name('quests.progress');
+    Route::patch('/{userQuest}/add-progress', [QuestController::class, 'addProgress'])->name('quests.add-progress');
 
-    Route::get('/stats', [QuestController::class, 'stats']);
-    Route::post('/reset', [QuestController::class, 'resetQuests']);
+    Route::get('/stats', [QuestController::class, 'stats'])->name('quests.stats');
+    Route::post('/reset', [QuestController::class, 'resetQuests'])->name('quests.reset');
 });
 
 Route::prefix('noises')->name('noises.')->group(function () {
@@ -185,6 +190,7 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/journal/{journal}', [JournalController::class, 'update'])->name('journal.update');
     Route::delete('/journal/{journal}', [JournalController::class, 'destroy'])->name('journal.destroy');
 });
+Route::get('/achievements', [QuestController::class, 'achievements'])->name('quests.achievements');
 
 Route::get('/profile', function(){
     return view('profile.profile');

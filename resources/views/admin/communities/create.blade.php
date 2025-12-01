@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Create Community - MindWell Admin')
+@section('title', 'Create Community - Tenang Admin')
 @section('page_title', 'Create New Community')
 
 @section('content')

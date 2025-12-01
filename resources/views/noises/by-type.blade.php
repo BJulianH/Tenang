@@ -7,21 +7,33 @@
 <div class="container mx-auto px-4 py-8">
     <!-- Header -->
     <div class="text-center mb-12">
-        <div class="w-20 h-20 rounded-full mx-auto mb-4" style="background-color: {{ $noiseType->color_code }}"></div>
-        <h1 class="text-4xl font-bold text-gray-800 mb-4">{{ $noiseType->name }}</h1>
-        <p class="text-xl text-gray-600 max-w-2xl mx-auto">{{ $noiseType->description }}</p>
-        <div class="mt-4 text-gray-500">
-            <i class="fas fa-music mr-2"></i>
-            <span>{{ $noises->total() }} sounds available</span>
+        <div class="relative inline-block mb-6">
+            <div class="absolute -inset-4 bg-gradient-to-r from-primary-200 to-secondary-200 rounded-full blur-sm opacity-50"></div>
+            <div class="w-24 h-24 rounded-full mx-auto relative bg-white shadow-duo border-4 flex items-center justify-center" 
+                 style="border-color: {{ $noiseType->color_code }}">
+                <i class="fas fa-music text-3xl" style="color: {{ $noiseType->color_code }}"></i>
+            </div>
+        </div>
+        <h1 class="text-4xl font-bold text-neutral-800 mb-4">{{ $noiseType->name }}</h1>
+        <p class="text-xl text-neutral-600 max-w-2xl mx-auto">{{ $noiseType->description }}</p>
+        <div class="mt-4 text-neutral-500 bg-white px-4 py-2 rounded-duo inline-block shadow-duo">
+            <i class="fas fa-music mr-2 text-primary-500"></i>
+            <span class="font-semibold">{{ $noises->total() }} sounds available</span>
         </div>
     </div>
 
     <!-- Breadcrumb -->
     <nav class="flex mb-8" aria-label="Breadcrumb">
-        <ol class="flex items-center space-x-2 text-sm text-gray-600">
-            <li><a href="{{ route('noises.index') }}" class="hover:text-blue-500">All Sounds</a></li>
-            <li><i class="fas fa-chevron-right"></i></li>
-            <li class="text-gray-800">{{ $noiseType->name }}</li>
+        <ol class="flex items-center space-x-2 text-sm text-neutral-600">
+            <li>
+                <a href="{{ route('noises.index') }}" 
+                   class="hover:text-primary-600 transition-colors flex items-center">
+                    <i class="fas fa-home mr-1"></i>
+                    All Sounds
+                </a>
+            </li>
+            <li><i class="fas fa-chevron-right text-neutral-400 text-xs"></i></li>
+            <li class="text-neutral-800 font-semibold">{{ $noiseType->name }}</li>
         </ol>
     </nav>
 
@@ -38,11 +50,14 @@
         {{ $noises->links() }}
     </div>
     @else
-    <div class="text-center py-16 bg-white rounded-xl shadow-sm">
-        <div class="text-6xl text-gray-300 mb-4">🎵</div>
-        <h3 class="text-2xl font-semibold text-gray-600 mb-2">No sounds found</h3>
-        <p class="text-gray-500 mb-6">We couldn't find any sounds of this type.</p>
-        <a href="{{ route('noises.index') }}" class="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition-colors">
+    <!-- Empty State -->
+    <div class="text-center py-16 card rounded-duo-xl max-w-2xl mx-auto">
+        <div class="text-6xl text-neutral-300 mb-4 animate-bounce-gentle">🎵</div>
+        <h3 class="text-2xl font-semibold text-neutral-600 mb-2">No sounds found</h3>
+        <p class="text-neutral-500 mb-6">We couldn't find any sounds of this type.</p>
+        <a href="{{ route('noises.index') }}" 
+           class="app-button inline-flex items-center px-6 py-3">
+            <i class="fas fa-arrow-left mr-2"></i>
             Browse All Sounds
         </a>
     </div>
@@ -59,18 +74,77 @@
     
     @if($relatedTypes->count())
     <div class="mt-16">
-        <h2 class="text-2xl font-semibold mb-6">Other Sound Types</h2>
+        <h2 class="text-2xl font-semibold mb-6 text-neutral-800">Explore Other Sound Types</h2>
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             @foreach($relatedTypes as $relatedType)
             <a href="{{ route('noises.by-type', $relatedType->slug) }}" 
-               class="bg-white p-4 rounded-lg shadow hover:shadow-md transition-shadow text-center group border border-gray-100">
-                <div class="w-12 h-12 rounded-full mx-auto mb-2 group-hover:scale-110 transition-transform" 
-                     style="background-color: {{ $relatedType->color_code }}"></div>
-                <h3 class="font-medium text-gray-800 text-sm">{{ $relatedType->name }}</h3>
+               class="card p-4 rounded-duo-xl hover:shadow-duo-lg transition-all duration-200 text-center group">
+                <div class="relative mb-3">
+                    <div class="absolute -inset-2 bg-gradient-to-r from-primary-100 to-secondary-100 rounded-full blur-sm opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="w-12 h-12 rounded-full mx-auto relative bg-white shadow-duo border-2 flex items-center justify-center group-hover:scale-110 transition-transform" 
+                         style="border-color: {{ $relatedType->color_code }}">
+                        <i class="fas fa-music text-sm" style="color: {{ $relatedType->color_code }}"></i>
+                    </div>
+                </div>
+                <h3 class="font-medium text-neutral-800 text-sm">{{ $relatedType->name }}</h3>
+                <p class="text-xs text-neutral-500 mt-1">{{ $relatedType->noises_count }} sounds</p>
             </a>
             @endforeach
         </div>
     </div>
     @endif
 </div>
+
+<style>
+    /* Custom styling untuk breadcrumb aktif */
+    .breadcrumb-active {
+        color: #58cc70;
+        font-weight: 600;
+    }
+
+    /* Animasi untuk icon musik di empty state */
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+    }
+
+    .animate-float {
+        animation: float 3s ease-in-out infinite;
+    }
+</style>
+
+<script>
+    // Tambahkan efek interaktif untuk related types
+    document.addEventListener('DOMContentLoaded', function() {
+        const relatedCards = document.querySelectorAll('.card a');
+        
+        relatedCards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                const icon = this.querySelector('.fa-music');
+                if (icon) {
+                    icon.style.transform = 'scale(1.2)';
+                    icon.style.transition = 'transform 0.2s ease';
+                }
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                const icon = this.querySelector('.fa-music');
+                if (icon) {
+                    icon.style.transform = 'scale(1)';
+                }
+            });
+        });
+
+        // Animasi untuk header icon
+        const headerIcon = document.querySelector('.text-center .fa-music');
+        if (headerIcon) {
+            setInterval(() => {
+                headerIcon.style.transform = 'rotate(5deg)';
+                setTimeout(() => {
+                    headerIcon.style.transform = 'rotate(-5deg)';
+                }, 1000);
+            }, 2000);
+        }
+    });
+</script>
 @endsection

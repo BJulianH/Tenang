@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'MindWell - Mental Health App')</title>
+    <title>@yield('title', 'Tenang - Mental Health App')</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+    <link rel="icon" type="image/png" href="{{ asset('assets/icon/icon.png') }}">
+
     <!-- Custom Tailwind Configuration -->
     <script>
         tailwind.config = {
@@ -194,8 +195,44 @@
     box-shadow: 0 2px 0 rgba(0, 0, 0, 0.1);
     border-color: #dfe3e6; /* klik = lebih solid */
 }
+/* Tambahkan di section styles layout app Anda */
+.error-page {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+}
 
+.error-character {
+    width: 120px;
+    height: 120px;
+    background: #58cc70;
+    border-radius: 50%;
+    position: relative;
+    box-shadow: 0 6px 0 #45b259;
+    margin: 0 auto 2rem;
+}
 
+.error-character::before {
+    content: '';
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background: white;
+    border-radius: 50%;
+    top: 30px;
+    left: 20px;
+    box-shadow: 30px 0 white;
+}
+
+.error-character::after {
+    content: '';
+    position: absolute;
+    width: 30px;
+    height: 15px;
+    background: #ff6b6b;
+    border-radius: 15px 15px 0 0;
+    bottom: 25px;
+    left: 45px;
+}
         .app-button {
             background: #58cc70;
             color: white;
@@ -304,6 +341,7 @@
             transition: all 0.2s ease;
             background: white;
             box-shadow: 0 2px 0 rgba(0, 0, 0, 0.05);
+            border:1px rgba(0, 0, 0, 0.171) solid;
         }
 
         .sidebar-item:hover {
@@ -455,8 +493,78 @@
                 padding: 0.5rem;
             }
         }
-    </style>
 
+    .line-clamp-2 {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .quest-item {
+        transition: all 0.3s ease;
+    }
+
+    .quest-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .quest-item.completed {
+        background: linear-gradient(135deg, #f0f9f0 0%, #e8f5e8 100%);
+        border-color: #58cc70;
+    }
+
+    .animate-slide-in {
+        animation: slideIn 0.5s ease-out forwards;
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    @keyframes slideIn {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Celebration particles */
+    .celebration-particle {
+        animation: celebrateParticle 1s ease-out forwards;
+        pointer-events: none;
+    }
+
+    @keyframes celebrateParticle {
+        0% {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+        50% {
+            opacity: 0.8;
+            transform: translateY(-20px) scale(1.2);
+        }
+        100% {
+            opacity: 0;
+            transform: translateY(-40px) scale(0.5);
+        }
+    }
+
+    /* Modal animations */
+    .modal-enter {
+        animation: modalEnter 0.3s ease-out;
+    }
+
+    @keyframes modalEnter {
+        from {
+            opacity: 0;
+            transform: scale(0.9) translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+    }
+</style>
     <!-- Additional Styles Section -->
     @yield('styles')
 </head>
@@ -476,7 +584,7 @@
                 
                 <!-- Teks loading dengan animasi -->
                 <div class="space-y-4">
-                    <h3 class="text-2xl font-bold text-neutral-800">MindWell</h3>
+                    <h3 class="text-2xl font-bold text-neutral-800">Tenang</h3>
                     <p class="text-neutral-600 font-medium flex items-center justify-center space-x-2">
                         <span>Loading your journey</span>
                         <span class="loading-dots">
@@ -518,7 +626,7 @@
                 <button id="mobile-menu-toggle" class="app-button p-2 rounded-duo text-neutral-700 mr-4">
                     <i class="fas fa-bars"></i>
                 </button>
-                {{-- <h1 class="text-xl font-bold text-primary-600">MindWell</h1> --}}
+                {{-- <h1 class="text-xl font-bold text-primary-600">Tenang</h1> --}}
             </div>
 
             <!-- Navigation Menu -->
@@ -551,7 +659,23 @@
                 <span class="sidebar-text mt-2 text-sm">Community</span>
             </a>
         </li>
+<li>
+    <a href="{{ route('quests.index.view') }}" 
+        class="sidebar-item flex flex-col items-center p-3 rounded-duo text-neutral-800 
+        {{ request()->routeIs('quests.index.view') ? 'active font-bold text-primary-600' : '' }}">
+        <i class="fas fa-flag-checkered w-6 text-center text-xl"></i>
+        <span class="sidebar-text mt-2 text-sm">Quests</span>
+    </a>
+</li>
 
+<li>
+    <a href="{{ route('quests.achievements') }}" 
+        class="sidebar-item flex flex-col items-center p-3 rounded-duo text-neutral-800 
+        {{ request()->routeIs('quests.achievements') ? 'active font-bold text-primary-600' : '' }}">
+        <i class="fas fa-trophy w-6 text-center text-xl"></i>
+        <span class="sidebar-text mt-2 text-sm">Achievements</span>
+    </a>
+</li>
         <li>
             <a href="#" 
                 class="sidebar-item flex flex-col items-center p-3 rounded-duo text-neutral-800 
@@ -636,7 +760,7 @@
                         <button id="mobile-menu-toggle-2" class="app-button p-2 rounded-duo text-neutral-700">
                             <i class="fas fa-bars"></i>
                         </button>
-                        <h1 class="text-lg font-bold text-primary-600">MindWell</h1>
+                        <h1 class="text-lg font-bold text-primary-600">Tenang</h1>
                     </div>
                     
                     <div class="flex items-center space-x-2">

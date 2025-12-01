@@ -1,7 +1,7 @@
 {{-- resources/views/community/profile/show.blade.php --}}
 @extends('layouts.app')
 
-@section('title', $user->name . ' - MindWell Community')
+@section('title', $user->name . ' - Tenang Community')
 
 @section('styles')
 <style>
