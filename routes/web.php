@@ -6,6 +6,8 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\NoiseController;
 use App\Http\Controllers\QuestController;
+use App\Http\Controllers\SoundController;
+use App\Http\Controllers\ChatbotController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\JournalController;
 use App\Http\Controllers\ProfileController;
@@ -50,7 +52,7 @@ Route::get('/forgot-password', function () {
     return view('auth.forgot-password');
 })->name('password.request');
 
-Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink'])->name('password.email');
+// Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink'])->name('password.email');
 
 Route::get('/reset-password/{token}', function ($token) {
     return view('auth.reset-password', ['token' => $token]);
@@ -129,6 +131,7 @@ Route::prefix('quests')->group(function () {
 
 Route::prefix('noises')->name('noises.')->group(function () {
     // Main noise routes
+    Route::get('/mixed-sounds', [SoundController::class, 'index'])->name('sounds.index');
     Route::get('/', [NoiseController::class, 'index'])->name('index');
     Route::get('/type/{type}', [NoiseController::class, 'byType'])->name('by-type');
     Route::get('/use-case/{useCase}', [NoiseController::class, 'byUseCase'])->name('by-use-case');
@@ -140,17 +143,12 @@ Route::prefix('noises')->name('noises.')->group(function () {
     Route::post('/{noise}/favorite', [NoiseController::class, 'toggleFavorite'])->name('favorite');
     Route::post('/{noise}/save', [NoiseController::class, 'toggleSave'])->name('save');
 });
-
-// Noise types routes (optional separate prefix)
 Route::prefix('noise-types')->name('noise-types.')->group(function () {
     Route::get('/', [NoiseTypeController::class, 'index'])->name('index');
     Route::get('/{type}', [NoiseTypeController::class, 'show'])->name('show');
 });
 // Profile routes
 Route::get('/profile/{user:username}', [CommunityProfileController::class, 'show'])->name('profile.community');
-
-// Support groups routes
-Route::get('/support-groups', [SupportGroupController::class, 'index'])->name('support-groups.index');
 
 Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     // Dashboard
@@ -186,11 +184,12 @@ Route::delete('/communities/{community}/moderators/{user}', [AdminCommunityContr
 Route::put('/communities/{community}/members/{user}/role', [AdminCommunityController::class, 'updateMemberRole'])->name('admin.communities.members.role');
 Route::delete('/communities/{community}/members/{user}', [AdminCommunityController::class, 'removeMember'])->name('admin.communities.members.remove');
 Route::post('/communities/bulk-action', [AdminCommunityController::class, 'bulkAction'])->name('admin.communities.bulk-action');
-    // Reports Management
     Route::get('/reports', [AdminReportController::class, 'index'])->name('admin.reports.index');
     Route::put('/reports/{report}/resolve', [AdminReportController::class, 'resolve'])->name('admin.reports.resolve');
 });
-
+Route::get('/curhat', [ChatbotController::class, 'index'])->name('curhat.index');
+Route::post('/curhat/send', [ChatbotController::class, 'send'])->name('curhat.send');
+Route::post('/curhat/clear', [ChatbotController::class, 'clear'])->name('curhat.clear');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/journal', [JournalController::class, 'index'])->name('journal.index');

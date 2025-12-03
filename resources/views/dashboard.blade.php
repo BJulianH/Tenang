@@ -1,9 +1,59 @@
 @extends('layouts.app')
 
 @section('title', 'Dashboard - Tenang')
+@section('style')
+<style>
+    /* Tambahkan ke section style atau stylesheet terpisah */
 
+/* Animations untuk welcome container */
+@keyframes spin-slow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.animate-spin-slow {
+    animation: spin-slow 20s linear infinite;
+}
+
+/* Gradient text untuk highlights */
+.gradient-text {
+    background: linear-gradient(90deg, #58cc70, #4a8cff, #9b59b6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Floating animation untuk decorative elements */
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+.animate-float {
+    animation: float 3s ease-in-out infinite;
+}
+
+/* Glass morphism effect */
+.glass-effect {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Pulsing ring effect */
+.pulse-ring {
+    animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse-ring {
+    0% { transform: scale(0.8); opacity: 0.8; }
+    70%, 100% { transform: scale(1.2); opacity: 0; }
+}
+</style>
+@endsection
 @section('content')
-
+{{-- @extends('widget.avatar-message')
+@extends('widget.avatar-widget') --}}
 <!-- Quest Confirmation Modal -->
 <div id="questConfirmationModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
     <div class="bg-white rounded-xl p-6 max-w-md w-full mx-4">
@@ -96,146 +146,235 @@
     </div>
 </div>
 
+<!-- Updated Welcome Header with Wilson Icon -->
 <div class="mb-8">
-    <h1 class="text-2xl font-bold text-neutral-800">Welcome back, {{ auth()->user()->name ?? 'Explorer' }}! 👋</h1>
-    <p class="text-neutral-600">How are you feeling today?</p>
-</div>
-
-<!-- Stats Cards -->
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-    <!-- Current Streak -->
-    <div class="bg-white rounded-xl p-6 card hover-lift border border-neutral-200">
-        <div class="flex items-center justify-between">
-            <div>
-                <p class="text-neutral-500 text-sm">Current Streak</p>
-                <h3 class="text-2xl font-bold text-neutral-800 mt-1">{{ $stats['streak'] }} days</h3>
-            </div>
-            <div class="w-12 h-12 rounded-full bg-secondary-100 flex items-center justify-center animate-pulse">
-                <i class="fas fa-fire text-accent-red text-xl"></i>
-            </div>
-        </div>
-        <div class="mt-4">
-            <div class="flex items-center text-sm text-primary-600">
-                <i class="fas fa-arrow-up mr-1"></i>
-                <span>Keep going!</span>
+    <!-- Main Welcome Container -->
+    <div class="bg-white rounded-xl p-6 card border border-neutral-200">
+        <!-- Background Gradient -->
+        <div class="absolute inset-0 "></div>
+        
+        <!-- Pattern Dots -->
+        <div class="absolute inset-0 opacity-5" style="
+            background-image: radial-gradient(#58cc70 2px, transparent 2px);
+            background-size: 30px 30px;
+        "></div>
+        
+        <!-- Floating Elements -->
+        <div class="absolute top-4 right-4 w-24 h-24 rounded-full bg-primary-300 opacity-20 animate-pulse-slow"></div>
+        <div class="absolute bottom-4 left-4 w-16 h-16 rounded-full bg-accent-blue opacity-20 animate-pulse-slow" style="animation-delay: 1s"></div>
+        
+        <!-- Content -->
+        <div class="relative z-10">
+            <div class="flex flex-col lg:flex-row items-center justify-between gap-6">
+                <!-- Left: Wilson Character -->
+                <div class="flex items-center space-x-4">
+                    <!-- Wilson Character with animation -->
+                    <div class="relative group">
+    <!-- Outer ring animation -->
+    <div class="absolute inset-0 rounded-full bg-gradient-to-r from-primary-500 to-accent-purple animate-spin-slow opacity-20"></div>
+    
+    <!-- Profile Container -->
+    <div class="relative w-24 h-24 rounded-full bg-gradient-to-br from-primary-500 to-accent-blue p-1.5 shadow-duo-lg">
+        <!-- Inner white circle -->
+        <div class="w-full h-full rounded-full bg-white flex items-center justify-center overflow-hidden">
+            <!-- User Profile Photo -->
+            @if(auth()->user()->profile_photo_path)
+                <!-- Jika user punya foto profil -->
+                <img 
+                    src="{{ Storage::url(auth()->user()->profile_photo_path) }}" 
+                    alt="{{ auth()->user()->name }}"
+                    class="w-full h-full object-cover rounded-full"
+                    onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name) }}&background=58cc70&color=fff&size=128'"
+                >
+            @elseif(auth()->user()->profile_photo_url)
+                <!-- Jika menggunakan Socialite/OAuth photo -->
+                <img 
+                    src="{{ auth()->user()->profile_photo_url }}" 
+                    alt="{{ auth()->user()->name }}"
+                    class="w-full h-full object-cover rounded-full"
+                >
+            @else
+                <!-- Fallback ke avatar dengan initial -->
+                <div class="w-full h-full rounded-full bg-gradient-to-br from-primary-500 to-accent-blue flex items-center justify-center">
+                    <span class="text-3xl font-bold text-white">
+                        {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                    </span>
+                </div>
+            @endif
+            
+            <!-- Level Badge -->
+            <div class="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-secondary-500 flex items-center justify-center shadow-duo animate-bounce-gentle border-2 border-white">
+                <span class="text-xs font-bold text-white">{{ auth()->user()->level ?? 1 }}</span>
             </div>
         </div>
     </div>
-
-    <!-- Level Progress -->
-    <div class="bg-white rounded-xl p-6 card hover-lift border border-neutral-200">
-        <div class="flex items-center justify-between">
-            <div>
-                <p class="text-neutral-500 text-sm">Your Level</p>
-                <h3 class="text-2xl font-bold text-neutral-800 mt-1">Level {{ $stats['level'] }}</h3>
-            </div>
-            <div class="w-12 h-12 rounded-full bg-primary-100 flex items-center justify-center">
-                <i class="fas fa-trophy text-primary-600 text-xl"></i>
-            </div>
-        </div>
-        <div class="mt-4">
-            <div class="w-full bg-neutral-200 rounded-full h-2">
-                <div class="bg-primary-500 h-2 rounded-full" style="width: {{ ($stats['level'] % 10) * 10 }}%"></div>
-            </div>
+    
+    <!-- Online indicator -->
+    <div class="absolute bottom-2 right-2 w-4 h-4 bg-green-500 rounded-full border-2 border-white shadow-sm">
+        <!-- Animated pulse effect -->
+        <div class="absolute inset-0 rounded-full bg-green-500 animate-ping opacity-75"></div>
+    </div>
+    
+    <!-- Interactive overlay on hover -->
+    <div class="absolute inset-0 rounded-full bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center cursor-pointer">
+        <div class="w-8 h-8 rounded-full bg-white/80 flex items-center justify-center">
+            <i class="fas fa-camera text-primary-600 text-sm"></i>
         </div>
     </div>
-
-    <!-- Quest Completion -->
-    <div class="bg-white rounded-xl p-6 card hover-lift border border-neutral-200">
-        <div class="flex items-center justify-between">
-            <div>
-                <p class="text-neutral-500 text-sm">Today's Progress</p>
-                <h3 class="text-2xl font-bold text-neutral-800 mt-1">{{ $stats['quest_completion_rate'] }}%</h3>
-            </div>
-            <div class="w-12 h-12 rounded-full bg-accent-purple/20 flex items-center justify-center">
-                <i class="fas fa-flag-checkered text-accent-purple text-xl"></i>
-            </div>
+    
+    <!-- Tooltip on hover -->
+    <div class="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-neutral-800 text-white text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap pointer-events-none">
+        <div class="flex items-center gap-1">
+            <i class="fas fa-user-circle"></i>
+            {{ auth()->user()->name }}
         </div>
-        <div class="mt-4">
-            <div class="flex items-center text-sm text-neutral-500">
-                <span>{{ $todayQuests->whereIn('status', ['completed', 'claimed'])->count() }}/{{ $todayQuests->count() }} quests</span>
-            </div>
-        </div>
-    </div>
-
-    <!-- Today's Mood -->
-    <div class="bg-white rounded-xl p-6 card hover-lift border border-neutral-200">
-        <div class="flex items-center justify-between">
-            <div>
-                <p class="text-neutral-500 text-sm">Today's Mood</p>
-                <h3 class="text-2xl font-bold text-neutral-800 mt-1">
-                    @if($todayMood ?? false)
-                        {{ ucfirst(getMoodLabel($todayMood->rate)) }}
-                    @else
-                        Not set
-                    @endif
-                </h3>
-            </div>
-            <div class="w-12 h-12 rounded-full bg-primary-100 flex items-center justify-center animate-bounce-gentle">
-                <i class="fas fa-smile text-primary-600 text-xl"></i>
-            </div>
-        </div>
-        <div class="mt-4">
-            <div class="flex items-center text-sm text-neutral-500">
-                <span>
-                    @if($todayMood ?? false)
-                        Rate: {{ $todayMood->rate }}/10
-                    @else
-                        <a href="#" class="text-primary-600 hover:text-primary-700">Log your mood</a>
-                    @endif
-                </span>
-            </div>
+        <div class="text-xs text-neutral-300 mt-0.5">
+            Level {{ auth()->user()->level ?? 1 }} • {{ auth()->user()->streak ?? 0 }} day streak
         </div>
     </div>
 </div>
-
-<!-- Currency & Rewards -->
-<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-    <!-- Coins -->
-    <div class="bg-white rounded-xl p-6 card hover-lift border border-neutral-200">
-        <div class="flex items-center justify-between">
-            <div class="flex items-center">
-                <div class="w-10 h-10 rounded-full bg-secondary-100 flex items-center justify-center mr-3">
-                    <i class="fas fa-coins text-secondary-500"></i>
+                    
+                    <!-- Greeting Message -->
+                    <div class="flex-1">
+                        <!-- Greeting with time-based emoji -->
+                        <div class="flex items-center gap-2 mb-2">
+                            @php
+                                $hour = date('H');
+                                $greetings = [
+                                    ['emoji' => '🌅', 'text' => 'Good morning'],
+                                    ['emoji' => '☀️', 'text' => 'Good afternoon'],
+                                    ['emoji' => '🌇', 'text' => 'Good evening'],
+                                    ['emoji' => '🌙', 'text' => 'Good night']
+                                ];
+                                
+                                $greeting = $hour < 12 ? $greetings[0] : 
+                                           ($hour < 17 ? $greetings[1] : 
+                                           ($hour < 21 ? $greetings[2] : $greetings[3]));
+                            @endphp
+                            
+                            <span class="text-2xl animate-bounce-gentle">{{ $greeting['emoji'] }}</span>
+                            <h1 class="text-2xl lg:text-3xl font-bold text-neutral-800">
+                                {{ $greeting['text'] }}, 
+                                <span class="text-primary-600">{{ auth()->user()->name ?? 'Explorer' }}</span>!
+                                <span class="wave-animation inline-block ml-2">👋</span>
+                            </h1>
+                        </div>
+                        
+                        <!-- Encouraging message -->
+                        <p class="text-neutral-600 mb-3 text-sm lg:text-base">
+                            @php
+                                $messages = [
+                                    "Ready to level up your wellness today?",
+                                    "Small steps lead to big changes. Let's go!",
+                                    "Your mental health journey continues...",
+                                    "Every moment is a new opportunity to grow.",
+                                    "Take a deep breath. You've got this!"
+                                ];
+                                echo $messages[array_rand($messages)];
+                            @endphp
+                        </p>
+                        
+                        <!-- Quick Stats -->
+                        <div class="flex flex-wrap items-center gap-4">
+                            <!-- Daily Progress -->
+                            <div class="flex items-center gap-2 px-3 py-1.5 bg-white/80 backdrop-blur-sm rounded-full border border-primary-200">
+                                <div class="w-6 h-6 rounded-full bg-primary-100 flex items-center justify-center">
+                                    <i class="fas fa-check text-primary-600 text-xs"></i>
+                                </div>
+                                <span class="text-sm font-medium text-neutral-700">
+                                    {{ $todayQuests->where('status', 'completed')->count() }}/{{ $todayQuests->count() }} quests
+                                </span>
+                            </div>
+                            
+                            <!-- Streak -->
+                            <div class="flex items-center gap-2 px-3 py-1.5 bg-white/80 backdrop-blur-sm rounded-full border border-secondary-200">
+                                <div class="w-6 h-6 rounded-full bg-secondary-100 flex items-center justify-center">
+                                    <i class="fas fa-fire text-secondary-500 text-xs"></i>
+                                </div>
+                                <span class="text-sm font-medium text-neutral-700">
+                                    {{ $streakDays ?? '0' }} day streak
+                                </span>
+                            </div>
+                            
+                            <!-- Date -->
+                            <div class="flex items-center gap-2 px-3 py-1.5 bg-white/80 backdrop-blur-sm rounded-full border border-accent-blue/20">
+                                <div class="w-6 h-6 rounded-full bg-accent-blue/10 flex items-center justify-center">
+                                    <i class="fas fa-calendar text-accent-blue text-xs"></i>
+                                </div>
+                                <span class="text-sm font-medium text-neutral-700">
+                                    {{ date('M j, Y') }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    <p class="text-neutral-500 text-sm">Coins</p>
-                    <h3 class="text-xl font-bold text-neutral-800">{{ $stats['coins'] }}</h3>
+                
+                <!-- Right: Wilson's Message Bubble (Desktop) -->
+                <div class="hidden lg:block">
+                    <div class="relative">
+                        <!-- Chat bubble -->
+                        <div class="bg-white rounded-2xl p-4 border-2 border-primary-300 shadow-duo-lg max-w-xs">
+                            <div class="flex items-center gap-2 mb-3">
+                                <div class="w-10 h-10 rounded-full bg-gradient-to-r from-primary-500 to-accent-blue flex items-center justify-center">
+                                    <span class="text-white font-bold">W</span>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-neutral-800">Wilson Assistant</h3>
+                                    <p class="text-xs text-neutral-500">Always here for you</p>
+                                </div>
+                            </div>
+                            <p class="text-neutral-700 text-sm italic">
+                                "{{ $messages[array_rand($messages)] }}"
+                            </p>
+                            
+                            <!-- Typing indicator -->
+                            <div class="flex items-center gap-1 mt-3">
+                                <div class="w-2 h-2 bg-primary-400 rounded-full animate-pulse"></div>
+                                <div class="w-2 h-2 bg-primary-400 rounded-full animate-pulse" style="animation-delay: 0.2s"></div>
+                                <div class="w-2 h-2 bg-primary-400 rounded-full animate-pulse" style="animation-delay: 0.4s"></div>
+                                <span class="text-xs text-neutral-500 ml-2">Online</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Speech bubble tail -->
+                        <div class="absolute -left-3 top-1/2 transform -translate-y-1/2">
+                            <div class="w-4 h-4 bg-white border-l-2 border-b-2 border-primary-300 transform rotate-45"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <span class="text-sm text-secondary-600 font-medium">+{{ $todayQuests->whereIn('status', ['completed', 'claimed'])->sum('dailyQuest.coins') }} today</span>
+            
+            <!-- Progress Bar -->
+            <div class="mt-6">
+                <div class="flex items-center justify-between text-sm text-neutral-600 mb-2">
+                    <span>Daily Progress</span>
+                    <span>{{ $todayQuests->where('status', 'completed')->count() * 100 / max($todayQuests->count(), 1) }}%</span>
+                </div>
+                <div class="h-3 bg-neutral-200 rounded-full overflow-hidden">
+                    <div class="h-full bg-gradient-to-r from-primary-500 to-accent-blue rounded-full transition-all duration-500"
+                         style="width: {{ $todayQuests->where('status', 'completed')->count() * 100 / max($todayQuests->count(), 1) }}%"></div>
+                </div>
+            </div>
         </div>
     </div>
-
-    <!-- Diamonds -->
-    <div class="bg-white rounded-xl p-6 card hover-lift border border-neutral-200">
-        <div class="flex items-center justify-between">
-            <div class="flex items-center">
-                <div class="w-10 h-10 rounded-full bg-accent-blue/20 flex items-center justify-center mr-3">
-                    <i class="fas fa-gem text-accent-blue"></i>
+    
+    <!-- Mobile Wilson Message -->
+    <div class="lg:hidden mt-4">
+        <div class="bg-gradient-to-r from-primary-50 to-accent-blue/20 rounded-xl p-4 border border-primary-200">
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-primary-500 to-accent-blue flex items-center justify-center">
+                    <span class="text-white font-bold">W</span>
                 </div>
-                <div>
-                    <p class="text-neutral-500 text-sm">Diamonds</p>
-                    <h3 class="text-xl font-bold text-neutral-800">{{ $stats['diamonds'] }}</h3>
-                </div>
-            </div>
-            <span class="text-sm text-accent-blue font-medium">+{{ $todayQuests->whereIn('status', ['completed', 'claimed'])->sum('dailyQuest.diamonds') }} today</span>
-        </div>
-    </div>
-
-    <!-- Weekly Activity -->
-    <div class="bg-white rounded-xl p-6 card hover-lift border border-neutral-200">
-        <div class="flex items-center justify-between">
-            <div class="flex items-center">
-                <div class="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center mr-3">
-                    <i class="fas fa-chart-line text-primary-600"></i>
-                </div>
-                <div>
-                    <p class="text-neutral-500 text-sm">Weekly Activity</p>
-                    <h3 class="text-xl font-bold text-neutral-800">{{ $stats['journal_count'] + $stats['mood_count'] + $stats['post_count'] }}</h3>
+                <div class="flex-1">
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-bold text-neutral-800">Wilson says:</h3>
+                        <span class="text-xs text-neutral-500">Just now</span>
+                    </div>
+                    <p class="text-sm text-neutral-700 mt-1 italic">
+                        "{{ $messages[array_rand($messages)] }}"
+                    </p>
                 </div>
             </div>
-            <span class="text-sm text-primary-600 font-medium">Active</span>
         </div>
     </div>
 </div>
@@ -369,27 +508,6 @@
             </div>
         </div>
 
-        <!-- Mood Chart -->
-        <div class="bg-white rounded-xl p-6 card border border-neutral-200">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-lg font-bold text-neutral-800">Weekly Progress 📊</h2>
-                <span class="text-sm text-primary-600 font-medium">{{ now()->format('M j') }}</span>
-            </div>
-            <div class="grid grid-cols-3 gap-4">
-                <div class="text-center p-4 bg-primary-50 rounded-lg">
-                    <div class="text-2xl font-bold text-primary-600">{{ $stats['journal_count'] }}</div>
-                    <div class="text-sm text-neutral-600">Journals</div>
-                </div>
-                <div class="text-center p-4 bg-secondary-50 rounded-lg">
-                    <div class="text-2xl font-bold text-secondary-600">{{ $stats['post_count'] }}</div>
-                    <div class="text-sm text-neutral-600">Posts</div>
-                </div>
-                <div class="text-center p-4 bg-accent-purple/20 rounded-lg">
-                    <div class="text-2xl font-bold text-accent-purple">{{ $todayQuests->whereIn('status', ['completed', 'claimed'])->count() }}</div>
-                    <div class="text-sm text-neutral-600">Quests Done</div>
-                </div>
-            </div>
-        </div>
     </div>
 
     <!-- Right Column -->
@@ -1194,45 +1312,7 @@ function confirmQuestSelection() {
         location.reload();
     }
 
-    // Show notification
-    function showNotification(message, type = 'info') {
-        // Remove existing notifications
-        document.querySelectorAll('.custom-notification').forEach(notification => {
-            notification.remove();
-        });
 
-        // Create notification element
-        const notification = document.createElement('div');
-        notification.className = `custom-notification fixed top-4 right-4 p-4 rounded-lg shadow-lg z-50 transform transition-all duration-300 ${
-            type === 'success' ? 'bg-green-500 text-white' :
-            type === 'error' ? 'bg-red-500 text-white' :
-            type === 'warning' ? 'bg-yellow-500 text-white' :
-            'bg-blue-500 text-white'
-        }`;
-        notification.innerHTML = `
-            <div class="flex items-center">
-                <i class="fas ${
-                    type === 'success' ? 'fa-check-circle' :
-                    type === 'error' ? 'fa-exclamation-circle' :
-                    type === 'warning' ? 'fa-exclamation-triangle' :
-                    'fa-info-circle'
-                } mr-2"></i>
-                <span>${message}</span>
-            </div>
-        `;
-        
-        document.body.appendChild(notification);
-        
-        // Remove notification after 4 seconds
-        setTimeout(() => {
-            notification.style.transform = 'translateX(100%)';
-            setTimeout(() => {
-                if (notification.parentNode) {
-                    document.body.removeChild(notification);
-                }
-            }, 300);
-        }, 4000);
-    }
 function claimRewards(questId) {
         console.log('Claiming rewards for quest:', questId); // Debug log
         
@@ -1276,13 +1356,28 @@ function claimRewards(questId) {
             showNotification('Error claiming rewards: ' + error.message, 'error');
         });
     }
+    function showDailyWelcomeMessage() {
+    const today = new Date().toISOString().slice(0, 10);
+    const lastShown = localStorage.getItem("avatarMessageLastShown");
+
+    // Jika belum pernah muncul hari ini → tampilkan
+    if (lastShown !== today) {
+        showAvatarMessage("welcome back dear {{ auth()->user()->name ?? 'Explorer' }}");
+
+        // Simpan tanggal hari ini
+        localStorage.setItem("avatarMessageLastShown", today);
+    }
+}
+
     // Add animation to quest items
     document.addEventListener('DOMContentLoaded', function() {
         console.log('Dashboard JavaScript loaded');
-        
+
         const questItems = document.querySelectorAll('.quest-item');
         console.log('Found quest items:', questItems.length);
-        
+        // showDailyWelcomeMessage();
+        //         showAvatarPopup("Welcome back, {{ auth()->user()->name ?? 'Explorer' }}!");
+
         questItems.forEach((item, index) => {
             item.style.animationDelay = `${index * 0.1}s`;
             item.classList.add('animate-slide-in');
@@ -1305,6 +1400,7 @@ function claimRewards(questId) {
             const modal = document.getElementById(modalId);
             console.log(`Modal ${modalId}:`, modal ? 'Found' : 'NOT FOUND');
         });
+
     });
 
     // Global error handler for debugging
@@ -1314,7 +1410,51 @@ function claimRewards(questId) {
         console.error('Line:', e.lineno);
         console.error('Column:', e.colno);
     });
+// Dalam JavaScript section, tambahkan:
+function toggleWilsonMessage() {
+    const messageBubble = document.querySelector('.wilson-message-bubble');
+    if (messageBubble) {
+        messageBubble.classList.toggle('hidden');
+    }
+}
+
+// Wilson greeting berdasarkan waktu
+function getWilsonGreeting() {
+    const hour = new Date().getHours();
+    const greetings = [
+        { time: "morning", emoji: "🌅", message: "Rise and shine! A new day for growth." },
+        { time: "afternoon", emoji: "☀️", message: "Hope you're having a productive day!" },
+        { time: "evening", emoji: "🌙", message: "Time to unwind and reflect on your day." },
+        { time: "night", emoji: "⭐", message: "Don't forget to rest and recharge." }
+    ];
+    
+    let timeOfDay;
+    if (hour < 12) timeOfDay = "morning";
+    else if (hour < 17) timeOfDay = "afternoon";
+    else if (hour < 21) timeOfDay = "evening";
+    else timeOfDay = "night";
+    
+    return greetings.find(g => g.time === timeOfDay);
+}
+
+// Update greeting secara dinamis
+document.addEventListener('DOMContentLoaded', function() {
+    const greeting = getWilsonGreeting();
+    const greetingElement = document.getElementById('wilson-greeting');
+    if (greetingElement) {
+        greetingElement.innerHTML = `${greeting.emoji} ${greeting.message}`;
+    }
+    
+    // Pulsing effect untuk Wilson icon
+    const wilsonIcon = document.querySelector('.wilson-icon-container');
+    if (wilsonIcon) {
+        setInterval(() => {
+            wilsonIcon.classList.toggle('pulse-gentle');
+        }, 3000);
+    }
+});
 </script>
+
 <style>
     .line-clamp-2 {
         display: -webkit-box;

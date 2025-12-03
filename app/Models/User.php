@@ -78,6 +78,10 @@ class User extends Authenticatable
         'show_date_of_birth' => 'boolean',
         'notification_settings' => 'array',
         'preferences' => 'array',
+        'streak' => 'integer',
+        'coins' => 'integer',
+        'diamonds' => 'integer',
+        'level' => 'integer',
     ];
 
     // Relasi ke communities yang dimiliki (sebagai creator)
@@ -110,6 +114,18 @@ class User extends Authenticatable
     public function votes()
     {
         return $this->hasMany(Vote::class);
+    }
+
+    // Relasi journals
+    public function journals()
+    {
+        return $this->hasMany(Journal::class);
+    }
+
+    // TAMBAHAN: Relasi mood trackings untuk MindWell
+    public function moodTrackings()
+    {
+        return $this->hasMany(MoodTracking::class);
     }
 
     // Scope untuk admin
@@ -174,10 +190,7 @@ class User extends Authenticatable
     {
         return $this->username ? '@' . $this->username : $this->name;
     }
-    public function journals()
-    {
-        return $this->hasMany(Journal::class);
-    }
+
      public function userQuests()
     {
         return $this->hasMany(UserQuest::class);

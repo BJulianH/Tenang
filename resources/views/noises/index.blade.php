@@ -53,6 +53,20 @@
                 </div>
             </a>
             @endforeach
+            <a href="{{ route('noises.sounds.index') }}" 
+               class="card p-6 rounded-duo-xl hover:shadow-duo-lg transition-all duration-200 text-center group relative overflow-hidden">
+                <!-- Hover gradient effect -->
+                <div class="absolute inset-0 bg-gradient-to-br from-primary-50 to-secondary-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div class="relative z-10">
+                    <div class="text-4xl mb-3 group-hover:scale-110 transition-transform duration-200 group-hover:animate-bounce-gentle">
+                        <i class="fas fa-music"></i>
+                    </div>
+                    <h3 class="font-semibold text-neutral-800 text-lg mb-2">create your noise?</h3>
+                    <div class="bg-secondary text-primary-700 text-sm font-medium px-3 py-1 rounded-duo inline-block">
+                        be creative and be calm
+                    </div>
+                </div>
+            </a>
         </div>
     </div>
 
