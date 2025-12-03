@@ -616,7 +616,7 @@
     </style>
 </head>
 <body class="bg-neutral-50">
-    <!-- Loading Section -->f
+    <!-- Loading Section -->
      @extends('widget.loading')
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
