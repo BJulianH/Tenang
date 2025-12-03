@@ -16,100 +16,115 @@
                     colors: {
                         // Duolingo-inspired color palette
                         primary: {
-                            50: '#e6f7ea',
-                            100: '#c2ebd0',
-                            200: '#9bdfb5',
-                            300: '#70d399',
-                            400: '#4dc982',
-                            500: '#58cc70',
-                            600: '#45b259',
-                            700: '#339847',
-                            800: '#237e36',
-                            900: '#156427',
-                        },
-                        secondary: {
-                            50: '#fff9e6',
-                            100: '#ffefbf',
-                            200: '#ffe599',
-                            300: '#ffdb70',
-                            400: '#ffd14c',
-                            500: '#ffc800', // Duolingo yellow
-                            600: '#e6b400',
-                            700: '#cc9f00',
-                            800: '#b38b00',
-                            900: '#997700',
-                        },
-                        accent: {
-                            blue: '#4a8cff',
-                            red: '#ff6b6b',
-                            purple: '#9b59b6',
-                            orange: '#ff9f43',
-                        },
-                        neutral: {
-                            50: '#f8f9fa',
-                            100: '#e9ecef',
-                            200: '#dee2e6',
-                            300: '#ced4da',
-                            400: '#adb5bd',
-                            500: '#6c757d',
-                            600: '#495057',
-                            700: '#343a40',
-                            800: '#212529',
-                            900: '#121416',
-                        }
-                    },
-                    fontFamily: {
-                        'sans': ['Nunito', 'Inter', 'ui-sans-serif', 'system-ui'],
-                        'duo': ['Nunito', 'sans-serif'],
-                    },
-                    animation: {
-                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                        'bounce-gentle': 'bounce-gentle 2s infinite',
-                        'wiggle': 'wiggle 1s ease-in-out infinite',
-                        'celebrate': 'celebrate 0.6s ease-out',
-                        'slide-in': 'slideIn 0.3s ease-out',
-                    },
-                    keyframes: {
-                        'bounce-gentle': {
-                            '0%, 100%': { 
-                                transform: 'translateY(0)',
-                                animationTimingFunction: 'cubic-bezier(0.8, 0, 1, 1)'
-                            },
-                            '50%': { 
-                                transform: 'translateY(-8px)',
-                                animationTimingFunction: 'cubic-bezier(0, 0, 0.2, 1)'
-                            },
-                        },
-                        'wiggle': {
-                            '0%, 100%': { transform: 'rotate(-5deg)' },
-                            '50%': { transform: 'rotate(5deg)' },
-                        },
-                        'celebrate': {
-                            '0%': { transform: 'scale(1)' },
-                            '50%': { transform: 'scale(1.2)' },
-                            '100%': { transform: 'scale(1)' },
-                        },
-                        'slideIn': {
-                            '0%': { transform: 'translateX(-100%)' },
-                            '100%': { transform: 'translateX(0)' },
-                        }
-                    },
-                    borderRadius: {
-                        'duo': '16px',
-                        'duo-lg': '24px',
-                        'duo-xl': '32px',
-                    },
-                    boxShadow: {
-                        'duo': '0 4px 0 rgba(0, 0, 0, 0.1)',
-                        'duo-lg': '0 6px 0 rgba(0, 0, 0, 0.1)',
-                        'duo-pressed': '0 2px 0 rgba(0, 0, 0, 0.1)',
-                    },
-                    screens: {
-                        'xs': '475px',
+                            50: '#e6f7ea'
+                            , 100: '#c2ebd0'
+                            , 200: '#9bdfb5'
+                            , 300: '#70d399'
+                            , 400: '#4dc982'
+                            , 500: '#58cc70'
+                            , 600: '#45b259'
+                            , 700: '#339847'
+                            , 800: '#237e36'
+                            , 900: '#156427'
+                        , }
+                        , secondary: {
+                            50: '#fff9e6'
+                            , 100: '#ffefbf'
+                            , 200: '#ffe599'
+                            , 300: '#ffdb70'
+                            , 400: '#ffd14c'
+                            , 500: '#ffc800', // Duolingo yellow
+                            600: '#e6b400'
+                            , 700: '#cc9f00'
+                            , 800: '#b38b00'
+                            , 900: '#997700'
+                        , }
+                        , accent: {
+                            blue: '#4a8cff'
+                            , red: '#ff6b6b'
+                            , purple: '#9b59b6'
+                            , orange: '#ff9f43'
+                        , }
+                        , neutral: {
+                            50: '#f8f9fa'
+                            , 100: '#e9ecef'
+                            , 200: '#dee2e6'
+                            , 300: '#ced4da'
+                            , 400: '#adb5bd'
+                            , 500: '#6c757d'
+                            , 600: '#495057'
+                            , 700: '#343a40'
+                            , 800: '#212529'
+                            , 900: '#121416'
+                        , }
                     }
+                    , fontFamily: {
+                        'sans': ['Nunito', 'Inter', 'ui-sans-serif', 'system-ui']
+                        , 'duo': ['Nunito', 'sans-serif']
+                    , }
+                    , animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite'
+                        , 'bounce-gentle': 'bounce-gentle 2s infinite'
+                        , 'wiggle': 'wiggle 1s ease-in-out infinite'
+                        , 'celebrate': 'celebrate 0.6s ease-out'
+                        , 'slide-in': 'slideIn 0.3s ease-out'
+                    , }
+                    , keyframes: {
+                        'bounce-gentle': {
+                            '0%, 100%': {
+                                transform: 'translateY(0)'
+                                , animationTimingFunction: 'cubic-bezier(0.8, 0, 1, 1)'
+                            }
+                            , '50%': {
+                                transform: 'translateY(-8px)'
+                                , animationTimingFunction: 'cubic-bezier(0, 0, 0.2, 1)'
+                            }
+                        , }
+                        , 'wiggle': {
+                            '0%, 100%': {
+                                transform: 'rotate(-5deg)'
+                            }
+                            , '50%': {
+                                transform: 'rotate(5deg)'
+                            }
+                        , }
+                        , 'celebrate': {
+                            '0%': {
+                                transform: 'scale(1)'
+                            }
+                            , '50%': {
+                                transform: 'scale(1.2)'
+                            }
+                            , '100%': {
+                                transform: 'scale(1)'
+                            }
+                        , }
+                        , 'slideIn': {
+                            '0%': {
+                                transform: 'translateX(-100%)'
+                            }
+                            , '100%': {
+                                transform: 'translateX(0)'
+                            }
+                        , }
+                    }
+                    , borderRadius: {
+                        'duo': '16px'
+                        , 'duo-lg': '24px'
+                        , 'duo-xl': '32px'
+                    , }
+                    , boxShadow: {
+                        'duo': '0 4px 0 rgba(0, 0, 0, 0.1)'
+                        , 'duo-lg': '0 6px 0 rgba(0, 0, 0, 0.1)'
+                        , 'duo-pressed': '0 2px 0 rgba(0, 0, 0, 0.1)'
+                    , }
+                    , screens: {
+                        'xs': '475px'
+                    , }
                 }
             }
         }
+
     </script>
 
     <style>
@@ -138,9 +153,11 @@
             .sidebar {
                 width: 80px !important;
             }
+
             .sidebar .sidebar-text {
                 display: none;
             }
+
             .main-content {
                 margin-left: 0 !important;
             }
@@ -154,9 +171,11 @@
                 z-index: 40;
                 background: white;
             }
+
             .sidebar.mobile-open {
                 transform: translateX(0);
             }
+
             .mobile-overlay {
                 display: none;
                 position: fixed;
@@ -167,6 +186,7 @@
                 background: rgba(0, 0, 0, 0.5);
                 z-index: 30;
             }
+
             .mobile-overlay.active {
                 display: block;
             }
@@ -177,62 +197,67 @@
         }
 
         .card {
-    background: white;
-    border-radius: 16px;
-    box-shadow: 0 4px 0 rgba(0, 0, 0, 0.1);
-    transition: all 0.2s ease;
-    border: 3px solid #f1f3f4; /* abu abu tipis */
-}
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 0 rgba(0, 0, 0, 0.1);
+            transition: all 0.2s ease;
+            border: 3px solid #f1f3f4;
+            /* abu abu tipis */
+        }
 
-.card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 0 rgba(0, 0, 0, 0.1);
-    border-color: #e5e7eb; /* sedikit lebih gelap saat hover */
-}
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 0 rgba(0, 0, 0, 0.1);
+            border-color: #e5e7eb;
+            /* sedikit lebih gelap saat hover */
+        }
 
-.card:active {
-    transform: translateY(2px);
-    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.1);
-    border-color: #dfe3e6; /* klik = lebih solid */
-}
-/* Tambahkan di section styles layout app Anda */
-.error-page {
-    min-height: 100vh;
-    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-}
+        .card:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 rgba(0, 0, 0, 0.1);
+            border-color: #dfe3e6;
+            /* klik = lebih solid */
+        }
 
-.error-character {
-    width: 120px;
-    height: 120px;
-    background: #58cc70;
-    border-radius: 50%;
-    position: relative;
-    box-shadow: 0 6px 0 #45b259;
-    margin: 0 auto 2rem;
-}
+        /* Tambahkan di section styles layout app Anda */
+        .error-page {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        }
 
-.error-character::before {
-    content: '';
-    position: absolute;
-    width: 40px;
-    height: 40px;
-    background: white;
-    border-radius: 50%;
-    top: 30px;
-    left: 20px;
-    box-shadow: 30px 0 white;
-}
+        .error-character {
+            width: 120px;
+            height: 120px;
+            background: #58cc70;
+            border-radius: 50%;
+            position: relative;
+            box-shadow: 0 6px 0 #45b259;
+            margin: 0 auto 2rem;
+        }
 
-.error-character::after {
-    content: '';
-    position: absolute;
-    width: 30px;
-    height: 15px;
-    background: #ff6b6b;
-    border-radius: 15px 15px 0 0;
-    bottom: 25px;
-    left: 45px;
-}
+        .error-character::before {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 50%;
+            top: 30px;
+            left: 20px;
+            box-shadow: 30px 0 white;
+        }
+
+        .error-character::after {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 15px;
+            background: #ff6b6b;
+            border-radius: 15px 15px 0 0;
+            bottom: 25px;
+            left: 45px;
+        }
+
         .app-button {
             background: #58cc70;
             color: white;
@@ -281,20 +306,28 @@
         }
 
         @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
         }
 
         /* Dot pattern background */
         .striped-dotted-main {
-            background-color: #f8f9fa; 
-            background-image: 
+            background-color: #f8f9fa;
+            background-image:
                 radial-gradient(#808080b7 2px, transparent 2px);
-            background-size: 40px 40px, 60px 60px; 
+            background-size: 40px 40px, 60px 60px;
             background-position: 0 0, 20px 20px;
-            border-radius: 30px; 
-            border: 3px solid rgb(182, 182,  182);
+            border-radius: 30px;
+            border: 3px solid rgb(182, 182, 182);
             box-shadow: 0 6px 0 rgba(182, 182, 182);
         }
 
@@ -330,6 +363,7 @@
             transform: translateY(-4px);
             box-shadow: 0 6px 0 rgba(0, 0, 0, 0.1);
         }
+
         .gamification-badge:active {
             transform: translateY(2px);
             box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
@@ -341,7 +375,7 @@
             transition: all 0.2s ease;
             background: white;
             box-shadow: 0 2px 0 rgba(0, 0, 0, 0.05);
-            border:1px rgba(0, 0, 0, 0.171) solid;
+            border: 1px rgba(0, 0, 0, 0.171) solid;
         }
 
         .sidebar-item:hover {
@@ -428,32 +462,49 @@
             display: inline-block;
             animation: dot-pulse 1.5s infinite ease-in-out;
         }
-        
+
         .loading-dots .dot:nth-child(2) {
             animation-delay: 0.2s;
         }
-        
+
         .loading-dots .dot:nth-child(3) {
             animation-delay: 0.4s;
         }
-        
+
         @keyframes dot-pulse {
-            0%, 100% { opacity: 0.3; transform: scale(0.8); }
-            50% { opacity: 1; transform: scale(1.2); }
+
+            0%,
+            100% {
+                opacity: 0.3;
+                transform: scale(0.8);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.2);
+            }
         }
-        
+
         /* Animasi progress bar */
         .progress-animation {
             animation: progress-grow 3s forwards ease-in-out;
             width: 0%;
         }
-        
+
         @keyframes progress-grow {
-            0% { width: 0%; }
-            50% { width: 70%; }
-            100% { width: 95%; }
+            0% {
+                width: 0%;
+            }
+
+            50% {
+                width: 70%;
+            }
+
+            100% {
+                width: 95%;
+            }
         }
-        
+
         /* Animasi khusus untuk loading section */
         #loading-section {
             backdrop-filter: blur(8px);
@@ -472,11 +523,11 @@
                 background: white;
                 border-bottom: 2px solid #e9ecef;
             }
-            
+
             .top-nav-elements {
                 display: none;
             }
-            
+
             .mobile-nav-elements {
                 display: flex;
                 align-items: center;
@@ -488,83 +539,87 @@
             .gamification-badge span {
                 display: none;
             }
-            
+
             .gamification-badge {
                 padding: 0.5rem;
             }
         }
 
-    .line-clamp-2 {
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-    }
-
-    .quest-item {
-        transition: all 0.3s ease;
-    }
-
-    .quest-item:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
-
-    .quest-item.completed {
-        background: linear-gradient(135deg, #f0f9f0 0%, #e8f5e8 100%);
-        border-color: #58cc70;
-    }
-
-    .animate-slide-in {
-        animation: slideIn 0.5s ease-out forwards;
-        opacity: 0;
-        transform: translateY(20px);
-    }
-
-    @keyframes slideIn {
-        to {
-            opacity: 1;
-            transform: translateY(0);
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
-    }
 
-    /* Celebration particles */
-    .celebration-particle {
-        animation: celebrateParticle 1s ease-out forwards;
-        pointer-events: none;
-    }
+        .quest-item {
+            transition: all 0.3s ease;
+        }
 
-    @keyframes celebrateParticle {
-        0% {
-            opacity: 1;
-            transform: translateY(0) scale(1);
+        .quest-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
-        50% {
-            opacity: 0.8;
-            transform: translateY(-20px) scale(1.2);
+
+        .quest-item.completed {
+            background: linear-gradient(135deg, #f0f9f0 0%, #e8f5e8 100%);
+            border-color: #58cc70;
         }
-        100% {
+
+        .animate-slide-in {
+            animation: slideIn 0.5s ease-out forwards;
             opacity: 0;
-            transform: translateY(-40px) scale(0.5);
+            transform: translateY(20px);
         }
-    }
 
-    /* Modal animations */
-    .modal-enter {
-        animation: modalEnter 0.3s ease-out;
-    }
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-    @keyframes modalEnter {
-        from {
-            opacity: 0;
-            transform: scale(0.9) translateY(-20px);
+        /* Celebration particles */
+        .celebration-particle {
+            animation: celebrateParticle 1s ease-out forwards;
+            pointer-events: none;
         }
-        to {
-            opacity: 1;
-            transform: scale(1) translateY(0);
+
+        @keyframes celebrateParticle {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+
+            50% {
+                opacity: 0.8;
+                transform: translateY(-20px) scale(1.2);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateY(-40px) scale(0.5);
+            }
         }
-    }
-</style>
+
+        /* Modal animations */
+        .modal-enter {
+            animation: modalEnter 0.3s ease-out;
+        }
+
+        @keyframes modalEnter {
+            from {
+                opacity: 0;
+                transform: scale(0.9) translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+    </style>
     <!-- Additional Styles Section -->
     @yield('styles')
 </head>
@@ -588,70 +643,56 @@
 
             <!-- Navigation Menu -->
             <div class="flex-1 py-4 flex flex-col justify-center align-middle">
-    <ul class="space-y-3 px-4">
+                <ul class="space-y-3 px-4">
 
-        <li>
-            <a href="{{ route('dashboard') }}" 
-                class="sidebar-item flex flex-col items-center p-3 rounded-duo text-neutral-800 
+                    <li>
+                        <a href="{{ route('dashboard') }}" class="sidebar-item flex flex-col items-center p-3 rounded-duo text-neutral-800 
                 {{ request()->routeIs('dashboard') ? 'active font-bold text-primary-600' : '' }}">
-                <i class="fas fa-home w-6 text-center text-xl"></i>
-                <span class="sidebar-text mt-2 text-sm">Dashboard</span>
-            </a>
-        </li>
+                            <i class="fas fa-home w-6 text-center text-xl"></i>
+                            <span class="sidebar-text mt-2 text-sm">Dashboard</span>
+                        </a>
+                    </li>
 
-        <li>
-            <a href="{{ route('journal.index') }}"
-                class="sidebar-item flex flex-col items-center p-3 rounded-duo text-neutral-800 
+                    <li>
+                        <a href="{{ route('journal.index') }}" class="sidebar-item flex flex-col items-center p-3 rounded-duo text-neutral-800 
                 {{ request()->routeIs('journal.*') ? 'active font-bold text-primary-600' : '' }}">
-                <i class="fas fa-book w-6 text-center text-xl"></i>
-                <span class="sidebar-text mt-2 text-sm">Journal</span>
-            </a>
-        </li>
+                            <i class="fas fa-book w-6 text-center text-xl"></i>
+                            <span class="sidebar-text mt-2 text-sm">Journal</span>
+                        </a>
+                    </li>
 
-        <li>
-            <a href="{{ route('community.index') }}" 
-                class="sidebar-item flex flex-col items-center p-3 rounded-duo text-neutral-800 
+                    <li>
+                        <a href="{{ route('community.index') }}" class="sidebar-item flex flex-col items-center p-3 rounded-duo text-neutral-800 
                 {{ request()->routeIs('community.*') ? 'active font-bold text-primary-600' : '' }}">
-                <i class="fas fa-users w-6 text-center text-xl"></i>
-                <span class="sidebar-text mt-2 text-sm">Community</span>
-            </a>
-        </li>
-        <li>
-    <a href="{{ route('curhat.index') }}" 
-        class="sidebar-item flex flex-col items-center p-3 rounded-duo text-neutral-800 
-        {{ request()->routeIs('curhat.*') ? 'active font-bold text-primary-600' : '' }}">
-        <i class="fas fa-comments w-6 text-center text-xl"></i>
-        <span class="sidebar-text mt-2 text-sm">Curhat with Wilson</span>
-    </a>
-</li>
-<li>
-    <a href="{{ route('quests.index.view') }}" 
-        class="sidebar-item flex flex-col items-center p-3 rounded-duo text-neutral-800 
+                            <i class="fas fa-users w-6 text-center text-xl"></i>
+                            <span class="sidebar-text mt-2 text-sm">Community</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('quests.index.view') }}" class="sidebar-item flex flex-col items-center p-3 rounded-duo text-neutral-800 
         {{ request()->routeIs('quests.index.view') ? 'active font-bold text-primary-600' : '' }}">
-        <i class="fas fa-flag-checkered w-6 text-center text-xl"></i>
-        <span class="sidebar-text mt-2 text-sm">Quests</span>
-    </a>
-</li>
+                            <i class="fas fa-flag-checkered w-6 text-center text-xl"></i>
+                            <span class="sidebar-text mt-2 text-sm">Quests</span>
+                        </a>
+                    </li>
 
-<li>
-    <a href="{{ route('noises.index') }}" 
-        class="sidebar-item flex flex-col items-center p-3 rounded-duo text-neutral-800 
+                    <li>
+                        <a href="{{ route('noises.index') }}" class="sidebar-item flex flex-col items-center p-3 rounded-duo text-neutral-800 
         {{ request()->routeIs('noises.index') ? 'active font-bold text-primary-600' : '' }}">
-        <i class="fas fa-music w-6 text-center text-xl"></i>
-        <span class="sidebar-text mt-2 text-sm">noises</span>
-    </a>
-</li>
-        <li>
-            <a href="#" 
-                class="sidebar-item flex flex-col items-center p-3 rounded-duo text-neutral-800 
+                            <i class="fas fa-music w-6 text-center text-xl"></i>
+                            <span class="sidebar-text mt-2 text-sm">noises</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('settings.index') }}" class="sidebar-item flex flex-col items-center p-3 rounded-duo text-neutral-800 
                 {{ request()->routeIs('settings.*') ? 'active font-bold text-primary-600' : '' }}">
-                <i class="fas fa-cog w-6 text-center text-xl"></i>
-                <span class="sidebar-text mt-2 text-sm">Settings</span>
-            </a>
-        </li>
+                            <i class="fas fa-cog w-6 text-center text-xl"></i>
+                            <span class="sidebar-text mt-2 text-sm">Settings</span>
+                        </a>
+                    </li>
 
-    </ul>
-</div>
+                </ul>
+            </div>
         </div>
 
         <!-- Main Content -->
@@ -724,7 +765,7 @@
                         </button>
                         <h1 class="text-lg font-bold text-primary-600">Tenang</h1>
                     </div>
-                    
+
                     <div class="flex items-center space-x-2">
                         <!-- Mobile gamification badges (simplified) -->
                         <div class="gamification-badge flex items-center p-2 rounded-duo">
@@ -752,7 +793,7 @@
 
     <script>
         // Sidebar toggle functionality for desktop
-        document.getElementById('sidebar-toggle')?.addEventListener('click', function() {
+        document.getElementById('sidebar-toggle') ? .addEventListener('click', function() {
             const sidebar = document.getElementById('sidebar');
             sidebar.classList.toggle('collapsed');
         });
@@ -761,17 +802,17 @@
         function toggleMobileMenu() {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('mobile-overlay');
-            
+
             sidebar.classList.toggle('mobile-open');
             overlay.classList.toggle('active');
-            
+
             // Prevent body scroll when menu is open
             document.body.style.overflow = sidebar.classList.contains('mobile-open') ? 'hidden' : '';
         }
 
-        document.getElementById('mobile-menu-toggle')?.addEventListener('click', toggleMobileMenu);
-        document.getElementById('mobile-menu-toggle-2')?.addEventListener('click', toggleMobileMenu);
-        document.getElementById('mobile-overlay')?.addEventListener('click', toggleMobileMenu);
+        document.getElementById('mobile-menu-toggle') ? .addEventListener('click', toggleMobileMenu);
+        document.getElementById('mobile-menu-toggle-2') ? .addEventListener('click', toggleMobileMenu);
+        document.getElementById('mobile-overlay') ? .addEventListener('click', toggleMobileMenu);
 
         // Close mobile menu when clicking on a link
         document.querySelectorAll('.sidebar-item').forEach(item => {
@@ -779,7 +820,7 @@
                 if (window.innerWidth <= 768) {
                     toggleMobileMenu();
                 }
-                
+
                 // Update active state
                 document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
                 this.classList.add('active');
@@ -794,14 +835,14 @@
                     this.style.boxShadow = '0 2px 0 rgba(0, 0, 0, 0.1)';
                 }
             });
-            
+
             element.addEventListener('mouseup', function() {
                 this.style.transform = 'translateY(0)';
                 if (this.classList.contains('app-button') || this.classList.contains('duo-card')) {
                     this.style.boxShadow = '0 4px 0 rgba(0, 0, 0, 0.1)';
                 }
             });
-            
+
             element.addEventListener('mouseleave', function() {
                 this.style.transform = 'translateY(0)';
                 if (this.classList.contains('app-button') || this.classList.contains('duo-card')) {
@@ -809,27 +850,28 @@
                 }
             });
         });
-function showNotification(message, type = 'info') {
-    // Remove existing notifications
-    document.querySelectorAll('.custom-notification').forEach(n => n.remove());
 
-    const colors = {
-        success: 'bg-primary-500 text-white shadow-duo',
-        error: 'bg-accent-red text-white shadow-duo',
-        warning: 'bg-secondary-500 text-neutral-900 shadow-duo',
-        info: 'bg-accent-blue text-white shadow-duo'
-    };
+        function showNotification(message, type = 'info') {
+            // Remove existing notifications
+            document.querySelectorAll('.custom-notification').forEach(n => n.remove());
 
-    const icons = {
-        success: 'fa-check-circle',
-        error: 'fa-exclamation-circle',
-        warning: 'fa-exclamation-triangle',
-        info: 'fa-info-circle'
-    };
+            const colors = {
+                success: 'bg-primary-500 text-white shadow-duo'
+                , error: 'bg-accent-red text-white shadow-duo'
+                , warning: 'bg-secondary-500 text-neutral-900 shadow-duo'
+                , info: 'bg-accent-blue text-white shadow-duo'
+            };
 
-    // Create element
-    const notification = document.createElement('div');
-    notification.className = `
+            const icons = {
+                success: 'fa-check-circle'
+                , error: 'fa-exclamation-circle'
+                , warning: 'fa-exclamation-triangle'
+                , info: 'fa-info-circle'
+            };
+
+            // Create element
+            const notification = document.createElement('div');
+            notification.className = `
         custom-notification
         fixed top-24 right-8 
         px-5 py-4 rounded-duo-lg z-[9999]
@@ -840,20 +882,21 @@ function showNotification(message, type = 'info') {
         ${colors[type] || colors.info}
     `;
 
-    notification.innerHTML = `
+            notification.innerHTML = `
         <i class="fas ${icons[type]} text-xl"></i>
         <span class="font-semibold">${message}</span>
     `;
 
-    document.body.appendChild(notification);
+            document.body.appendChild(notification);
 
-    // Auto remove
-    setTimeout(() => {
-        notification.style.opacity = "0";
-        notification.style.transform = "translateX(100%)";
-        setTimeout(() => notification.remove(), 300);
-    }, 4000);
-}
+            // Auto remove
+            setTimeout(() => {
+                notification.style.opacity = "0";
+                notification.style.transform = "translateX(100%)";
+                setTimeout(() => notification.remove(), 300);
+            }, 4000);
+        }
+
     </script>
 </body>
 </html>

@@ -5,50 +5,71 @@
 <style>
     /* Tambahkan ke section style atau stylesheet terpisah */
 
-/* Animations untuk welcome container */
-@keyframes spin-slow {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-}
+    /* Animations untuk welcome container */
+    @keyframes spin-slow {
+        from {
+            transform: rotate(0deg);
+        }
 
-.animate-spin-slow {
-    animation: spin-slow 20s linear infinite;
-}
+        to {
+            transform: rotate(360deg);
+        }
+    }
 
-/* Gradient text untuk highlights */
-.gradient-text {
-    background: linear-gradient(90deg, #58cc70, #4a8cff, #9b59b6);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
+    .animate-spin-slow {
+        animation: spin-slow 20s linear infinite;
+    }
 
-/* Floating animation untuk decorative elements */
-@keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-10px); }
-}
+    /* Gradient text untuk highlights */
+    .gradient-text {
+        background: linear-gradient(90deg, #58cc70, #4a8cff, #9b59b6);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
 
-.animate-float {
-    animation: float 3s ease-in-out infinite;
-}
+    /* Floating animation untuk decorative elements */
+    @keyframes float {
 
-/* Glass morphism effect */
-.glass-effect {
-    background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
+        0%,
+        100% {
+            transform: translateY(0px);
+        }
 
-/* Pulsing ring effect */
-.pulse-ring {
-    animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
+        50% {
+            transform: translateY(-10px);
+        }
+    }
 
-@keyframes pulse-ring {
-    0% { transform: scale(0.8); opacity: 0.8; }
-    70%, 100% { transform: scale(1.2); opacity: 0; }
-}
+    .animate-float {
+        animation: float 3s ease-in-out infinite;
+    }
+
+    /* Glass morphism effect */
+    .glass-effect {
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    /* Pulsing ring effect */
+    .pulse-ring {
+        animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    @keyframes pulse-ring {
+        0% {
+            transform: scale(0.8);
+            opacity: 0.8;
+        }
+
+        70%,
+        100% {
+            transform: scale(1.2);
+            opacity: 0;
+        }
+    }
+
 </style>
 @endsection
 @section('content')
@@ -63,7 +84,7 @@
                 <i class="fas fa-times"></i>
             </button>
         </div>
-        
+
         <div class="text-center mb-6">
             <div class="w-16 h-16 rounded-full bg-primary-100 flex items-center justify-center mx-auto mb-4">
                 <i class="fas fa-check text-primary-600 text-2xl"></i>
@@ -92,12 +113,10 @@
         </div>
 
         <div class="flex space-x-3">
-            <button onclick="closeQuestConfirmation()" 
-                    class="flex-1 px-4 py-3 bg-neutral-200 text-neutral-700 rounded-lg hover:bg-neutral-300 transition-colors font-medium">
+            <button onclick="closeQuestConfirmation()" class="flex-1 px-4 py-3 bg-neutral-200 text-neutral-700 rounded-lg hover:bg-neutral-300 transition-colors font-medium">
                 Cancel
             </button>
-            <button onclick="confirmQuestCompletion()" 
-                    class="flex-1 px-4 py-3 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors font-medium app-button">
+            <button onclick="confirmQuestCompletion()" class="flex-1 px-4 py-3 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors font-medium app-button">
                 <i class="fas fa-check mr-2"></i>
                 Complete Quest
             </button>
@@ -113,7 +132,7 @@
                 <i class="fas fa-trophy text-green-600 text-3xl"></i>
             </div>
         </div>
-        
+
         <h3 class="text-xl font-bold text-neutral-800 mb-2">Quest Completed! 🎉</h3>
         <p class="text-neutral-600 mb-4">Great job! You've completed the quest.</p>
 
@@ -138,8 +157,7 @@
             </div>
         </div>
 
-        <button onclick="closeQuestSuccess()" 
-                class="w-full px-4 py-3 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors font-medium app-button">
+        <button onclick="closeQuestSuccess()" class="w-full px-4 py-3 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors font-medium app-button">
             <i class="fas fa-check mr-2"></i>
             Awesome!
         </button>
@@ -152,17 +170,7 @@
     <div class="bg-white rounded-xl p-6 card border border-neutral-200">
         <!-- Background Gradient -->
         <div class="absolute inset-0 "></div>
-        
-        <!-- Pattern Dots -->
-        <div class="absolute inset-0 opacity-5" style="
-            background-image: radial-gradient(#58cc70 2px, transparent 2px);
-            background-size: 30px 30px;
-        "></div>
-        
-        <!-- Floating Elements -->
-        <div class="absolute top-4 right-4 w-24 h-24 rounded-full bg-primary-300 opacity-20 animate-pulse-slow"></div>
-        <div class="absolute bottom-4 left-4 w-16 h-16 rounded-full bg-accent-blue opacity-20 animate-pulse-slow" style="animation-delay: 1s"></div>
-        
+
         <!-- Content -->
         <div class="relative z-10">
             <div class="flex flex-col lg:flex-row items-center justify-between gap-6">
@@ -170,110 +178,95 @@
                 <div class="flex items-center space-x-4">
                     <!-- Wilson Character with animation -->
                     <div class="relative group">
-    <!-- Outer ring animation -->
-    <div class="absolute inset-0 rounded-full bg-gradient-to-r from-primary-500 to-accent-purple animate-spin-slow opacity-20"></div>
-    
-    <!-- Profile Container -->
-    <div class="relative w-24 h-24 rounded-full bg-gradient-to-br from-primary-500 to-accent-blue p-1.5 shadow-duo-lg">
-        <!-- Inner white circle -->
-        <div class="w-full h-full rounded-full bg-white flex items-center justify-center overflow-hidden">
-            <!-- User Profile Photo -->
-            @if(auth()->user()->profile_photo_path)
-                <!-- Jika user punya foto profil -->
-                <img 
-                    src="{{ Storage::url(auth()->user()->profile_photo_path) }}" 
-                    alt="{{ auth()->user()->name }}"
-                    class="w-full h-full object-cover rounded-full"
-                    onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name) }}&background=58cc70&color=fff&size=128'"
-                >
-            @elseif(auth()->user()->profile_photo_url)
-                <!-- Jika menggunakan Socialite/OAuth photo -->
-                <img 
-                    src="{{ auth()->user()->profile_photo_url }}" 
-                    alt="{{ auth()->user()->name }}"
-                    class="w-full h-full object-cover rounded-full"
-                >
-            @else
-                <!-- Fallback ke avatar dengan initial -->
-                <div class="w-full h-full rounded-full bg-gradient-to-br from-primary-500 to-accent-blue flex items-center justify-center">
-                    <span class="text-3xl font-bold text-white">
-                        {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
-                    </span>
-                </div>
-            @endif
-            
-            <!-- Level Badge -->
-            <div class="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-secondary-500 flex items-center justify-center shadow-duo animate-bounce-gentle border-2 border-white">
-                <span class="text-xs font-bold text-white">{{ auth()->user()->level ?? 1 }}</span>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Online indicator -->
-    <div class="absolute bottom-2 right-2 w-4 h-4 bg-green-500 rounded-full border-2 border-white shadow-sm">
-        <!-- Animated pulse effect -->
-        <div class="absolute inset-0 rounded-full bg-green-500 animate-ping opacity-75"></div>
-    </div>
-    
-    <!-- Interactive overlay on hover -->
-    <div class="absolute inset-0 rounded-full bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center cursor-pointer">
-        <div class="w-8 h-8 rounded-full bg-white/80 flex items-center justify-center">
-            <i class="fas fa-camera text-primary-600 text-sm"></i>
-        </div>
-    </div>
-    
-    <!-- Tooltip on hover -->
-    <div class="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-neutral-800 text-white text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap pointer-events-none">
-        <div class="flex items-center gap-1">
-            <i class="fas fa-user-circle"></i>
-            {{ auth()->user()->name }}
-        </div>
-        <div class="text-xs text-neutral-300 mt-0.5">
-            Level {{ auth()->user()->level ?? 1 }} • {{ auth()->user()->streak ?? 0 }} day streak
-        </div>
-    </div>
-</div>
-                    
+                        <!-- Outer ring animation -->
+                        <div class="absolute inset-0 rounded-full bg-gradient-to-r from-primary-500 to-accent-purple animate-spin-slow opacity-20"></div>
+
+                        <!-- Profile Container -->
+                        <div class="relative w-24 h-24 rounded-full bg-gradient-to-br from-primary-500 to-accent-blue p-1.5 shadow-duo-lg">
+                            <!-- Inner white circle -->
+                            <div class="w-full h-full rounded-full bg-white flex items-center justify-center overflow-hidden">
+                                <!-- User Profile Photo -->
+                                @if(auth()->user()->profile_photo_path)
+                                <!-- Jika user punya foto profil -->
+                                <img src="{{ Storage::url(auth()->user()->profile_photo_path) }}" alt="{{ auth()->user()->name }}" class="w-full h-full object-cover rounded-full" onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name) }}&background=58cc70&color=fff&size=128'">
+                                @elseif(auth()->user()->profile_photo_url)
+                                <!-- Jika menggunakan Socialite/OAuth photo -->
+                                <img src="{{ auth()->user()->profile_photo_url }}" alt="{{ auth()->user()->name }}" class="w-full h-full object-cover rounded-full">
+                                @else
+                                <!-- Fallback ke avatar dengan initial -->
+                                <div class="w-full h-full rounded-full bg-gradient-to-br from-primary-500 to-accent-blue flex items-center justify-center">
+                                    <span class="text-3xl font-bold text-white">
+                                        {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                                    </span>
+                                </div>
+                                @endif
+
+                                <!-- Level Badge -->
+                                <div class="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-secondary-500 flex items-center justify-center shadow-duo animate-bounce-gentle border-2 border-white">
+                                    <span class="text-xs font-bold text-white">{{ auth()->user()->level ?? 1 }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Online indicator -->
+                        <div class="absolute bottom-2 right-2 w-4 h-4 bg-green-500 rounded-full border-2 border-white shadow-sm">
+                            <!-- Animated pulse effect -->
+                            <div class="absolute inset-0 rounded-full bg-green-500 animate-ping opacity-75"></div>
+                        </div>
+
+                        <!-- Interactive overlay on hover -->
+                        <div class="absolute inset-0 rounded-full bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center cursor-pointer">
+                            <div class="w-8 h-8 rounded-full bg-white/80 flex items-center justify-center">
+                                <i class="fas fa-camera text-primary-600 text-sm"></i>
+                            </div>
+                        </div>
+
+                        <!-- Tooltip on hover -->
+                        <div class="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-neutral-800 text-white text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap pointer-events-none">
+                            <div class="flex items-center gap-1">
+                                <i class="fas fa-user-circle"></i>
+                                {{ auth()->user()->name }}
+                            </div>
+                            <div class="text-xs text-neutral-300 mt-0.5">
+                                Level {{ auth()->user()->level ?? 1 }} • {{ auth()->user()->streak ?? 0 }} day streak
+                            </div>
+                        </div>
+                    </div>
                     <!-- Greeting Message -->
                     <div class="flex-1">
                         <!-- Greeting with time-based emoji -->
                         <div class="flex items-center gap-2 mb-2">
                             @php
-                                $hour = date('H');
-                                $greetings = [
-                                    ['emoji' => '🌅', 'text' => 'Good morning'],
-                                    ['emoji' => '☀️', 'text' => 'Good afternoon'],
-                                    ['emoji' => '🌇', 'text' => 'Good evening'],
-                                    ['emoji' => '🌙', 'text' => 'Good night']
-                                ];
-                                
-                                $greeting = $hour < 12 ? $greetings[0] : 
-                                           ($hour < 17 ? $greetings[1] : 
-                                           ($hour < 21 ? $greetings[2] : $greetings[3]));
-                            @endphp
-                            
-                            <span class="text-2xl animate-bounce-gentle">{{ $greeting['emoji'] }}</span>
-                            <h1 class="text-2xl lg:text-3xl font-bold text-neutral-800">
-                                {{ $greeting['text'] }}, 
-                                <span class="text-primary-600">{{ auth()->user()->name ?? 'Explorer' }}</span>!
-                                <span class="wave-animation inline-block ml-2">👋</span>
-                            </h1>
+                            $hour = date('H');
+                            $greetings = [
+                            ['emoji' => '🌅', 'text' => 'Good morning'],
+                            ['emoji' => '☀️', 'text' => 'Good afternoon'],
+                            ['emoji' => '🌇', 'text' => 'Good evening'],
+                            ['emoji' => '🌙', 'text' => 'Good night']
+                            ];
+
+                            $greeting = $hour < 12 ? $greetings[0] : ($hour < 17 ? $greetings[1] : ($hour < 21 ? $greetings[2] : $greetings[3])); @endphp <span class="text-2xl animate-bounce-gentle">{{ $greeting['emoji'] }}</span>
+                                <h1 class="text-2xl lg:text-3xl font-bold text-neutral-800">
+                                    {{ $greeting['text'] }},
+                                    <span class="text-primary-600">{{ auth()->user()->name ?? 'Explorer' }}</span>!
+                                    <span class="wave-animation inline-block ml-2">👋</span>
+                                </h1>
                         </div>
-                        
+
                         <!-- Encouraging message -->
                         <p class="text-neutral-600 mb-3 text-sm lg:text-base">
                             @php
-                                $messages = [
-                                    "Ready to level up your wellness today?",
-                                    "Small steps lead to big changes. Let's go!",
-                                    "Your mental health journey continues...",
-                                    "Every moment is a new opportunity to grow.",
-                                    "Take a deep breath. You've got this!"
-                                ];
-                                echo $messages[array_rand($messages)];
+                            $messages = [
+                            "Ready to level up your wellness today?",
+                            "Small steps lead to big changes. Let's go!",
+                            "Your mental health journey continues...",
+                            "Every moment is a new opportunity to grow.",
+                            "Take a deep breath. You've got this!"
+                            ];
+                            echo $messages[array_rand($messages)];
                             @endphp
                         </p>
-                        
+
                         <!-- Quick Stats -->
                         <div class="flex flex-wrap items-center gap-4">
                             <!-- Daily Progress -->
@@ -285,7 +278,7 @@
                                     {{ $todayQuests->where('status', 'completed')->count() }}/{{ $todayQuests->count() }} quests
                                 </span>
                             </div>
-                            
+
                             <!-- Streak -->
                             <div class="flex items-center gap-2 px-3 py-1.5 bg-white/80 backdrop-blur-sm rounded-full border border-secondary-200">
                                 <div class="w-6 h-6 rounded-full bg-secondary-100 flex items-center justify-center">
@@ -295,7 +288,7 @@
                                     {{ $streakDays ?? '0' }} day streak
                                 </span>
                             </div>
-                            
+
                             <!-- Date -->
                             <div class="flex items-center gap-2 px-3 py-1.5 bg-white/80 backdrop-blur-sm rounded-full border border-accent-blue/20">
                                 <div class="w-6 h-6 rounded-full bg-accent-blue/10 flex items-center justify-center">
@@ -308,7 +301,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Right: Wilson's Message Bubble (Desktop) -->
                 <div class="hidden lg:block">
                     <div class="relative">
@@ -326,7 +319,7 @@
                             <p class="text-neutral-700 text-sm italic">
                                 "{{ $messages[array_rand($messages)] }}"
                             </p>
-                            
+
                             <!-- Typing indicator -->
                             <div class="flex items-center gap-1 mt-3">
                                 <div class="w-2 h-2 bg-primary-400 rounded-full animate-pulse"></div>
@@ -335,7 +328,7 @@
                                 <span class="text-xs text-neutral-500 ml-2">Online</span>
                             </div>
                         </div>
-                        
+
                         <!-- Speech bubble tail -->
                         <div class="absolute -left-3 top-1/2 transform -translate-y-1/2">
                             <div class="w-4 h-4 bg-white border-l-2 border-b-2 border-primary-300 transform rotate-45"></div>
@@ -343,7 +336,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <!-- Progress Bar -->
             <div class="mt-6">
                 <div class="flex items-center justify-between text-sm text-neutral-600 mb-2">
@@ -351,13 +344,12 @@
                     <span>{{ $todayQuests->where('status', 'completed')->count() * 100 / max($todayQuests->count(), 1) }}%</span>
                 </div>
                 <div class="h-3 bg-neutral-200 rounded-full overflow-hidden">
-                    <div class="h-full bg-gradient-to-r from-primary-500 to-accent-blue rounded-full transition-all duration-500"
-                         style="width: {{ $todayQuests->where('status', 'completed')->count() * 100 / max($todayQuests->count(), 1) }}%"></div>
+                    <div class="h-full bg-gradient-to-r from-primary-500 to-accent-blue rounded-full transition-all duration-500" style="width: {{ $todayQuests->where('status', 'completed')->count() * 100 / max($todayQuests->count(), 1) }}%"></div>
                 </div>
             </div>
         </div>
     </div>
-    
+
     <!-- Mobile Wilson Message -->
     <div class="lg:hidden mt-4">
         <div class="bg-gradient-to-r from-primary-50 to-accent-blue/20 rounded-xl p-4 border border-primary-200">
@@ -419,9 +411,7 @@
 
             <div class="space-y-4" id="quests-container">
                 @forelse($todayQuests as $quest)
-                <div class="flex items-center p-4 border border-neutral-200 rounded-lg hover:bg-primary-50 transition-colors cursor-pointer quest-item" 
-                     data-quest-id="{{ $quest->id }}" 
-                     onclick="handleQuestClick({{ $quest->id }}, '{{ $quest->status }}')">
+                <div class="flex items-center p-4 border border-neutral-200 rounded-lg hover:bg-primary-50 transition-colors cursor-pointer quest-item" data-quest-id="{{ $quest->id }}" onclick="handleQuestClick({{ $quest->id }}, '{{ $quest->status }}')">
                     <div class="w-10 h-10 rounded-full 
                         @if($quest->status === 'claimed') 
                             bg-green-100 text-green-600
@@ -460,8 +450,7 @@
                                 <span class="progress-text">{{ $quest->progress }}/{{ $quest->required_progress }}</span>
                             </div>
                             <div class="w-full bg-neutral-200 rounded-full h-2">
-                                <div class="bg-primary-500 h-2 rounded-full transition-all duration-300" 
-                                     style="width: {{ ($quest->progress / $quest->required_progress) * 100 }}%"></div>
+                                <div class="bg-primary-500 h-2 rounded-full transition-all duration-300" style="width: {{ ($quest->progress / $quest->required_progress) * 100 }}%"></div>
                             </div>
                         </div>
                         @endif
@@ -480,8 +469,7 @@
                             <i class="fas fa-star text-accent-purple text-sm"></i>
                         </div>
                         @if($quest->status === 'completed')
-                        <button onclick="event.stopPropagation(); claimRewards({{ $quest->id }})" 
-                                class="mt-2 px-3 py-1 bg-green-500 text-white text-xs rounded-lg hover:bg-green-600 transition-colors app-button">
+                        <button onclick="event.stopPropagation(); claimRewards({{ $quest->id }})" class="mt-2 px-3 py-1 bg-green-500 text-white text-xs rounded-lg hover:bg-green-600 transition-colors app-button">
                             Claim Rewards
                         </button>
                         @elseif($quest->status === 'claimed')
@@ -489,8 +477,7 @@
                             Claimed ✓
                         </span>
                         @elseif($quest->required_progress > 1 && $quest->status !== 'completed')
-                        <button onclick="event.stopPropagation(); addQuestProgress({{ $quest->id }})" 
-                                class="mt-2 px-3 py-1 bg-primary-500 text-white text-xs rounded-lg hover:bg-primary-600 transition-colors app-button">
+                        <button onclick="event.stopPropagation(); addQuestProgress({{ $quest->id }})" class="mt-2 px-3 py-1 bg-primary-500 text-white text-xs rounded-lg hover:bg-primary-600 transition-colors app-button">
                             Add Progress
                         </button>
                         @endif
@@ -668,83 +655,83 @@
 
     // Handle quest click - show confirmation modal
     function handleQuestClick(questId, status) {
-    console.log('Quest clicked:', questId, 'Status:', status);
-    
-    // Debug: cek semua data quest
-    const questElement = document.querySelector(`[data-quest-id="${questId}"]`);
-    console.log('Quest element:', questElement);
-    
-    if (!questId || questId === 'null' || questId === 'undefined') {
-        console.error('Invalid quest ID received:', questId);
-        showNotification('Error: Invalid quest selection', 'error');
-        return;
+        console.log('Quest clicked:', questId, 'Status:', status);
+
+        // Debug: cek semua data quest
+        const questElement = document.querySelector(`[data-quest-id="${questId}"]`);
+        console.log('Quest element:', questElement);
+
+        if (!questId || questId === 'null' || questId === 'undefined') {
+            console.error('Invalid quest ID received:', questId);
+            showNotification('Error: Invalid quest selection', 'error');
+            return;
+        }
+
+        // Convert to number dan validasi
+        const numericQuestId = parseInt(questId);
+        if (isNaN(numericQuestId)) {
+            console.error('Quest ID is not a number:', questId);
+            showNotification('Error: Invalid quest ID format', 'error');
+            return;
+        }
+
+        console.log('Numeric quest ID:', numericQuestId);
+
+        if (status === 'assigned' || status === 'in_progress') {
+            showQuestConfirmation(numericQuestId);
+        } else if (status === 'completed') {
+            showNotification('Quest already completed!', 'info');
+        } else if (status === 'claimed') {
+            showNotification('Rewards already claimed!', 'info');
+        }
     }
-    
-    // Convert to number dan validasi
-    const numericQuestId = parseInt(questId);
-    if (isNaN(numericQuestId)) {
-        console.error('Quest ID is not a number:', questId);
-        showNotification('Error: Invalid quest ID format', 'error');
-        return;
-    }
-    
-    console.log('Numeric quest ID:', numericQuestId);
-    
-    if (status === 'assigned' || status === 'in_progress') {
-        showQuestConfirmation(numericQuestId);
-    } else if (status === 'completed') {
-        showNotification('Quest already completed!', 'info');
-    } else if (status === 'claimed') {
-        showNotification('Rewards already claimed!', 'info');
-    }
-}
 
 
     // Show quest confirmation modal
     function showQuestConfirmation(questId) {
         console.log('Showing confirmation for quest:', questId);
-        
+
         // Validate questId again
         if (!questId) {
             console.error('No quest ID provided to showQuestConfirmation');
             showNotification('Error: No quest selected', 'error');
             return;
         }
-        
+
         const questElement = document.querySelector(`[data-quest-id="${questId}"]`);
         if (!questElement) {
             console.error('Quest element not found for ID:', questId);
             showNotification('Error: Quest not found in page', 'error');
             return;
         }
-        
+
         // Get quest details
-        const questTitle = questElement.querySelector('h3')?.textContent || 'Unknown Quest';
+        const questTitle = questElement.querySelector('h3') ? .textContent || 'Unknown Quest';
         const coinsElement = questElement.querySelector('.text-secondary-500');
         const diamondsElement = questElement.querySelector('.text-accent-blue');
-        
+
         const coins = coinsElement ? coinsElement.textContent.replace('+', '') : '0';
         const diamonds = diamondsElement ? diamondsElement.textContent.replace('+', '') : '0';
-        
+
         console.log('Quest details - Title:', questTitle, 'Coins:', coins, 'Diamonds:', diamonds);
-        
+
         // Update modal content
         const confirmationTitle = document.getElementById('confirmationQuestTitle');
         const rewardCoins = document.getElementById('rewardCoins');
         const rewardDiamonds = document.getElementById('rewardDiamonds');
-        
+
         if (confirmationTitle) confirmationTitle.textContent = questTitle;
         if (rewardCoins) rewardCoins.textContent = `+${coins}`;
         if (rewardDiamonds) rewardDiamonds.textContent = `+${diamonds}`;
-        
+
         // Show rewards preview
         const rewardsPreview = document.getElementById('rewardsPreview');
         if (rewardsPreview) rewardsPreview.classList.remove('hidden');
-        
+
         // Store quest ID for confirmation
         pendingQuestId = questId;
         console.log('Pending quest ID set to:', pendingQuestId);
-        
+
         // Show modal
         const modal = document.getElementById('questConfirmationModal');
         if (modal) {
@@ -766,13 +753,13 @@
     // Confirm quest completion
     function confirmQuestCompletion() {
         console.log('Confirming quest completion, pendingQuestId:', pendingQuestId);
-        
+
         if (!pendingQuestId) {
             console.error('No pending quest ID found in confirmQuestCompletion');
             showNotification('Error: No quest selected for completion', 'error');
             return;
         }
-        
+
         completeQuest(pendingQuestId);
         closeQuestConfirmation();
     }
@@ -780,7 +767,7 @@
     // Complete quest dengan modal success
     function completeQuest(questId) {
         console.log('Completing quest:', questId);
-        
+
         if (!questId) {
             console.error('Invalid quest ID in completeQuest:', questId);
             showNotification('Error: Invalid quest ID', 'error');
@@ -788,78 +775,78 @@
         }
 
         showNotification('Completing quest...', 'info');
-        
+
         // Ensure URL is correct
         const url = `/quests/${questId}/complete`;
         console.log('Making POST request to:', url);
-        
+
         fetch(url, {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify({})
-        })
-        .then(response => {
-            console.log('Response status:', response.status, 'URL:', response.url);
-            
-            // Check if response is HTML (error page)
-            const contentType = response.headers.get('content-type');
-            if (contentType && contentType.includes('text/html')) {
-                return response.text().then(html => {
-                    console.error('HTML response received. Route might not exist.');
-                    console.error('HTML snippet:', html.substring(0, 500));
-                    throw new Error('Server returned HTML instead of JSON. Route may not exist: ' + url);
-                });
-            }
-            
-            // Check if response is OK
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            
-            return response.json();
-        })
-        .then(data => {
-            console.log('Response data received:', data);
-            
-            if (data.message) {
-                console.log('Quest completed successfully');
-                showQuestSuccess(data.rewards);
-            } else if (data.error) {
-                console.error('Server returned error:', data.error);
-                showNotification('Error: ' + data.error, 'error');
-            } else {
-                console.error('Unexpected response format:', data);
-                showNotification('Error: Unexpected response from server', 'error');
-            }
-        })
-        .catch(error => {
-            console.error('Error completing quest:', error);
-            
-            if (error.message.includes('Route may not exist')) {
-                showNotification('Error: Quest completion route not found. Please check server configuration.', 'error');
-            } else if (error.message.includes('HTTP error')) {
-                showNotification('Error: Server returned ' + error.message, 'error');
-            } else {
-                showNotification('Error completing quest: ' + error.message, 'error');
-            }
-        });
+                method: 'POST'
+                , headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    , 'Content-Type': 'application/json'
+                    , 'Accept': 'application/json'
+                }
+                , body: JSON.stringify({})
+            })
+            .then(response => {
+                console.log('Response status:', response.status, 'URL:', response.url);
+
+                // Check if response is HTML (error page)
+                const contentType = response.headers.get('content-type');
+                if (contentType && contentType.includes('text/html')) {
+                    return response.text().then(html => {
+                        console.error('HTML response received. Route might not exist.');
+                        console.error('HTML snippet:', html.substring(0, 500));
+                        throw new Error('Server returned HTML instead of JSON. Route may not exist: ' + url);
+                    });
+                }
+
+                // Check if response is OK
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                return response.json();
+            })
+            .then(data => {
+                console.log('Response data received:', data);
+
+                if (data.message) {
+                    console.log('Quest completed successfully');
+                    showQuestSuccess(data.rewards);
+                } else if (data.error) {
+                    console.error('Server returned error:', data.error);
+                    showNotification('Error: ' + data.error, 'error');
+                } else {
+                    console.error('Unexpected response format:', data);
+                    showNotification('Error: Unexpected response from server', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error completing quest:', error);
+
+                if (error.message.includes('Route may not exist')) {
+                    showNotification('Error: Quest completion route not found. Please check server configuration.', 'error');
+                } else if (error.message.includes('HTTP error')) {
+                    showNotification('Error: Server returned ' + error.message, 'error');
+                } else {
+                    showNotification('Error completing quest: ' + error.message, 'error');
+                }
+            });
     }
 
     // Show quest success modal
     function showQuestSuccess(rewards) {
         console.log('Showing success modal with rewards:', rewards);
-        
+
         // Update rewards in success modal
         const successCoins = document.getElementById('successCoins');
         const successDiamonds = document.getElementById('successDiamonds');
-        
+
         if (successCoins) successCoins.textContent = `+${rewards?.coins || 0}`;
         if (successDiamonds) successDiamonds.textContent = `+${rewards?.diamonds || 0}`;
-        
+
         // Show success modal
         const modal = document.getElementById('questSuccessModal');
         if (modal) {
@@ -870,7 +857,7 @@
             setTimeout(() => location.reload(), 2000);
             return;
         }
-        
+
         // Add celebration effects
         createCelebrationEffects();
     }
@@ -889,9 +876,9 @@
     function createCelebrationEffects() {
         const container = document.getElementById('questSuccessModal');
         if (!container) return;
-        
+
         const particles = ['🎉', '✨', '🌟', '💫', '🥳', '🎊'];
-        
+
         for (let i = 0; i < 8; i++) {
             setTimeout(() => {
                 const particle = document.createElement('div');
@@ -901,9 +888,9 @@
                 particle.style.top = Math.random() * 80 + 10 + '%';
                 particle.style.animationDelay = (Math.random() * 0.5) + 's';
                 particle.style.zIndex = '60';
-                
+
                 container.appendChild(particle);
-                
+
                 setTimeout(() => {
                     if (particle.parentNode) {
                         particle.remove();
@@ -916,32 +903,32 @@
     // Add progress to quest
     function addQuestProgress(questId) {
         console.log('Adding progress to quest:', questId);
-        
+
         const questElement = document.querySelector(`[data-quest-id="${questId}"]`);
         if (!questElement) {
             console.error('Quest element not found for progress:', questId);
             return;
         }
-        
-        const progressText = questElement.querySelector('.progress-text')?.textContent;
+
+        const progressText = questElement.querySelector('.progress-text') ? .textContent;
         if (!progressText) {
             console.error('Progress text not found for quest:', questId);
             return;
         }
-        
+
         const [current, max] = progressText.split('/').map(Number);
-        
+
         currentQuestId = questId;
         currentProgress = current;
         maxProgress = max;
-        
+
         const progressTitle = document.getElementById('progressQuestTitle');
         if (progressTitle) {
-            progressTitle.textContent = questElement.querySelector('h3')?.textContent || 'Unknown Quest';
+            progressTitle.textContent = questElement.querySelector('h3') ? .textContent || 'Unknown Quest';
         }
-        
+
         updateProgressDisplay();
-        
+
         const modal = document.getElementById('progressModal');
         if (modal) {
             modal.classList.remove('hidden');
@@ -956,11 +943,11 @@
     function updateProgressDisplay() {
         const progressDisplay = document.getElementById('progressDisplay');
         const progressBar = document.getElementById('progressBar');
-        
+
         if (progressDisplay) {
             progressDisplay.textContent = `${currentProgress}/${maxProgress}`;
         }
-        
+
         if (progressBar) {
             const percentage = (currentProgress / maxProgress) * 100;
             progressBar.style.width = `${percentage}%`;
@@ -974,42 +961,42 @@
         }
 
         showNotification('Updating progress...', 'info');
-        
+
         fetch(`/quests/${currentQuestId}/progress`, {
-            method: 'PATCH',
-            headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify({
-                progress: currentProgress
+                method: 'PATCH'
+                , headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    , 'Content-Type': 'application/json'
+                    , 'Accept': 'application/json'
+                }
+                , body: JSON.stringify({
+                    progress: currentProgress
+                })
             })
-        })
-        .then(response => {
-            const contentType = response.headers.get('content-type');
-            if (contentType && contentType.includes('text/html')) {
-                return response.text().then(html => {
-                    throw new Error('Server returned HTML instead of JSON');
-                });
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.message) {
-                showNotification('Progress updated successfully!', 'success');
-                closeProgressModal();
-                setTimeout(() => {
-                    location.reload();
-                }, 1500);
-            } else if (data.error) {
-                showNotification(data.error, 'error');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            showNotification('Error updating progress: ' + error.message, 'error');
-        });
+            .then(response => {
+                const contentType = response.headers.get('content-type');
+                if (contentType && contentType.includes('text/html')) {
+                    return response.text().then(html => {
+                        throw new Error('Server returned HTML instead of JSON');
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.message) {
+                    showNotification('Progress updated successfully!', 'success');
+                    closeProgressModal();
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1500);
+                } else if (data.error) {
+                    showNotification(data.error, 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showNotification('Error updating progress: ' + error.message, 'error');
+            });
     }
 
     function closeProgressModal() {
@@ -1020,43 +1007,43 @@
 
     // Show available quests
     function showAvailableQuests() {
-    showNotification('Loading available quests...', 'info');
-    
-    fetch('/quests/available', {
-        headers: {
-            'Accept': 'application/json'
-        }
-    })
-    .then(response => {
-        const contentType = response.headers.get('content-type');
-        if (contentType && contentType.includes('text/html')) {
-            return response.text().then(html => {
-                throw new Error('Server returned HTML instead of JSON');
-            });
-        }
-        return response.json();
-    })
-    .then(data => {
-        const container = document.getElementById('available-quests-list');
-        if (!container) return;
-        
-        container.innerHTML = '';
-        
-        if (data.available_quests && data.available_quests.length === 0) {
-            container.innerHTML = `
+        showNotification('Loading available quests...', 'info');
+
+        fetch('/quests/available', {
+                headers: {
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => {
+                const contentType = response.headers.get('content-type');
+                if (contentType && contentType.includes('text/html')) {
+                    return response.text().then(html => {
+                        throw new Error('Server returned HTML instead of JSON');
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                const container = document.getElementById('available-quests-list');
+                if (!container) return;
+
+                container.innerHTML = '';
+
+                if (data.available_quests && data.available_quests.length === 0) {
+                    container.innerHTML = `
                 <div class="text-center py-4 text-neutral-500">
                     <i class="fas fa-quest text-2xl mb-2"></i>
                     <p>No available quests at the moment</p>
                 </div>
             `;
-            return;
-        }
-        
-        if (data.available_quests) {
-            data.available_quests.forEach(quest => {
-                const questElement = document.createElement('div');
-                questElement.className = 'flex items-center p-3 border border-neutral-200 rounded-lg hover:bg-primary-50 transition-colors';
-                questElement.innerHTML = `
+                    return;
+                }
+
+                if (data.available_quests) {
+                    data.available_quests.forEach(quest => {
+                        const questElement = document.createElement('div');
+                        questElement.className = 'flex items-center p-3 border border-neutral-200 rounded-lg hover:bg-primary-50 transition-colors';
+                        questElement.innerHTML = `
                     <input type="checkbox" value="${quest.id}" 
                            class="mr-3 quest-checkbox rounded text-primary-500">
                     <div class="flex-1">
@@ -1073,126 +1060,127 @@
                         </div>
                     </div>
                 `;
-                
-                // Add event listener properly
-                const checkbox = questElement.querySelector('.quest-checkbox');
-                checkbox.addEventListener('change', function() {
-                    toggleQuestSelection(quest.id, this.checked);
-                });
-                
-                container.appendChild(questElement);
-            });
-        }
-        
-        const modal = document.getElementById('availableQuestsModal');
-        if (modal) modal.classList.remove('hidden');
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        showNotification('Error loading available quests: ' + error.message, 'error');
-    });
-}
 
-// Toggle quest selection - FIXED VERSION
-function toggleQuestSelection(questId, isChecked) {
-    console.log('Toggle quest selection:', questId, 'Checked:', isChecked);
-    
-    // Validate questId
-    if (!questId) {
-        console.error('Invalid quest ID in toggleQuestSelection:', questId);
-        return;
+                        // Add event listener properly
+                        const checkbox = questElement.querySelector('.quest-checkbox');
+                        checkbox.addEventListener('change', function() {
+                            toggleQuestSelection(quest.id, this.checked);
+                        });
+
+                        container.appendChild(questElement);
+                    });
+                }
+
+                const modal = document.getElementById('availableQuestsModal');
+                if (modal) modal.classList.remove('hidden');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showNotification('Error loading available quests: ' + error.message, 'error');
+            });
     }
-    
-    const numericQuestId = parseInt(questId);
-    
-    if (isChecked) {
-        // Add to selection
-        if (selectedQuestIds.length < 5) {
-            if (!selectedQuestIds.includes(numericQuestId)) {
-                selectedQuestIds.push(numericQuestId);
-                console.log('Added quest to selection:', numericQuestId);
-            }
-        } else {
-            // Maximum reached, uncheck the box
-            showNotification('Maximum 5 quests allowed', 'warning');
-            const checkbox = document.querySelector(`input[value="${questId}"]`);
-            if (checkbox) checkbox.checked = false;
+
+    // Toggle quest selection - FIXED VERSION
+    function toggleQuestSelection(questId, isChecked) {
+        console.log('Toggle quest selection:', questId, 'Checked:', isChecked);
+
+        // Validate questId
+        if (!questId) {
+            console.error('Invalid quest ID in toggleQuestSelection:', questId);
             return;
         }
-    } else {
-        // Remove from selection
-        const index = selectedQuestIds.indexOf(numericQuestId);
-        if (index > -1) {
-            selectedQuestIds.splice(index, 1);
-            console.log('Removed quest from selection:', numericQuestId);
+
+        const numericQuestId = parseInt(questId);
+
+        if (isChecked) {
+            // Add to selection
+            if (selectedQuestIds.length < 5) {
+                if (!selectedQuestIds.includes(numericQuestId)) {
+                    selectedQuestIds.push(numericQuestId);
+                    console.log('Added quest to selection:', numericQuestId);
+                }
+            } else {
+                // Maximum reached, uncheck the box
+                showNotification('Maximum 5 quests allowed', 'warning');
+                const checkbox = document.querySelector(`input[value="${questId}"]`);
+                if (checkbox) checkbox.checked = false;
+                return;
+            }
+        } else {
+            // Remove from selection
+            const index = selectedQuestIds.indexOf(numericQuestId);
+            if (index > -1) {
+                selectedQuestIds.splice(index, 1);
+                console.log('Removed quest from selection:', numericQuestId);
+            }
         }
+
+        console.log('Current selected quests:', selectedQuestIds);
+        updateSelectedCount();
     }
-    
-    console.log('Current selected quests:', selectedQuestIds);
-    updateSelectedCount();
-}
-function debugSelectedQuests() {
-    console.log('=== DEBUG SELECTED QUESTS ===');
-    console.log('Selected Quest IDs:', selectedQuestIds);
-    console.log('Selected Count:', selectedQuestIds.length);
-    console.log('Checkboxes:');
-    
-    document.querySelectorAll('.quest-checkbox').forEach(checkbox => {
-        console.log(`Checkbox value: ${checkbox.value}, checked: ${checkbox.checked}`);
-    });
-    console.log('=== END DEBUG ===');
-}
-// Confirm quest selection - FIXED VERSION
-function confirmQuestSelection() {
-    console.log('Confirming selection with quests:', selectedQuestIds);
+
+    function debugSelectedQuests() {
+        console.log('=== DEBUG SELECTED QUESTS ===');
+        console.log('Selected Quest IDs:', selectedQuestIds);
+        console.log('Selected Count:', selectedQuestIds.length);
+        console.log('Checkboxes:');
+
+        document.querySelectorAll('.quest-checkbox').forEach(checkbox => {
+            console.log(`Checkbox value: ${checkbox.value}, checked: ${checkbox.checked}`);
+        });
+        console.log('=== END DEBUG ===');
+    }
+    // Confirm quest selection - FIXED VERSION
+    function confirmQuestSelection() {
+        console.log('Confirming selection with quests:', selectedQuestIds);
         debugSelectedQuests();
 
-    if (selectedQuestIds.length === 0) {
-        showNotification('Please select at least one quest', 'warning');
-        return;
-    }
+        if (selectedQuestIds.length === 0) {
+            showNotification('Please select at least one quest', 'warning');
+            return;
+        }
 
-    showNotification('Assigning quests...', 'info');
+        showNotification('Assigning quests...', 'info');
 
-    fetch('/quests/choose', {
-        method: 'POST',
-        headers: {
-            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        },
-        body: JSON.stringify({
-            quest_ids: selectedQuestIds
-        })
-    })
-    .then(response => {
-        console.log('Response status:', response.status);
-        const contentType = response.headers.get('content-type');
-        if (contentType && contentType.includes('text/html')) {
-            return response.text().then(html => {
-                console.error('HTML response received:', html.substring(0, 500));
-                throw new Error('Server returned HTML instead of JSON');
+        fetch('/quests/choose', {
+                method: 'POST'
+                , headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    , 'Content-Type': 'application/json'
+                    , 'Accept': 'application/json'
+                }
+                , body: JSON.stringify({
+                    quest_ids: selectedQuestIds
+                })
+            })
+            .then(response => {
+                console.log('Response status:', response.status);
+                const contentType = response.headers.get('content-type');
+                if (contentType && contentType.includes('text/html')) {
+                    return response.text().then(html => {
+                        console.error('HTML response received:', html.substring(0, 500));
+                        throw new Error('Server returned HTML instead of JSON');
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Selection response:', data);
+                if (data.message) {
+                    showNotification('Quests assigned successfully!', 'success');
+                    closeAvailableQuests();
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1500);
+                } else if (data.error) {
+                    showNotification(data.error, 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showNotification('Error assigning quests: ' + error.message, 'error');
             });
-        }
-        return response.json();
-    })
-    .then(data => {
-        console.log('Selection response:', data);
-        if (data.message) {
-            showNotification('Quests assigned successfully!', 'success');
-            closeAvailableQuests();
-            setTimeout(() => {
-                location.reload();
-            }, 1500);
-        } else if (data.error) {
-            showNotification(data.error, 'error');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        showNotification('Error assigning quests: ' + error.message, 'error');
-    });
-}
+    }
 
     // Toggle quest selection
     function toggleQuestSelection(questId) {
@@ -1226,77 +1214,77 @@ function confirmQuestSelection() {
         showNotification('Assigning quests...', 'info');
 
         fetch('/quests/choose', {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify({
-                quest_ids: selectedQuestIds
+                method: 'POST'
+                , headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    , 'Content-Type': 'application/json'
+                    , 'Accept': 'application/json'
+                }
+                , body: JSON.stringify({
+                    quest_ids: selectedQuestIds
+                })
             })
-        })
-        .then(response => {
-            const contentType = response.headers.get('content-type');
-            if (contentType && contentType.includes('text/html')) {
-                return response.text().then(html => {
-                    throw new Error('Server returned HTML instead of JSON');
-                });
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.message) {
-                showNotification('Quests assigned successfully!', 'success');
-                closeAvailableQuests();
-                setTimeout(() => {
-                    location.reload();
-                }, 1500);
-            } else if (data.error) {
-                showNotification(data.error, 'error');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            showNotification('Error assigning quests: ' + error.message, 'error');
-        });
+            .then(response => {
+                const contentType = response.headers.get('content-type');
+                if (contentType && contentType.includes('text/html')) {
+                    return response.text().then(html => {
+                        throw new Error('Server returned HTML instead of JSON');
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.message) {
+                    showNotification('Quests assigned successfully!', 'success');
+                    closeAvailableQuests();
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1500);
+                } else if (data.error) {
+                    showNotification(data.error, 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showNotification('Error assigning quests: ' + error.message, 'error');
+            });
     }
 
     // Assign random quests
     function assignRandomQuests() {
         showNotification('Assigning random quests...', 'info');
-        
+
         fetch('/quests/assign-random', {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify({})
-        })
-        .then(response => {
-            const contentType = response.headers.get('content-type');
-            if (contentType && contentType.includes('text/html')) {
-                return response.text().then(html => {
-                    throw new Error('Server returned HTML instead of JSON');
-                });
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.message || (Array.isArray(data) && data.length > 0)) {
-                showNotification('Random quests assigned!', 'success');
-                closeAvailableQuests();
-                setTimeout(() => {
-                    location.reload();
-                }, 1500);
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            showNotification('Error assigning quests: ' + error.message, 'error');
-        });
+                method: 'POST'
+                , headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    , 'Content-Type': 'application/json'
+                    , 'Accept': 'application/json'
+                }
+                , body: JSON.stringify({})
+            })
+            .then(response => {
+                const contentType = response.headers.get('content-type');
+                if (contentType && contentType.includes('text/html')) {
+                    return response.text().then(html => {
+                        throw new Error('Server returned HTML instead of JSON');
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.message || (Array.isArray(data) && data.length > 0)) {
+                    showNotification('Random quests assigned!', 'success');
+                    closeAvailableQuests();
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1500);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showNotification('Error assigning quests: ' + error.message, 'error');
+            });
     }
 
     // Close available quests modal
@@ -1313,61 +1301,62 @@ function confirmQuestSelection() {
     }
 
 
-function claimRewards(questId) {
+    function claimRewards(questId) {
         console.log('Claiming rewards for quest:', questId); // Debug log
-        
+
         if (!questId) {
             showNotification('Error: Invalid quest ID', 'error');
             return;
         }
 
         showNotification('Claiming rewards...', 'info');
-        
+
         fetch(`/quests/${questId}/claim`, {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify({})
-        })
-        .then(response => {
-            const contentType = response.headers.get('content-type');
-            if (contentType && contentType.includes('text/html')) {
-                return response.text().then(html => {
-                    throw new Error('Server returned HTML instead of JSON');
-                });
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.message) {
-                showNotification('Rewards claimed successfully!', 'success');
-                setTimeout(() => {
-                    location.reload();
-                }, 1500);
-            } else if (data.error) {
-                showNotification(data.error, 'error');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            showNotification('Error claiming rewards: ' + error.message, 'error');
-        });
+                method: 'POST'
+                , headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    , 'Content-Type': 'application/json'
+                    , 'Accept': 'application/json'
+                }
+                , body: JSON.stringify({})
+            })
+            .then(response => {
+                const contentType = response.headers.get('content-type');
+                if (contentType && contentType.includes('text/html')) {
+                    return response.text().then(html => {
+                        throw new Error('Server returned HTML instead of JSON');
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.message) {
+                    showNotification('Rewards claimed successfully!', 'success');
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1500);
+                } else if (data.error) {
+                    showNotification(data.error, 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showNotification('Error claiming rewards: ' + error.message, 'error');
+            });
     }
+
     function showDailyWelcomeMessage() {
-    const today = new Date().toISOString().slice(0, 10);
-    const lastShown = localStorage.getItem("avatarMessageLastShown");
+        const today = new Date().toISOString().slice(0, 10);
+        const lastShown = localStorage.getItem("avatarMessageLastShown");
 
-    // Jika belum pernah muncul hari ini → tampilkan
-    if (lastShown !== today) {
-        showAvatarMessage("welcome back dear {{ auth()->user()->name ?? 'Explorer' }}");
+        // Jika belum pernah muncul hari ini → tampilkan
+        if (lastShown !== today) {
+            showAvatarMessage("welcome back dear {{ auth()->user()->name ?? 'Explorer' }}");
 
-        // Simpan tanggal hari ini
-        localStorage.setItem("avatarMessageLastShown", today);
+            // Simpan tanggal hari ini
+            localStorage.setItem("avatarMessageLastShown", today);
+        }
     }
-}
 
     // Add animation to quest items
     document.addEventListener('DOMContentLoaded', function() {
@@ -1381,21 +1370,21 @@ function claimRewards(questId) {
         questItems.forEach((item, index) => {
             item.style.animationDelay = `${index * 0.1}s`;
             item.classList.add('animate-slide-in');
-            
+
             // Debug: log each quest item
             const questId = item.getAttribute('data-quest-id');
             const onclick = item.getAttribute('onclick');
             console.log(`Quest ${index + 1}: ID=${questId}, onclick=${onclick}`);
         });
-        
+
         // Test if modals exist
         const modals = [
-            'questConfirmationModal',
-            'questSuccessModal', 
-            'progressModal',
-            'availableQuestsModal'
+            'questConfirmationModal'
+            , 'questSuccessModal'
+            , 'progressModal'
+            , 'availableQuestsModal'
         ];
-        
+
         modals.forEach(modalId => {
             const modal = document.getElementById(modalId);
             console.log(`Modal ${modalId}:`, modal ? 'Found' : 'NOT FOUND');
@@ -1410,49 +1399,65 @@ function claimRewards(questId) {
         console.error('Line:', e.lineno);
         console.error('Column:', e.colno);
     });
-// Dalam JavaScript section, tambahkan:
-function toggleWilsonMessage() {
-    const messageBubble = document.querySelector('.wilson-message-bubble');
-    if (messageBubble) {
-        messageBubble.classList.toggle('hidden');
+    // Dalam JavaScript section, tambahkan:
+    function toggleWilsonMessage() {
+        const messageBubble = document.querySelector('.wilson-message-bubble');
+        if (messageBubble) {
+            messageBubble.classList.toggle('hidden');
+        }
     }
-}
 
-// Wilson greeting berdasarkan waktu
-function getWilsonGreeting() {
-    const hour = new Date().getHours();
-    const greetings = [
-        { time: "morning", emoji: "🌅", message: "Rise and shine! A new day for growth." },
-        { time: "afternoon", emoji: "☀️", message: "Hope you're having a productive day!" },
-        { time: "evening", emoji: "🌙", message: "Time to unwind and reflect on your day." },
-        { time: "night", emoji: "⭐", message: "Don't forget to rest and recharge." }
-    ];
-    
-    let timeOfDay;
-    if (hour < 12) timeOfDay = "morning";
-    else if (hour < 17) timeOfDay = "afternoon";
-    else if (hour < 21) timeOfDay = "evening";
-    else timeOfDay = "night";
-    
-    return greetings.find(g => g.time === timeOfDay);
-}
+    // Wilson greeting berdasarkan waktu
+    function getWilsonGreeting() {
+        const hour = new Date().getHours();
+        const greetings = [{
+                time: "morning"
+                , emoji: "🌅"
+                , message: "Rise and shine! A new day for growth."
+            }
+            , {
+                time: "afternoon"
+                , emoji: "☀️"
+                , message: "Hope you're having a productive day!"
+            }
+            , {
+                time: "evening"
+                , emoji: "🌙"
+                , message: "Time to unwind and reflect on your day."
+            }
+            , {
+                time: "night"
+                , emoji: "⭐"
+                , message: "Don't forget to rest and recharge."
+            }
+        ];
 
-// Update greeting secara dinamis
-document.addEventListener('DOMContentLoaded', function() {
-    const greeting = getWilsonGreeting();
-    const greetingElement = document.getElementById('wilson-greeting');
-    if (greetingElement) {
-        greetingElement.innerHTML = `${greeting.emoji} ${greeting.message}`;
+        let timeOfDay;
+        if (hour < 12) timeOfDay = "morning";
+        else if (hour < 17) timeOfDay = "afternoon";
+        else if (hour < 21) timeOfDay = "evening";
+        else timeOfDay = "night";
+
+        return greetings.find(g => g.time === timeOfDay);
     }
-    
-    // Pulsing effect untuk Wilson icon
-    const wilsonIcon = document.querySelector('.wilson-icon-container');
-    if (wilsonIcon) {
-        setInterval(() => {
-            wilsonIcon.classList.toggle('pulse-gentle');
-        }, 3000);
-    }
-});
+
+    // Update greeting secara dinamis
+    document.addEventListener('DOMContentLoaded', function() {
+        const greeting = getWilsonGreeting();
+        const greetingElement = document.getElementById('wilson-greeting');
+        if (greetingElement) {
+            greetingElement.innerHTML = `${greeting.emoji} ${greeting.message}`;
+        }
+
+        // Pulsing effect untuk Wilson icon
+        const wilsonIcon = document.querySelector('.wilson-icon-container');
+        if (wilsonIcon) {
+            setInterval(() => {
+                wilsonIcon.classList.toggle('pulse-gentle');
+            }, 3000);
+        }
+    });
+
 </script>
 
 <style>
@@ -1489,23 +1494,24 @@ document.addEventListener('DOMContentLoaded', function() {
             transform: translateY(0);
         }
     }
+
 </style>
 @endsection
 
 @php
 function getMoodLabel($rate) {
-    if ($rate >= 9) return 'Excellent';
-    if ($rate >= 7) return 'Good';
-    if ($rate >= 5) return 'Okay';
-    if ($rate >= 3) return 'Poor';
-    return 'Bad';
+if ($rate >= 9) return 'Excellent';
+if ($rate >= 7) return 'Good';
+if ($rate >= 5) return 'Okay';
+if ($rate >= 3) return 'Poor';
+return 'Bad';
 }
 
 function getMoodColor($rate) {
-    if ($rate >= 9) return 'bg-mood-excellent';
-    if ($rate >= 7) return 'bg-mood-good';
-    if ($rate >= 5) return 'bg-mood-okay';
-    if ($rate >= 3) return 'bg-mood-poor';
-    return 'bg-mood-bad';
+if ($rate >= 9) return 'bg-mood-excellent';
+if ($rate >= 7) return 'bg-mood-good';
+if ($rate >= 5) return 'bg-mood-okay';
+if ($rate >= 3) return 'bg-mood-poor';
+return 'bg-mood-bad';
 }
 @endphp
