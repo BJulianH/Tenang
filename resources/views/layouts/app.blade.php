@@ -476,7 +476,7 @@
                 
                 <!-- Teks loading dengan animasi -->
                 <div class="space-y-4">
-                    <h3 class="text-2xl font-bold text-neutral-800">MindWell</h3>
+                    <h3 class="text-2xl font-bold text-neutral-800">Tenang</h3>
                     <p class="text-neutral-600 font-medium flex items-center justify-center space-x-2">
                         <span>Loading your journey</span>
                         <span class="loading-dots">

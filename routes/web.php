@@ -17,6 +17,8 @@ use App\Http\Controllers\NoiseTypeController;
 use App\Http\Controllers\AdminReportController;
 use App\Http\Controllers\AdminCommunityController;
 use App\Http\Controllers\CommunityProfileController;
+use App\Http\Controllers\ForgotPasswordController;
+
 
 // Landing Page
 Route::get('/', function () {
@@ -39,26 +41,36 @@ Route::get('/register', function () {
 
 Route::post('/register', [AuthController::class, 'register'])->name('register.post');
 
-
-
-
-// forgot password
+// Password Reset Routes
 Route::get('/forgot-password', function () {
     return view('auth.forgot-password');
 })->name('password.request');
 
-Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink'])->name('password.email');
+Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink'])->name('password.email');    
+
+// Route baru untuk verify token
+Route::get('/verify-token', function () {
+    return view('auth.verify-token');
+})->name('password.verify');
+
+Route::post('/verify-token', [ForgotPasswordController::class, 'verifyToken'])->name('password.verify.submit');
 
 Route::get('/reset-password/{token}', function ($token) {
     return view('auth.reset-password', ['token' => $token]);
-})->middleware('guest')->name('password.reset');
+})->name('password.reset');
+
+Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword'])->name('password.update');
 
 Route::get('/verify-email', function () {
     return view('auth.verify-email');
-})->middleware('auth')->name('verification.notice');
+})->name('verification.notice');
+//
 
 
-
+// Hapus middleware auth dari verify-email
+Route::get('/verify-email', function () {
+    return view('auth.verify-email');
+})->name('verification.notice'); // ← HAPUS middleware('auth')
 Route::prefix('community')->group(function () {
     // Community routes
     Route::get('/', [CommunityController::class, 'index'])->name('community.index');
@@ -203,3 +215,70 @@ Route::put('/profile/update', [ProfileController::class, 'update'])->name('profi
 Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
 Route::put('/profile/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.avatar.update');
 
+
+
+
+
+
+// border
+Route::get('/border', function(){
+    return view('border');
+})->name('border');
+
+
+// coba
+Route::get('/test-token-email', function () {
+    try {
+        $token = "123456"; // Token test 6 digit
+        
+        // Test 1: Kirim email dengan token
+        Mail::to('test@example.com')->send(new \App\Mail\PasswordResetMail($token));
+        
+        // Test 2: Cek view email
+        $html = view('emails.password-reset', ['token' => $token])->render();
+        
+        return '
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Test Token Email</title>
+            <style>
+                body { font-family: Arial; padding: 20px; }
+                .success { background: #d4edda; padding: 20px; border-radius: 10px; }
+                .error { background: #f8d7da; padding: 20px; border-radius: 10px; }
+                .preview { background: #f8f9fa; padding: 20px; border-radius: 10px; margin-top: 20px; }
+            </style>
+        </head>
+        <body>
+            <div class="success">
+                <h2>✅ Email Test Berhasil</h2>
+                <p>Token yang dikirim: <strong>' . $token . '</strong></p>
+                <p>Variable $token berisi: ' . $token . '</p>
+            </div>
+            
+            <div class="preview">
+                <h3>Preview Email:</h3>
+                <iframe srcdoc="' . htmlspecialchars($html) . '" width="100%" height="500px"></iframe>
+            </div>
+            
+            <div style="margin-top: 20px;">
+                <a href="/forgot-password" style="background: #28a745; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">
+                    🚀 Test Forgot Password
+                </a>
+            </div>
+        </body>
+        </html>
+        ';
+        
+    } catch (\Exception $e) {
+        return '
+        <div class="error">
+            <h2>❌ Email Test Gagal</h2>
+            <p><strong>Error:</strong> ' . $e->getMessage() . '</p>
+            <p><strong>File:</strong> ' . $e->getFile() . ':' . $e->getLine() . '</p>
+            <p><strong>Trace:</strong></p>
+            <pre>' . $e->getTraceAsString() . '</pre>
+        </div>
+        ';
+    }
+});
