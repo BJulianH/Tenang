@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', $user->name . ' - Comments - MindWell Profile')
+@section('title', $user->name . ' - Comments - Tenang Profile')
 
 @section('styles')
 <style>

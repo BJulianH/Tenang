@@ -65,6 +65,12 @@ return new class extends Migration
             $table->json('notification_settings')->nullable();
             $table->json('preferences')->nullable();
             
+            $table->integer('quests_completed')->default(0);
+$table->integer('coins_earned')->default(0);
+$table->integer('diamonds_earned')->default(0);
+$table->integer('login_streak')->default(0);
+$table->integer('perfect_days')->default(0);
+
             // Timestamps
             $table->datetime('last_login_at')->nullable();
             $table->string('last_login_ip')->nullable();

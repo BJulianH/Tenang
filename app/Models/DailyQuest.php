@@ -20,6 +20,7 @@ class DailyQuest extends Model
         'max_completions',
         'is_active',
         'is_repeatable',
+        'required_progress',
         'requirements'
     ];
 
@@ -27,6 +28,7 @@ class DailyQuest extends Model
         'requirements' => 'array',
         'is_active' => 'boolean',
         'is_repeatable' => 'boolean',
+        'required_progress' => 'integer'
     ];
 
     public function userQuests()
@@ -56,5 +58,13 @@ class DailyQuest extends Model
     public function scopeForToday($query)
     {
         return $query->active();
+    }
+
+    // Get random quests for user
+    public function scopeRandomForUser($query, $user, $count = 5)
+    {
+        return $query->active()
+            ->inRandomOrder()
+            ->limit($count);
     }
 }

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Journal - MindWell')
+@section('title', 'Journal - Tenang')
 
 @section('content')
     <!-- Mood Selection Modal -->

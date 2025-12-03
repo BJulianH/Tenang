@@ -21,13 +21,15 @@ class DashboardController extends Controller
         $todayQuests = UserQuest::with('dailyQuest')
             ->where('user_id', $user->id)
             ->whereDate('assigned_date', today())
+            ->orderBy('status')
             ->get();
 
         // If no quests for today, assign random ones
         if ($todayQuests->isEmpty()) {
-            $todayQuests = $this->assignRandomQuests($user);
+            $questController = new QuestController();
+            $todayQuests = $questController->assignRandomQuests($user);
         }
-
+                $questStats = $this->getQuestStats($user);
         // Get recent journals
         $recentJournals = Journal::where('user_id', $user->id)
             ->orderBy('created_at', 'desc')
@@ -72,6 +74,22 @@ class DashboardController extends Controller
         ));
     }
 
+    private function getQuestStats($user)
+    {
+        $todayQuests = UserQuest::with('dailyQuest')
+            ->where('user_id', $user->id)
+            ->whereDate('assigned_date', today())
+            ->get();
+
+        $total = $todayQuests->count();
+        $completed = $todayQuests->whereIn('status', ['completed', 'claimed'])->count();
+
+        return [
+            'total' => $total,
+            'completed' => $completed,
+            'completion_rate' => $total > 0 ? round(($completed / $total) * 100) : 0,
+        ];
+    }
     private function assignRandomQuests($user)
     {
         // Get 3 random active quests

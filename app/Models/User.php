@@ -29,13 +29,14 @@ class User extends Authenticatable
         'github_url',
         'date_of_birth',
         'gender',
+        'phone',           // Pastikan ada
+        'avatar',          // Pastikan ada
         'role',
-        'phone',
-        'avatar',
-        'streak',
-        'coins',
-        'diamonds',
-        'level',
+        'streak',          // Pastikan ada
+        'coins',           // Pastikan ada
+        'diamonds',        // Pastikan ada
+        'points',          // PASTIKAN ADA - INI YANG DIBUTUHKAN
+        'level',           // Pastikan ada
         'account_type',
         'is_verified',
         'is_active',
@@ -50,6 +51,11 @@ class User extends Authenticatable
         'following_count',
         'timezone',
         'locale',
+        'quests_completed',
+        'coins_earned',
+        'diamonds_earned',
+        'login_streak',
+        'perfect_days',
         'notification_settings',
         'preferences',
         'last_login_at',
@@ -72,6 +78,10 @@ class User extends Authenticatable
         'show_date_of_birth' => 'boolean',
         'notification_settings' => 'array',
         'preferences' => 'array',
+        'streak' => 'integer',
+        'coins' => 'integer',
+        'diamonds' => 'integer',
+        'level' => 'integer',
     ];
 
     // Relasi ke communities yang dimiliki (sebagai creator)
@@ -104,6 +114,18 @@ class User extends Authenticatable
     public function votes()
     {
         return $this->hasMany(Vote::class);
+    }
+
+    // Relasi journals
+    public function journals()
+    {
+        return $this->hasMany(Journal::class);
+    }
+
+    // TAMBAHAN: Relasi mood trackings untuk MindWell
+    public function moodTrackings()
+    {
+        return $this->hasMany(MoodTracking::class);
     }
 
     // Scope untuk admin
@@ -168,10 +190,7 @@ class User extends Authenticatable
     {
         return $this->username ? '@' . $this->username : $this->name;
     }
-    public function journals()
-    {
-        return $this->hasMany(Journal::class);
-    }
+
      public function userQuests()
     {
         return $this->hasMany(UserQuest::class);
@@ -189,4 +208,44 @@ public function hasSocialLinks()
            $this->linkedin_url || 
            $this->github_url;
 }
+public function addPoints($amount)
+    {
+        $this->increment('points', $amount);
+        return $this;
+    }
+
+    // Method untuk menambah coins
+    public function addCoins($amount)
+    {
+        $this->increment('coins', $amount);
+        return $this;
+    }
+
+    // Method untuk menambah diamonds
+    public function addDiamonds($amount)
+    {
+        $this->increment('diamonds', $amount);
+        return $this;
+    }
+
+    // Method untuk menambah streak
+    public function addStreak()
+    {
+        $this->increment('streak');
+        return $this;
+    }
+
+    // Method untuk reset streak
+    public function resetStreak()
+    {
+        $this->update(['streak' => 0]);
+        return $this;
+    }
+
+    // Method untuk level up
+    public function levelUp()
+    {
+        $this->increment('level');
+        return $this;
+    }
 }

@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Community Management - MindWell Admin')
+@section('title', 'Community Management - Tenang Admin')
 @section('page_title', 'Community Management')
 
 @section('content')

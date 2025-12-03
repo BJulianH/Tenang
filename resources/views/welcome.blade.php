@@ -73,6 +73,8 @@
                         'fadeInRight': 'fadeInRight 0.8s ease-out',
                         'float': 'float 6s ease-in-out infinite',
                         'breathe': 'breathe 4s ease-in-out infinite',
+                        'progress-grow': 'progressGrow 3s forwards ease-in-out',
+                        'particle-float': 'particleFloat 3s ease-in-out infinite',
                     },
                     keyframes: {
                         'bounce-gentle': {
@@ -145,6 +147,21 @@
                         'breathe': {
                             '0%, 100%': { transform: 'scale(1)' },
                             '50%': { transform: 'scale(1.05)' },
+                        },
+                        'progressGrow': {
+                            '0%': { width: '0%' },
+                            '50%': { width: '70%' },
+                            '100%': { width: '95%' },
+                        },
+                        'particleFloat': {
+                            '0%, 100%': { 
+                                transform: 'translateY(0px) rotate(0deg)',
+                                opacity: '0.7'
+                            },
+                            '50%': { 
+                                transform: 'translateY(-20px) rotate(180deg)',
+                                opacity: '1'
+                            },
                         }
                     },
                     borderRadius: {
@@ -156,6 +173,7 @@
                         'duo': '0 4px 0 rgba(0, 0, 0, 0.1)',
                         'duo-lg': '0 6px 0 rgba(0, 0, 0, 0.1)',
                         'duo-pressed': '0 2px 0 rgba(0, 0, 0, 0.1)',
+                        'duo-glow': '0 0 20px rgba(88, 204, 112, 0.3)',
                     },
                     screens: {
                         'xs': '475px',
@@ -172,19 +190,39 @@
         body {
             font-family: 'Nunito', sans-serif;
             scroll-behavior: smooth;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
         }
 
+        /* Enhanced Card Styles */
         .card {
             background: white;
             border-radius: 16px;
             box-shadow: 0 4px 0 rgba(0, 0, 0, 0.1);
-            transition: all 0.2s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             border: 3px solid #f1f3f4;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(135deg, #58cc70 0%, #ffc800 100%);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover::before {
+            transform: scaleX(1);
         }
 
         .card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 0 rgba(0, 0, 0, 0.1);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 0 rgba(0, 0, 0, 0.1), 0 0 20px rgba(88, 204, 112, 0.2);
             border-color: #e5e7eb;
         }
 
@@ -194,59 +232,97 @@
             border-color: #dfe3e6;
         }
 
+        /* Enhanced Button Styles */
         .app-button {
-            background: #58cc70;
+            background: linear-gradient(135deg, #58cc70 0%, #45b259 100%);
             color: white;
             border-radius: 16px;
-            box-shadow: 0 4px 0 #45b259;
-            transition: all 0.2s ease;
+            box-shadow: 0 4px 0 #3a954b;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             font-weight: 700;
             border: none;
-            padding: 12px 24px;
+            padding: 14px 28px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .app-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .app-button:hover::before {
+            left: 100%;
         }
 
         .app-button:hover {
             transform: translateY(-6px);
-            box-shadow: 0 6px 0 #45b259;
+            box-shadow: 0 6px 0 #3a954b, 0 10px 20px rgba(88, 204, 112, 0.3);
         }
 
         .app-button:active {
             transform: translateY(2px);
-            box-shadow: 0 2px 0 #45b259;
+            box-shadow: 0 2px 0 #3a954b;
         }
 
         .app-button-secondary {
-            background: #ffc800;
-            box-shadow: 0 4px 0 #e6b400;
+            background: linear-gradient(135deg, #ffc800 0%, #e6b400 100%);
+            box-shadow: 0 4px 0 #cc9f00;
         }
 
         .app-button-secondary:hover {
-            box-shadow: 0 6px 0 #e6b400;
+            box-shadow: 0 6px 0 #cc9f00, 0 10px 20px rgba(255, 200, 0, 0.3);
         }
 
         .app-button-secondary:active {
-            box-shadow: 0 2px 0 #e6b400;
+            box-shadow: 0 2px 0 #cc9f00;
         }
 
+        /* Enhanced Badge Styles */
         .gamification-badge {
             border-radius: 16px;
             background: white;
             box-shadow: 0 4px 0 rgba(0, 0, 0, 0.1);
-            transition: all 0.2s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             border: 3px solid white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .gamification-badge::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(88, 204, 112, 0.1) 0%, rgba(255, 200, 0, 0.1) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .gamification-badge:hover::before {
+            opacity: 1;
         }
 
         .gamification-badge:hover {
             transform: translateY(-4px);
-            box-shadow: 0 6px 0 rgba(0, 0, 0, 0.1);
+            box-shadow: 0 6px 0 rgba(0, 0, 0, 0.1), 0 8px 15px rgba(0, 0, 0, 0.1);
         }
+
         .gamification-badge:active {
             transform: translateY(2px);
             box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
         }
 
         .hover-lift {
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .hover-lift:hover {
@@ -256,11 +332,7 @@
         /* Loading Section Styles */
         #loading-section {
             transition: opacity 0.3s ease-in-out;
-        }
-
-        .loading-gif {
-            width: 100px;
-            height: 100px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
         }
 
         .loading-text {
@@ -286,23 +358,6 @@
             0%, 100% { opacity: 0.3; transform: scale(0.8); }
             50% { opacity: 1; transform: scale(1.2); }
         }
-        
-        /* Animasi progress bar */
-        .progress-animation {
-            animation: progress-grow 3s forwards ease-in-out;
-            width: 0%;
-        }
-        
-        @keyframes progress-grow {
-            0% { width: 0%; }
-            50% { width: 70%; }
-            100% { width: 95%; }
-        }
-        
-        /* Animasi khusus untuk loading section */
-        #loading-section {
-            backdrop-filter: blur(8px);
-        }
 
         /* Progress indicators */
         .duo-progress {
@@ -310,13 +365,15 @@
             background: #e9ecef;
             border-radius: 6px;
             overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .duo-progress-fill {
             height: 100%;
-            background: #58cc70;
+            background: linear-gradient(135deg, #58cc70 0%, #45b259 100%);
             border-radius: 6px;
             transition: width 0.5s ease;
+            box-shadow: 0 2px 4px rgba(88, 204, 112, 0.3);
         }
 
         /* Custom scrollbar */
@@ -330,12 +387,12 @@
         }
 
         ::-webkit-scrollbar-thumb {
-            background: #58cc70;
+            background: linear-gradient(135deg, #58cc70 0%, #ffc800 100%);
             border-radius: 10px;
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: #45b259;
+            background: linear-gradient(135deg, #45b259 0%, #e6b400 100%);
         }
 
         /* Gradient Text */
@@ -344,23 +401,24 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            position: relative;
         }
 
         /* Error/Success Messages */
         .alert-success {
-            background-color: #d1fae5;
-            border-color: #a7f3d0;
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border: 2px solid #10b981;
             color: #065f46;
             border-radius: 12px;
-            box-shadow: 0 2px 0 rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 0 rgba(16, 185, 129, 0.2);
         }
 
         .alert-error {
-            background-color: #fee2e2;
-            border-color: #fecaca;
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            border: 2px solid #ef4444;
             color: #dc2626;
             border-radius: 12px;
-            box-shadow: 0 2px 0 rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 0 rgba(239, 68, 68, 0.2);
         }
 
         .shake {
@@ -401,12 +459,13 @@
         .striped-dotted-main {
             background-color: #f8f9fa; 
             background-image: 
-                radial-gradient(#808080b7 2px, transparent 2px);
+                radial-gradient(#58cc7040 2px, transparent 2px),
+                radial-gradient(#ffc80040 2px, transparent 2px);
             background-size: 40px 40px, 60px 60px; 
             background-position: 0 0, 20px 20px;
             border-radius: 30px; 
-            border: 3px solid rgb(182, 182,  182);
-            box-shadow: 0 6px 0 rgba(182, 182, 182);
+            border: 3px solid #e9ecef;
+            box-shadow: 0 6px 0 #dee2e6;
         }
 
         /* Developer Card Styles */
@@ -434,82 +493,152 @@
 
         .social-icon {
             transition: all 0.3s ease;
+            border: 2px solid transparent;
+            background: linear-gradient(135deg, white, white) padding-box,
+                        linear-gradient(135deg, #58cc70, #ffc800) border-box;
         }
 
         .social-icon:hover {
-            transform: translateY(-3px);
+            transform: translateY(-3px) scale(1.1);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Particle Effects */
+        .particle {
+            position: absolute;
+            pointer-events: none;
+            animation: particleFloat 3s ease-in-out infinite;
+        }
+
+        /* Navigation Styles */
+        .nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(135deg, #58cc70 0%, #ffc800 100%);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        /* Feature Icons */
+        .feature-icon {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: linear-gradient(135deg, #58cc70 0%, #45b259 100%);
+            box-shadow: 0 4px 0 #3a954b;
+        }
+
+        .feature-icon:hover {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 6px 0 #3a954b, 0 8px 15px rgba(88, 204, 112, 0.3);
+        }
+
+        /* Stats Counter */
+        .stat-number {
+            background: linear-gradient(135deg, #58cc70 0%, #ffc800 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 800;
+        }
+
+        /* Floating Elements */
+        .floating-element {
+            animation: float 6s ease-in-out infinite;
+            filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.1));
+        }
+
+        /* Section Backgrounds */
+        .section-gradient {
+            background: linear-gradient(135deg, #e6f7ea 0%, #fff9e6 100%);
+        }
+
+        /* Testimonial Styles */
+        .testimonial-card {
+            position: relative;
+            overflow: visible;
+        }
+
+        .testimonial-card::before {
+            content: '"';
+            position: absolute;
+            top: -20px;
+            left: 20px;
+            font-size: 4rem;
+            color: #58cc70;
+            opacity: 0.2;
+            font-family: serif;
+        }
+
+        /* FAQ Styles */
+        .faq-item {
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+
+        .faq-item:hover {
+            border-left-color: #58cc70;
+            transform: translateX(5px);
+        }
+
+        /* CTA Section */
+        .cta-gradient {
+            background: linear-gradient(135deg, #58cc70 0%, #45b259 50%, #ffc800 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-gradient::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 10s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body class="bg-neutral-50">
     <!-- Loading Section -->
-    <div id="loading-section" class="fixed inset-0 z-50 flex items-center justify-center bg-white transition-all duration-500">
-        <div class="text-center">
-            <!-- Container dengan efek kartu Duolingo -->
-            <div class="bg-white rounded-duo-xl p-8 shadow-duo-lg border-4 border-primary-100 transform transition-all duration-300 hover:scale-105">
-                <!-- Gif dengan frame dekoratif -->
-                <div class="relative mb-6">
-                    <div class="absolute -inset-4 bg-gradient-to-r from-primary-200 to-secondary-200 rounded-full blur-sm opacity-50 animate-pulse"></div>
-                    <div class="relative bg-white rounded-full p-3 shadow-duo border-2 border-primary-300">
-                        <div class="mx-auto w-28 h-28 rounded-full bg-primary-100 flex items-center justify-center">
-                            <i class="fas fa-peace text-primary-500 text-4xl"></i>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Teks loading dengan animasi -->
-                <div class="space-y-4">
-                    <h3 class="text-2xl font-bold text-neutral-800">Tenang</h3>
-                    <p class="text-neutral-600 font-medium flex items-center justify-center space-x-2">
-                        <span>Loading your journey</span>
-                        <span class="loading-dots">
-                            <span class="dot">.</span>
-                            <span class="dot">.</span>
-                            <span class="dot">.</span>
-                        </span>
-                    </p>
-                    
-                    <!-- Progress bar Duolingo style -->
-                    <div class="w-48 mx-auto mt-4">
-                        <div class="duo-progress bg-neutral-200 rounded-full h-3">
-                            <div class="duo-progress-fill bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full h-3 progress-animation"></div>
-                        </div>
-                    </div>
-                    
-                    <!-- Quote motivasional -->
-                    <p class="text-sm text-neutral-500 mt-4 italic max-w-xs">
-                        "Every step forward is progress"
-                    </p>
-                </div>
-            </div>
-            
-            <!-- Elemen dekoratif floating -->
-            <div class="absolute top-1/4 left-1/4 w-8 h-8 bg-accent-blue rounded-full opacity-20 animate-bounce-gentle"></div>
-            <div class="absolute bottom-1/4 right-1/4 w-6 h-6 bg-accent-purple rounded-full opacity-20 animate-bounce-gentle" style="animation-delay: 0.3s"></div>
-            <div class="absolute top-1/3 right-1/3 w-4 h-4 bg-accent-red rounded-full opacity-20 animate-bounce-gentle" style="animation-delay: 0.6s"></div>
-        </div>
-    </div>
+     @extends('widget.loading')
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <!-- Header -->
         <header class="flex justify-between items-center mb-16">
             <div class="text-2xl font-bold text-primary-700 flex items-center">
-                <i class="fas fa-peace mr-2 text-primary-500"></i>
-                Tenang
+                <img src="{{ asset('assets/icon/icon-2.png') }}" alt="Tenang" class="h-16 w-16 floating-element">
+                <span class="ml-2 gradient-text">Tenang</span>
             </div>
             <nav class="hidden md:flex space-x-8">
-                <a href="#" class="text-neutral-700 hover:text-primary-600 font-medium transition-colors">Beranda</a>
-                <a href="#" class="text-neutral-700 hover:text-primary-600 font-medium transition-colors">Fitur</a>
-                <a href="#" class="text-neutral-700 hover:text-primary-600 font-medium transition-colors">Journal</a>
-                <a href="#" class="text-neutral-700 hover:text-primary-600 font-medium transition-colors">Sumber Daya</a>
-                <a href="#about" class="text-neutral-700 hover:text-primary-600 font-medium transition-colors about-link">Tentang</a>
+                <a href="#" class="nav-link text-neutral-700 hover:text-primary-600 font-medium transition-colors">Beranda</a>
+                <a href="#" class="nav-link text-neutral-700 hover:text-primary-600 font-medium transition-colors">Fitur</a>
+                <a href="#" class="nav-link text-neutral-700 hover:text-primary-600 font-medium transition-colors">Journal</a>
+                <a href="#" class="nav-link text-neutral-700 hover:text-primary-600 font-medium transition-colors">Sumber Daya</a>
+                <a href="#about" class="nav-link text-neutral-700 hover:text-primary-600 font-medium transition-colors about-link">Tentang</a>
             </nav>
             <div class="flex space-x-4">
-                <a href="{{ route('login') }}" class="px-4 py-2 text-primary-600 font-medium border border-primary-500 rounded-duo transition-all duration-300 hover:bg-primary-50">
+                <a href="{{ route('login') }}" class="px-6 py-3 text-primary-600 font-medium border-2 border-primary-500 rounded-duo transition-all duration-300 hover:bg-primary-50 hover:shadow-duo">
                     Masuk
                 </a>
                 <a href="{{ route('register') }}">
-                    <button class="app-button px-4 py-2">
+                    <button class="app-button px-6 py-3">
                         Mulai Sekarang
                     </button>
                 </a>
@@ -519,14 +648,14 @@
         <!-- Session Messages -->
         @if(session('status'))
             <div class="mb-6 p-4 alert-success rounded-lg border flex items-center fade-in-up">
-                <i class="fas fa-check-circle mr-2"></i>
+                <i class="fas fa-check-circle mr-3 text-green-600"></i>
                 {{ session('status') }}
             </div>
         @endif
 
         @if(session('error'))
             <div class="mb-6 p-4 alert-error rounded-lg border flex items-center shake">
-                <i class="fas fa-exclamation-triangle mr-2"></i>
+                <i class="fas fa-exclamation-triangle mr-3 text-red-600"></i>
                 {{ session('error') }}
             </div>
         @endif
@@ -534,7 +663,7 @@
         @if($errors->any())
             <div class="mb-6 p-4 alert-error rounded-lg border shake">
                 <div class="flex items-center mb-2">
-                    <i class="fas fa-exclamation-circle mr-2"></i>
+                    <i class="fas fa-exclamation-circle mr-2 text-red-600"></i>
                     <span class="font-medium">Harap perbaiki error berikut:</span>
                 </div>
                 <ul class="list-disc list-inside space-y-1">
@@ -573,7 +702,7 @@
                             <i class="fas fa-peace ml-3"></i>
                         </button>
                     </a>
-                    <button class="px-8 py-4 bg-white text-primary-600 border border-primary-500 font-bold rounded-duo hover:bg-primary-50 transition-all flex items-center">
+                    <button class="px-8 py-4 bg-white text-primary-600 border-2 border-primary-500 font-bold rounded-duo hover:bg-primary-50 hover:shadow-duo transition-all flex items-center">
                         <i class="fas fa-play-circle mr-3"></i>
                         Lihat Demo
                     </button>
@@ -582,15 +711,15 @@
                 <!-- Stats -->
                 <div class="grid grid-cols-3 gap-6 pt-8">
                     <div class="text-center">
-                        <div class="text-2xl font-bold text-primary-600">10K+</div>
+                        <div class="stat-number text-2xl">10K+</div>
                         <div class="text-sm text-neutral-500">Pengguna Aktif</div>
                     </div>
                     <div class="text-center">
-                        <div class="text-2xl font-bold text-secondary-600">95%</div>
+                        <div class="stat-number text-2xl">95%</div>
                         <div class="text-sm text-neutral-500">Melaporkan Perbaikan</div>
                     </div>
                     <div class="text-center">
-                        <div class="text-2xl font-bold text-primary-500">4.9★</div>
+                        <div class="stat-number text-2xl">4.9★</div>
                         <div class="text-sm text-neutral-500">Rating Pengguna</div>
                     </div>
                 </div>
@@ -601,77 +730,51 @@
                 <!-- Main Illustration Container -->
                 <div class="relative z-10">
                     <div class="card p-8">
-                        <div class="grid grid-cols-2 gap-6">
-                            <!-- Mood Tracking Card -->
-                            <div class="card p-6 bg-primary-50 border-primary-200 hover-lift">
-                                <div class="w-12 h-12 bg-primary-500 rounded-full flex items-center justify-center mb-4 breathe">
-                                    <i class="fas fa-heart text-white text-lg"></i>
+                        <div class="flex items-center justify-center">
+                            <div class="relative">
+                                <img src="{{ asset('assets/video/icon.gif') }}" alt="Tenang App" class="w-80 h-80 rounded-duo-lg floating-element">
+                                <div class="absolute -top-4 -right-4 w-16 h-16 bg-secondary-500 rounded-full flex items-center justify-center shadow-duo-lg">
+                                    <i class="fas fa-heart text-white text-xl"></i>
                                 </div>
-                                <h3 class="font-bold text-primary-700 mb-2">Pelacakan Mood</h3>
-                                <p class="text-sm text-primary-600">Check-in emosional harian</p>
-                            </div>
-                            
-                            <!-- Journal Card -->
-                            <div class="card p-6 bg-secondary-50 border-secondary-200 hover-lift">
-                                <div class="w-12 h-12 bg-secondary-500 rounded-full flex items-center justify-center mb-4 breathe" style="animation-delay: 0.5s;">
-                                    <i class="fas fa-book text-white text-lg"></i>
+                                <div class="absolute -bottom-4 -left-4 w-12 h-12 bg-primary-500 rounded-full flex items-center justify-center shadow-duo-lg">
+                                    <i class="fas fa-peace text-white text-lg"></i>
                                 </div>
-                                <h3 class="font-bold text-secondary-700 mb-2">Journal</h3>
-                                <p class="text-sm text-secondary-600">Ekspresikan pikiran Anda</p>
-                            </div>
-                            
-                            <!-- Meditation Card -->
-                            <div class="card p-6 bg-primary-100 border-primary-300 hover-lift">
-                                <div class="w-12 h-12 bg-primary-600 rounded-full flex items-center justify-center mb-4 breathe" style="animation-delay: 1s;">
-                                    <i class="fas fa-wind text-white text-lg"></i>
-                                </div>
-                                <h3 class="font-bold text-primary-800 mb-2">Meditasi</h3>
-                                <p class="text-sm text-primary-700">Latihan pernapasan mindfulness</p>
-                            </div>
-                            
-                            <!-- Progress Card -->
-                            <div class="card p-6 bg-secondary-100 border-secondary-300 hover-lift">
-                                <div class="w-12 h-12 bg-secondary-600 rounded-full flex items-center justify-center mb-4 breathe" style="animation-delay: 1.5s;">
-                                    <i class="fas fa-chart-line text-white text-lg"></i>
-                                </div>
-                                <h3 class="font-bold text-secondary-800 mb-2">Progress</h3>
-                                <p class="text-sm text-secondary-700">Lacak perjalanan kesehatan Anda</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Background decorative elements -->
-                <div class="absolute -top-6 -right-6 w-32 h-32 bg-primary-200 rounded-full opacity-40 float"></div>
-                <div class="absolute -bottom-8 -left-8 w-24 h-24 bg-secondary-200 rounded-full opacity-40 float" style="animation-delay: 2s;"></div>
-                <div class="absolute top-1/2 -right-12 w-16 h-16 bg-primary-300 rounded-full opacity-30 float" style="animation-delay: 1s;"></div>
+                <div class="floating-element absolute -top-6 -right-6 w-32 h-32 bg-primary-200 rounded-full opacity-40" style="animation-delay: 0.5s"></div>
+                <div class="floating-element absolute -bottom-8 -left-8 w-24 h-24 bg-secondary-200 rounded-full opacity-40" style="animation-delay: 1s"></div>
+                <div class="floating-element absolute top-1/2 -right-12 w-16 h-16 bg-primary-300 rounded-full opacity-30" style="animation-delay: 1.5s"></div>
             </div>
         </main>
 
         <!-- Features Preview -->
         <section class="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8">
             <div class="card p-6 hover-lift fade-in-up">
-                <div class="w-14 h-14 bg-primary-100 rounded-duo flex items-center justify-center mb-4">
-                    <i class="fas fa-brain text-primary-600 text-xl"></i>
+                <div class="feature-icon w-14 h-14 rounded-duo flex items-center justify-center mb-4 mx-auto">
+                    <i class="fas fa-brain text-white text-xl"></i>
                 </div>
-                <h3 class="text-xl font-bold text-neutral-800 mb-3">Pelacakan Mindfulness</h3>
-                <p class="text-neutral-600">Pantau kesejahteraan emosional Anda dengan check-in harian dan insight yang dipersonalisasi.</p>
+                <h3 class="text-xl font-bold text-neutral-800 mb-3 text-center">Pelacakan Mindfulness</h3>
+                <p class="text-neutral-600 text-center">Pantau kesejahteraan emosional Anda dengan check-in harian dan insight yang dipersonalisasi.</p>
             </div>
             
             <div class="card p-6 hover-lift fade-in-up" style="animation-delay: 0.2s;">
-                <div class="w-14 h-14 bg-secondary-100 rounded-duo flex items-center justify-center mb-4">
-                    <i class="fas fa-tasks text-secondary-600 text-xl"></i>
+                <div class="feature-icon w-14 h-14 rounded-duo flex items-center justify-center mb-4 mx-auto">
+                    <i class="fas fa-tasks text-white text-xl"></i>
                 </div>
-                <h3 class="text-xl font-bold text-neutral-800 mb-3">Tantangan Kesehatan</h3>
-                <p class="text-neutral-600">Ikuti aktivitas harian yang dirancang untuk meningkatkan kesehatan mental dan membangun ketahanan.</p>
+                <h3 class="text-xl font-bold text-neutral-800 mb-3 text-center">Tantangan Kesehatan</h3>
+                <p class="text-neutral-600 text-center">Ikuti aktivitas harian yang dirancang untuk meningkatkan kesehatan mental dan membangun ketahanan.</p>
             </div>
             
             <div class="card p-6 hover-lift fade-in-up" style="animation-delay: 0.4s;">
-                <div class="w-14 h-14 bg-primary-100 rounded-duo flex items-center justify-center mb-4">
-                    <i class="fas fa-users text-primary-600 text-xl"></i>
+                <div class="feature-icon w-14 h-14 rounded-duo flex items-center justify-center mb-4 mx-auto">
+                    <i class="fas fa-users text-white text-xl"></i>
                 </div>
-                <h3 class="text-xl font-bold text-neutral-800 mb-3">Komunitas Support</h3>
-                <p class="text-neutral-600">Terhubung dengan orang lain dalam perjalanan serupa di lingkungan yang aman dan mendukung.</p>
+                <h3 class="text-xl font-bold text-neutral-800 mb-3 text-center">Komunitas Support</h3>
+                <p class="text-neutral-600 text-center">Terhubung dengan orang lain dalam perjalanan serupa di lingkungan yang aman dan mendukung.</p>
             </div>
         </section>
 
@@ -683,10 +786,10 @@
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="card p-6 fade-in-up">
+                <div class="testimonial-card card p-6 fade-in-up">
                     <div class="flex items-center mb-4">
-                        <div class="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center mr-4">
-                            <i class="fas fa-user text-primary-600"></i>
+                        <div class="w-12 h-12 bg-gradient-to-br from-primary-400 to-secondary-400 rounded-full flex items-center justify-center mr-4">
+                            <i class="fas fa-user text-white"></i>
                         </div>
                         <div>
                             <h4 class="font-bold text-neutral-800">Sarah</h4>
@@ -696,10 +799,10 @@
                     <p class="text-neutral-600">"Tenang membantu saya memahami pola mood dan mengelola stres dengan lebih baik. Journaling feature sangat membantu!"</p>
                 </div>
                 
-                <div class="card p-6 fade-in-up" style="animation-delay: 0.2s;">
+                <div class="testimonial-card card p-6 fade-in-up" style="animation-delay: 0.2s;">
                     <div class="flex items-center mb-4">
-                        <div class="w-12 h-12 bg-secondary-100 rounded-full flex items-center justify-center mr-4">
-                            <i class="fas fa-user text-secondary-600"></i>
+                        <div class="w-12 h-12 bg-gradient-to-br from-secondary-400 to-accent-purple rounded-full flex items-center justify-center mr-4">
+                            <i class="fas fa-user text-white"></i>
                         </div>
                         <div>
                             <h4 class="font-bold text-neutral-800">Budi</h4>
@@ -709,10 +812,10 @@
                     <p class="text-neutral-600">"Sebagai mahasiswa, Tenang membantu saya menjaga keseimbangan antara akademik dan kesehatan mental."</p>
                 </div>
                 
-                <div class="card p-6 fade-in-up" style="animation-delay: 0.4s;">
+                <div class="testimonial-card card p-6 fade-in-up" style="animation-delay: 0.4s;">
                     <div class="flex items-center mb-4">
-                        <div class="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center mr-4">
-                            <i class="fas fa-user text-primary-600"></i>
+                        <div class="w-12 h-12 bg-gradient-to-br from-primary-400 to-accent-blue rounded-full flex items-center justify-center mr-4">
+                            <i class="fas fa-user text-white"></i>
                         </div>
                         <div>
                             <h4 class="font-bold text-neutral-800">Dewi</h4>
@@ -725,7 +828,7 @@
         </section>
 
         <!-- About Section -->
-        <section id="about" class="mt-32 py-16 bg-gradient-to-br from-primary-50 to-secondary-50 rounded-duo-xl">
+        <section id="about" class="mt-32 py-16 section-gradient rounded-duo-xl">
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-16">
                     <h2 class="text-4xl font-bold text-neutral-800 mb-4">Tentang Tenang</h2>
@@ -746,19 +849,19 @@
                         </p>
                         <div class="space-y-4">
                             <div class="flex items-start">
-                                <div class="w-8 h-8 bg-primary-500 rounded-full flex items-center justify-center mr-4 mt-1">
+                                <div class="w-8 h-8 bg-primary-500 rounded-full flex items-center justify-center mr-4 mt-1 shadow-duo">
                                     <i class="fas fa-check text-white text-sm"></i>
                                 </div>
                                 <p class="text-neutral-700 flex-1">Membuat kesehatan mental lebih mudah diakses</p>
                             </div>
                             <div class="flex items-start">
-                                <div class="w-8 h-8 bg-primary-500 rounded-full flex items-center justify-center mr-4 mt-1">
+                                <div class="w-8 h-8 bg-primary-500 rounded-full flex items-center justify-center mr-4 mt-1 shadow-duo">
                                     <i class="fas fa-check text-white text-sm"></i>
                                 </div>
                                 <p class="text-neutral-700 flex-1">Mengurangi stigma seputar kesehatan mental</p>
                             </div>
                             <div class="flex items-start">
-                                <div class="w-8 h-8 bg-primary-500 rounded-full flex items-center justify-center mr-4 mt-1">
+                                <div class="w-8 h-8 bg-primary-500 rounded-full flex items-center justify-center mr-4 mt-1 shadow-duo">
                                     <i class="fas fa-check text-white text-sm"></i>
                                 </div>
                                 <p class="text-neutral-700 flex-1">Memberikan alat praktis untuk kehidupan sehari-hari</p>
@@ -767,7 +870,7 @@
                     </div>
                     <div class="fade-in-right">
                         <div class="card p-8 h-full">
-                            <div class="w-20 h-20 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <div class="w-20 h-20 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-duo-lg">
                                 <i class="fas fa-peace text-white text-3xl"></i>
                             </div>
                             <h4 class="text-2xl font-bold text-center text-neutral-800 mb-4">Visi Kami</h4>
@@ -792,7 +895,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                         <!-- Developer 1 -->
                         <div class="developer-card card p-6 text-center fade-in-up">
-                            <div class="w-32 h-32 bg-gradient-to-r from-primary-400 to-secondary-400 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <div class="w-32 h-32 bg-gradient-to-r from-primary-400 to-secondary-400 rounded-full flex items-center justify-center mx-auto mb-6 shadow-duo-lg">
                                 <i class="fas fa-user text-white text-4xl"></i>
                             </div>
                             <h4 class="text-xl font-bold text-neutral-800 mb-2">Ahmad Rizki</h4>
@@ -802,13 +905,13 @@
                                 dan performa. Bertanggung jawab atas arsitektur keseluruhan aplikasi Tenang.
                             </p>
                             <div class="flex justify-center space-x-4">
-                                <a href="#" class="social-icon w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center text-primary-600 hover:bg-primary-200">
+                                <a href="#" class="social-icon w-10 h-10 rounded-full flex items-center justify-center text-primary-600">
                                     <i class="fab fa-github"></i>
                                 </a>
-                                <a href="#" class="social-icon w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center text-primary-600 hover:bg-primary-200">
+                                <a href="#" class="social-icon w-10 h-10 rounded-full flex items-center justify-center text-primary-600">
                                     <i class="fab fa-linkedin"></i>
                                 </a>
-                                <a href="#" class="social-icon w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center text-primary-600 hover:bg-primary-200">
+                                <a href="#" class="social-icon w-10 h-10 rounded-full flex items-center justify-center text-primary-600">
                                     <i class="fab fa-twitter"></i>
                                 </a>
                             </div>
@@ -816,7 +919,7 @@
 
                         <!-- Developer 2 -->
                         <div class="developer-card card p-6 text-center fade-in-up" style="animation-delay: 0.2s;">
-                            <div class="w-32 h-32 bg-gradient-to-r from-secondary-400 to-accent-purple rounded-full flex items-center justify-center mx-auto mb-6">
+                            <div class="w-32 h-32 bg-gradient-to-r from-secondary-400 to-accent-purple rounded-full flex items-center justify-center mx-auto mb-6 shadow-duo-lg">
                                 <i class="fas fa-user text-white text-4xl"></i>
                             </div>
                             <h4 class="text-xl font-bold text-neutral-800 mb-2">Sarah Wijaya</h4>
@@ -826,13 +929,13 @@
                                 prinsip desain dengan psikologi warna untuk menciptakan antarmuka yang menenangkan.
                             </p>
                             <div class="flex justify-center space-x-4">
-                                <a href="#" class="social-icon w-10 h-10 bg-secondary-100 rounded-full flex items-center justify-center text-secondary-600 hover:bg-secondary-200">
+                                <a href="#" class="social-icon w-10 h-10 rounded-full flex items-center justify-center text-secondary-600">
                                     <i class="fab fa-github"></i>
                                 </a>
-                                <a href="#" class="social-icon w-10 h-10 bg-secondary-100 rounded-full flex items-center justify-center text-secondary-600 hover:bg-secondary-200">
+                                <a href="#" class="social-icon w-10 h-10 rounded-full flex items-center justify-center text-secondary-600">
                                     <i class="fab fa-linkedin"></i>
                                 </a>
-                                <a href="#" class="social-icon w-10 h-10 bg-secondary-100 rounded-full flex items-center justify-center text-secondary-600 hover:bg-secondary-200">
+                                <a href="#" class="social-icon w-10 h-10 rounded-full flex items-center justify-center text-secondary-600">
                                     <i class="fab fa-dribbble"></i>
                                 </a>
                             </div>
@@ -840,7 +943,7 @@
 
                         <!-- Developer 3 -->
                         <div class="developer-card card p-6 text-center fade-in-up" style="animation-delay: 0.4s;">
-                            <div class="w-32 h-32 bg-gradient-to-r from-accent-blue to-accent-purple rounded-full flex items-center justify-center mx-auto mb-6">
+                            <div class="w-32 h-32 bg-gradient-to-r from-accent-blue to-accent-purple rounded-full flex items-center justify-center mx-auto mb-6 shadow-duo-lg">
                                 <i class="fas fa-user text-white text-4xl"></i>
                             </div>
                             <h4 class="text-xl font-bold text-neutral-800 mb-2">Budi Santoso</h4>
@@ -850,13 +953,13 @@
                                 insight yang personal dan relevan bagi pengguna Tenang.
                             </p>
                             <div class="flex justify-center space-x-4">
-                                <a href="#" class="social-icon w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center text-purple-600 hover:bg-purple-200">
+                                <a href="#" class="social-icon w-10 h-10 rounded-full flex items-center justify-center text-purple-600">
                                     <i class="fab fa-github"></i>
                                 </a>
-                                <a href="#" class="social-icon w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center text-purple-600 hover:bg-purple-200">
+                                <a href="#" class="social-icon w-10 h-10 rounded-full flex items-center justify-center text-purple-600">
                                     <i class="fab fa-linkedin"></i>
                                 </a>
-                                <a href="#" class="social-icon w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center text-purple-600 hover:bg-purple-200">
+                                <a href="#" class="social-icon w-10 h-10 rounded-full flex items-center justify-center text-purple-600">
                                     <i class="fas fa-envelope"></i>
                                 </a>
                             </div>
@@ -885,7 +988,7 @@
                         </div>
                         <div class="bg-primary-50 rounded-duo-lg p-6 border-4 border-primary-100">
                             <div class="flex items-start mb-4">
-                                <div class="w-12 h-12 bg-primary-500 rounded-full flex items-center justify-center mr-4 flex-shrink-0">
+                                <div class="w-12 h-12 bg-primary-500 rounded-full flex items-center justify-center mr-4 flex-shrink-0 shadow-duo">
                                     <i class="fas fa-heart text-white"></i>
                                 </div>
                                 <div>
@@ -901,101 +1004,86 @@
                 </div>
             </div>
         </section>
+
+        <!-- Final CTA Section -->
+        <section class="mt-20 py-16 cta-gradient rounded-duo-xl text-center text-white relative overflow-hidden">
+            <div class="relative z-10">
+                <h2 class="text-4xl font-bold mb-6">Siap Memulai Perjalanan Kesehatan Mental Anda?</h2>
+                <p class="text-xl mb-8 opacity-95">Bergabunglah dengan komunitas Tenang hari ini dan temukan keseimbangan dalam hidup Anda</p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <a href="{{ route('register') }}">
+                        <button class="app-button bg-white text-primary-600 px-8 py-4 flex items-center">
+                            Daftar Sekarang - Gratis
+                            <i class="fas fa-arrow-right ml-3"></i>
+                        </button>
+                    </a>
+                    <button class="px-8 py-4 bg-transparent text-white border-2 border-white font-bold rounded-duo hover:bg-white hover:text-primary-600 transition-all flex items-center">
+                        <i class="fas fa-question-circle mr-3"></i>
+                        Pelajari Lebih Lanjut
+                    </button>
+                </div>
+                <p class="mt-6 text-sm opacity-90">Tidak membutuhkan kartu kredit • 100% privasi terjamin</p>
+            </div>
+        </section>
     </div>
 
+    <!-- Footer -->
+    <footer class="bg-neutral-800 text-white py-12 mt-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="col-span-1 md:col-span-2">
+                    <div class="text-2xl font-bold text-primary-400 flex items-center mb-4">
+                        <img src="{{ asset('assets/icon/icon-2.png') }}" alt="Tenang" class="h-10 w-10 mr-2">
+                        Tenang
+                    </div>
+                    <p class="text-neutral-300 mb-6 max-w-md">
+                        Platform kesehatan mental yang membantu Anda menemukan keseimbangan dan kedamaian dalam hidup sehari-hari.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="social-icon w-10 h-10 rounded-full flex items-center justify-center text-white">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="social-icon w-10 h-10 rounded-full flex items-center justify-center text-white">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="social-icon w-10 h-10 rounded-full flex items-center justify-center text-white">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="social-icon w-10 h-10 rounded-full flex items-center justify-center text-white">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Tautan Cepat</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-neutral-300 hover:text-primary-400 transition-colors">Beranda</a></li>
+                        <li><a href="#" class="text-neutral-300 hover:text-primary-400 transition-colors">Fitur</a></li>
+                        <li><a href="#" class="text-neutral-300 hover:text-primary-400 transition-colors">Tentang</a></li>
+                        <li><a href="#" class="text-neutral-300 hover:text-primary-400 transition-colors">FAQ</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Dukungan</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-neutral-300 hover:text-primary-400 transition-colors">Bantuan</a></li>
+                        <li><a href="#" class="text-neutral-300 hover:text-primary-400 transition-colors">Kebijakan Privasi</a></li>
+                        <li><a href="#" class="text-neutral-300 hover:text-primary-400 transition-colors">Syarat & Ketentuan</a></li>
+                        <li><a href="#" class="text-neutral-300 hover:text-primary-400 transition-colors">Kontak</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-neutral-700 mt-8 pt-8 text-center text-neutral-400">
+                <p>&copy; 2023 Tenang. Semua hak dilindungi undang-undang.</p>
+            </div>
+        </div>
+    </footer>
+
     <script>
-        // Loading section functionality
-        function hideLoading() {
-            const loadingSection = document.getElementById('loading-section');
-            loadingSection.style.opacity = '0';
-            loadingSection.style.transform = 'scale(0.95)';
-            setTimeout(() => {
-                loadingSection.style.display = 'none';
-            }, 500);
-        }
-
-        window.addEventListener('load', function() {
-            setTimeout(hideLoading, 1500);
-        });
-
-        document.addEventListener('DOMContentLoaded', function() {
-            const links = document.querySelectorAll('a');
-            links.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    if (this.target === '_blank') return;
-                    if (this.hasAttribute('data-no-loading')) return;
-                    
-                    const loadingSection = document.getElementById('loading-section');
-                    loadingSection.style.display = 'flex';
-                    loadingSection.style.opacity = '1';
-                    loadingSection.style.transform = 'scale(1)';
-                });
-            });
-            
-            const loadingSection = document.getElementById('loading-section');
-            setTimeout(() => {
-                loadingSection.style.transform = 'scale(1)';
-                loadingSection.style.opacity = '1';
-            }, 100);
-            
-            // Add breathing animation to wellness elements
-            const wellnessIcons = document.querySelectorAll('.breathe');
-            wellnessIcons.forEach((icon, index) => {
-                icon.style.animationDelay = `${index * 0.5}s`;
-            });
-            
-            // Add scroll animations
-            const observerOptions = {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
-            };
-
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.style.animationPlayState = 'running';
-                    }
-                });
-            }, observerOptions);
-
-            // Observe all animated elements
-            document.querySelectorAll('.fade-in-up, .fade-in-down, .fade-in-left, .fade-in-right').forEach(el => {
-                observer.observe(el);
-            });
-
-            // Auto-remove success/error messages after 5 seconds
-            setTimeout(() => {
-                const messages = document.querySelectorAll('.alert-success, .alert-error');
-                messages.forEach(message => {
-                    message.style.opacity = '0';
-                    message.style.transition = 'opacity 0.5s ease';
-                    setTimeout(() => message.remove(), 500);
-                });
-            }, 5000);
-
-            // Add Duolingo-style interactions to all duo elements
-            document.querySelectorAll('.app-button, .card, .gamification-badge').forEach(element => {
-                element.addEventListener('mousedown', function() {
-                    this.style.transform = 'translateY(2px)';
-                    if (this.classList.contains('app-button') || this.classList.contains('card')) {
-                        this.style.boxShadow = '0 2px 0 rgba(0, 0, 0, 0.1)';
-                    }
-                });
-                
-                element.addEventListener('mouseup', function() {
-                    this.style.transform = 'translateY(0)';
-                    if (this.classList.contains('app-button') || this.classList.contains('card')) {
-                        this.style.boxShadow = '0 4px 0 rgba(0, 0, 0, 0.1)';
-                    }
-                });
-                
-                element.addEventListener('mouseleave', function() {
-                    this.style.transform = 'translateY(0)';
-                    if (this.classList.contains('app-button') || this.classList.contains('card')) {
-                        this.style.boxShadow = '0 4px 0 rgba(0, 0, 0, 0.1)';
-                    }
-                });
-            });
+        
 
             // Smooth scroll for About link
             document.querySelectorAll('.about-link').forEach(link => {
@@ -1010,6 +1098,25 @@
                     }
                 });
             });
+
+            // Create additional floating particles
+            function createParticles() {
+                const particlesContainer = document.getElementById('loading-section');
+                for (let i = 0; i < 8; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'particle absolute rounded-full opacity-30';
+                    particle.style.width = `${Math.random() * 12 + 4}px`;
+                    particle.style.height = particle.style.width;
+                    particle.style.left = `${Math.random() * 100}%`;
+                    particle.style.top = `${Math.random() * 100}%`;
+                    particle.style.background = `hsl(${Math.random() * 360}, 70%, 60%)`;
+                    particle.style.animationDelay = `${Math.random() * 3}s`;
+                    particle.style.animationDuration = `${Math.random() * 4 + 2}s`;
+                    particlesContainer.appendChild(particle);
+                }
+            }
+
+            createParticles();
         });
     </script>
 </body>

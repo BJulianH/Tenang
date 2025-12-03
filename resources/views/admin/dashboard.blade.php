@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Admin Dashboard - MindWell')
+@section('title', 'Admin Dashboard - Tenang')
 
 @section('content')
 <div class="space-y-6">

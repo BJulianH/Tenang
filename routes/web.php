@@ -6,6 +6,8 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\NoiseController;
 use App\Http\Controllers\QuestController;
+use App\Http\Controllers\SoundController;
+use App\Http\Controllers\ChatbotController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\JournalController;
 use App\Http\Controllers\ProfileController;
@@ -23,6 +25,9 @@ use App\Http\Controllers\ForgotPasswordController;
 // Landing Page
 Route::get('/', function () {
     return view('welcome');
+});
+Route::get('/main', function () {
+    return view('main.index ');
 });
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('/voice-chat-gemini', function () {
@@ -118,24 +123,27 @@ Route::prefix('community')->group(function () {
     });
 });
 Route::prefix('quests')->group(function () {
-    Route::get('/', [QuestController::class, 'index']);
-    Route::get('/available', [QuestController::class, 'availableQuests']);
+    Route::get('/me', [QuestController::class, 'indexView'])->name('quests.index.view');
+    Route::get('/achievements', [QuestController::class, 'achievements'])->name('quests.achievements');
+    Route::get('/', [QuestController::class, 'index'])->name('quests.index');
+    Route::get('/available', [QuestController::class, 'availableQuests'])->name('quests.available');
     
-    Route::post('/assign-random', [QuestController::class, 'assignRandomQuests']);
-    Route::post('/choose', [QuestController::class, 'chooseQuests']);
+    Route::post('/assign-random', [QuestController::class, 'assignRandomQuests'])->name('quests.assign-random');
+    Route::post('/choose', [QuestController::class, 'chooseQuests'])->name('quests.choose');
 
-    Route::post('/{userQuest}/complete', [QuestController::class, 'completeQuest']);
-    Route::post('/{userQuest}/claim', [QuestController::class, 'claimRewards']);
+    Route::post('/{userQuest}/complete', [QuestController::class, 'completeQuest'])->name('quests.complete');
+    Route::post('/{userQuest}/claim', [QuestController::class, 'claimRewards'])->name('quests.claim');
 
-    Route::patch('/{userQuest}/progress', [QuestController::class, 'updateProgress']);
-    Route::patch('/{userQuest}/add-progress', [QuestController::class, 'addProgress']);
+    Route::patch('/{userQuest}/progress', [QuestController::class, 'updateProgress'])->name('quests.progress');
+    Route::patch('/{userQuest}/add-progress', [QuestController::class, 'addProgress'])->name('quests.add-progress');
 
-    Route::get('/stats', [QuestController::class, 'stats']);
-    Route::post('/reset', [QuestController::class, 'resetQuests']);
+    Route::get('/stats', [QuestController::class, 'stats'])->name('quests.stats');
+    Route::post('/reset', [QuestController::class, 'resetQuests'])->name('quests.reset');
 });
 
 Route::prefix('noises')->name('noises.')->group(function () {
     // Main noise routes
+    Route::get('/mixed-sounds', [SoundController::class, 'index'])->name('sounds.index');
     Route::get('/', [NoiseController::class, 'index'])->name('index');
     Route::get('/type/{type}', [NoiseController::class, 'byType'])->name('by-type');
     Route::get('/use-case/{useCase}', [NoiseController::class, 'byUseCase'])->name('by-use-case');
@@ -147,17 +155,12 @@ Route::prefix('noises')->name('noises.')->group(function () {
     Route::post('/{noise}/favorite', [NoiseController::class, 'toggleFavorite'])->name('favorite');
     Route::post('/{noise}/save', [NoiseController::class, 'toggleSave'])->name('save');
 });
-
-// Noise types routes (optional separate prefix)
 Route::prefix('noise-types')->name('noise-types.')->group(function () {
     Route::get('/', [NoiseTypeController::class, 'index'])->name('index');
     Route::get('/{type}', [NoiseTypeController::class, 'show'])->name('show');
 });
 // Profile routes
 Route::get('/profile/{user:username}', [CommunityProfileController::class, 'show'])->name('profile.community');
-
-// Support groups routes
-Route::get('/support-groups', [SupportGroupController::class, 'index'])->name('support-groups.index');
 
 Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     // Dashboard
@@ -193,11 +196,12 @@ Route::delete('/communities/{community}/moderators/{user}', [AdminCommunityContr
 Route::put('/communities/{community}/members/{user}/role', [AdminCommunityController::class, 'updateMemberRole'])->name('admin.communities.members.role');
 Route::delete('/communities/{community}/members/{user}', [AdminCommunityController::class, 'removeMember'])->name('admin.communities.members.remove');
 Route::post('/communities/bulk-action', [AdminCommunityController::class, 'bulkAction'])->name('admin.communities.bulk-action');
-    // Reports Management
     Route::get('/reports', [AdminReportController::class, 'index'])->name('admin.reports.index');
     Route::put('/reports/{report}/resolve', [AdminReportController::class, 'resolve'])->name('admin.reports.resolve');
 });
-
+Route::get('/curhat', [ChatbotController::class, 'index'])->name('curhat.index');
+Route::post('/curhat/send', [ChatbotController::class, 'send'])->name('curhat.send');
+Route::post('/curhat/clear', [ChatbotController::class, 'clear'])->name('curhat.clear');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/journal', [JournalController::class, 'index'])->name('journal.index');
@@ -205,6 +209,7 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/journal/{journal}', [JournalController::class, 'update'])->name('journal.update');
     Route::delete('/journal/{journal}', [JournalController::class, 'destroy'])->name('journal.destroy');
 });
+Route::get('/achievements', [QuestController::class, 'achievements'])->name('quests.achievements');
 
 Route::get('/profile', function(){
     return view('profile.profile');

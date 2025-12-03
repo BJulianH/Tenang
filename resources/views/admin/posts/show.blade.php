@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Post Details - MindWell Admin')
+@section('title', 'Post Details - Tenang Admin')
 @section('page_title', 'Post Details')
 
 @section('content')

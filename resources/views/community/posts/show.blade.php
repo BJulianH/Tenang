@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', $post->title . ' - ' . $post->community->name . ' - MindWell')
+@section('title', $post->title . ' - ' . $post->community->name . ' - Tenang')
 
 @section('styles')
 <style>

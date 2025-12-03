@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Reports Management - MindWell Admin')
+@section('title', 'Reports Management - Tenang Admin')
 @section('page_title', 'Reports Management')
 
 @section('content')

@@ -4,6 +4,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Database\Seeders\DailyQuestSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -17,6 +18,7 @@ class DatabaseSeeder extends Seeder
             NoiseTypeSeeder::class,
             UseCaseSeeder::class,
             NoiseSeeder::class,
+            DailyQuestSeeder::class
         ]);
     }
 }

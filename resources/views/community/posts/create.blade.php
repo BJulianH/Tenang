@@ -1,7 +1,7 @@
 {{-- resources/views/community/posts/create.blade.php --}}
 @extends('layouts.app')
 
-@section('title', 'Create Post - MindWell')
+@section('title', 'Create Post - Tenang')
 
 @section('styles')
 <style>
