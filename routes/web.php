@@ -158,4 +158,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/mood-tracking', [App\Http\Controllers\MoodTrackingController::class, 'store'])->name('mood.tracking.store');
     Route::delete('/mood-tracking/{moodTracking}', [App\Http\Controllers\MoodTrackingController::class, 'destroy'])->name('mood.tracking.destroy');
     Route::get('/mood-chart-data', [App\Http\Controllers\ProfileController::class, 'getMoodChartData'])->name('mood.chart.data');
+    Route::post('/mood-tracking', [App\Http\Controllers\MoodTrackingController::class, 'store'])->name('mood.tracking.store');
+    Route::delete('/mood-tracking/{moodTracking}', [App\Http\Controllers\MoodTrackingController::class, 'destroy'])->name('mood.tracking.destroy');
+    Route::post('/mood-tracking/delete-multiple', [App\Http\Controllers\MoodTrackingController::class, 'destroyMultiple'])->name('mood.tracking.destroy.multiple');
 });

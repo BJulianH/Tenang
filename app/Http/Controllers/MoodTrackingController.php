@@ -68,4 +68,40 @@ class MoodTrackingController extends Controller
                 ->with('active_tab', 'mental-health');
         }
     }
+
+    /**
+     * Remove multiple mood trackings.
+     */
+    public function destroyMultiple(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'mood_ids' => 'required|array',
+                'mood_ids.*' => 'exists:mood_trackings,id,user_id,' . Auth::id(),
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Data tidak valid.'
+                ], 400);
+            }
+
+            $count = MoodTracking::where('user_id', Auth::id())
+                ->whereIn('id', $request->mood_ids)
+                ->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Berhasil menghapus ' . $count . ' catatan mood!',
+                'count' => $count
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Mood bulk delete error: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menghapus catatan mood: ' . $e->getMessage()
+            ], 500);
+        }
+    }
 }
