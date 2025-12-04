@@ -1,0 +1,343 @@
+/* Profile Border & Icon Styles */
+.profile-container {
+    position: relative;
+}
+
+.profile-avatar-wrapper {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    padding: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 0 auto;
+}
+
+.profile-avatar-wrapper:hover {
+    transform: scale(1.05);
+}
+
+/* Border Styles */
+.profile-border-default {
+    background: linear-gradient(135deg, #58cc70, #45b259);
+    border: 4px solid white;
+    box-shadow: 0 4px 0 rgba(0, 0, 0, 0.1);
+}
+
+.profile-border-animated {
+    background: linear-gradient(white, white) padding-box, 
+                linear-gradient(45deg, #9b59b6, #e74c3c) border-box;
+    border: 4px solid transparent;
+    animation: pulse 2s infinite;
+}
+
+.profile-border-premium {
+    background: linear-gradient(135deg, #ffc800, #ff9f43);
+    border: 4px solid white;
+    box-shadow: 0 4px 0 rgba(255, 159, 67, 0.3);
+}
+
+.profile-border-community {
+    background: linear-gradient(135deg, #4a8cff, #1d4ed8);
+    border: 4px solid white;
+    box-shadow: 0 4px 0 rgba(59, 130, 246, 0.3), 
+                0 0 0 4px rgba(59, 130, 246, 0.1);
+}
+
+.profile-border-minimal {
+    background: #f8f9fa;
+    border: 4px solid #e9ecef;
+}
+
+.profile-border-float {
+    background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
+    border: 4px solid white;
+    box-shadow: 0 10px 25px rgba(255, 107, 107, 0.3);
+    animation: float 3s infinite ease-in-out;
+}
+
+.profile-avatar-img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid white;
+}
+
+/* Level Badge */
+.profile-level-badge {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #4caf50, #2e7d32);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 12px;
+    border: 2px solid white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+}
+
+/* Username with Icon */
+.profile-username-section {
+    margin-top: 1rem;
+    text-align: center;
+}
+
+.profile-username-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 0.5rem;
+}
+
+.profile-user-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #58cc70, #45b259);
+    color: white;
+    font-size: 16px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.profile-username {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+    margin: 0;
+}
+
+.profile-user-badge {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.badge-beginner {
+    background: #78909c;
+}
+
+.badge-intermediate {
+    background: #4caf50;
+}
+
+.badge-advanced {
+    background: #2196f3;
+}
+
+.badge-expert {
+    background: #9c27b0;
+}
+
+.badge-master {
+    background: linear-gradient(45deg, #ff9800, #f44336);
+}
+
+/* Avatar Modal */
+.profile-avatar-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.profile-avatar-modal.show {
+    display: flex;
+}
+
+.profile-avatar-modal-content {
+    background: white;
+    border-radius: 16px;
+    max-width: 500px;
+    width: 100%;
+    overflow: hidden;
+    animation: modalFadeIn 0.3s ease;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.profile-modal-header {
+    padding: 1rem 1.5rem;
+    background: #f8f9fa;
+    border-bottom: 2px solid #e9ecef;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.profile-modal-body {
+    padding: 2rem;
+    text-align: center;
+}
+
+.profile-modal-avatar {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 1.5rem;
+    border: 4px solid white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Border Selector */
+.profile-border-selector {
+    margin-top: 2rem;
+}
+
+.profile-border-options {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+}
+
+.profile-border-option {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.profile-border-option:hover {
+    transform: scale(1.1);
+}
+
+.profile-border-option.active {
+    border-color: #333;
+    transform: scale(1.1);
+}
+
+.border-option-default {
+    background: linear-gradient(135deg, #58cc70, #45b259);
+}
+
+.border-option-animated {
+    background: linear-gradient(45deg, #9b59b6, #e74c3c);
+    background-size: 200% 200%;
+    animation: gradientMove 3s ease infinite;
+}
+
+.border-option-premium {
+    background: linear-gradient(135deg, #ffc800, #ff9f43);
+}
+
+.border-option-community {
+    background: linear-gradient(135deg, #4a8cff, #1d4ed8);
+}
+
+.border-option-minimal {
+    background: #f8f9fa;
+    border: 2px solid #e9ecef;
+}
+
+.border-option-float {
+    background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
+}
+
+/* Status Indicator */
+.profile-status-indicator {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 2px solid white;
+    z-index: 20;
+}
+
+.profile-status-online {
+    background-color: #4caf50;
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.3);
+}
+
+.profile-status-away {
+    background-color: #ff9800;
+}
+
+.profile-status-offline {
+    background-color: #9e9e9e;
+}
+
+/* Animations */
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .profile-avatar-wrapper {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .profile-username-container {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .profile-level-badge {
+        width: 24px;
+        height: 24px;
+        font-size: 10px;
+    }
+    
+    .profile-modal-body {
+        padding: 1.5rem;
+    }
+    
+    .profile-modal-avatar {
+        width: 150px;
+        height: 150px;
+    }
+}

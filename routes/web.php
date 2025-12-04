@@ -225,10 +225,7 @@ Route::put('/profile/avatar', [ProfileController::class, 'updateAvatar'])->name(
 
 
 
-// border
-Route::get('/border', function(){
-    return view('border');
-})->name('border');
+
 
 
 // coba
