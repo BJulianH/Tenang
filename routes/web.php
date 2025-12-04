@@ -1,19 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\PostController;
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\NoiseController;
-use App\Http\Controllers\QuestController;
-use App\Http\Controllers\SoundController;
 use App\Http\Controllers\ChatbotController;
-use App\Http\Controllers\CommentController;
-use App\Http\Controllers\JournalController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\AdminPostController;
-use App\Http\Controllers\AdminUserController;
-use App\Http\Controllers\CommunityController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\NoiseTypeController;
 use App\Http\Controllers\AdminReportController;
@@ -22,7 +10,6 @@ use App\Http\Controllers\CommunityProfileController;
 use App\Http\Controllers\ForgotPasswordController;
 
 
-// Landing Page
 Route::get('/', function () {
     return view('welcome');
 });
