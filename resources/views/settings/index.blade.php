@@ -148,13 +148,6 @@
                     <span>Profile</span>
                 </button>
                 
-                <button onclick="showSection('account')" 
-                        class=" sidebar-item-settings bg-primary-700 text-white flex flex-col items-center p-3 rounded-duo text-neutral-800 w-[100%]"
-                        id="tab-account">
-                    <i class="fas fa-key w-5"></i>
-                    <span>Account</span>
-                </button>
-                
                 <button onclick="showSection('social')" 
                         class=" sidebar-item-settings bg-primary-700 text-white flex flex-col items-center p-3 rounded-duo text-neutral-800 w-[100%]"
                         id="tab-social">
@@ -223,107 +216,15 @@
         <!-- Profile Section -->
         <div id="profile-section" class="settings-section">
             <div class="card p-6">
-                <h2 class="text-2xl font-bold mb-6 text-neutral-800">Profile Settings</h2>
+                <h2 class="text-2xl font-bold mb-6 text-neutral-800">Profile</h2>
                 
                 <form action="{{ route('settings.profile.update') }}" method="POST" class="space-y-6">
                     @csrf
                     @method('PUT')
                     
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-sm font-medium text-neutral-700 mb-2">Full Name</label>
-                            <input type="text" name="name" value="{{ old('name', $user->name) }}" 
-                                   class="w-full px-4 py-3 border-2 border-neutral-300 rounded-duo focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
-                        </div>
-                        
-                        <div>
-                            <label class="block text-sm font-medium text-neutral-700 mb-2">Username</label>
-                            <input type="text" name="username" value="{{ old('username', $user->username) }}" 
-                                   class="w-full px-4 py-3 border-2 border-neutral-300 rounded-duo focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
-                        </div>
-                        
-                        <div>
-                            <label class="block text-sm font-medium text-neutral-700 mb-2">Email</label>
-                            <input type="email" name="email" value="{{ old('email', $user->email) }}" 
-                                   class="w-full px-4 py-3 border-2 border-neutral-300 rounded-duo focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
-                        </div>
-                        
-                        <div>
-                            <label class="block text-sm font-medium text-neutral-700 mb-2">Phone</label>
-                            <input type="tel" name="phone" value="{{ old('phone', $user->phone) }}" 
-                                   class="w-full px-4 py-3 border-2 border-neutral-300 rounded-duo focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
-                        </div>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-medium text-neutral-700 mb-2">Bio</label>
-                        <textarea name="bio" rows="3" 
-                                  class="w-full px-4 py-3 border-2 border-neutral-300 rounded-duo focus:ring-2 focus:ring-primary-500 focus:border-primary-500">{{ old('bio', $user->bio) }}</textarea>
-                        <p class="text-sm text-neutral-500 mt-1">Tell us a little about yourself</p>
-                    </div>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div>
-                            <label class="block text-sm font-medium text-neutral-700 mb-2">Date of Birth</label>
-                            <input type="date" name="date_of_birth" value="{{ old('date_of_birth', $user->date_of_birth ? $user->date_of_birth->format('Y-m-d') : '') }}" 
-                                   class="w-full px-4 py-3 border-2 border-neutral-300 rounded-duo focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
-                        </div>
-                        
-                        <div>
-                            <label class="block text-sm font-medium text-neutral-700 mb-2">Gender</label>
-                            <select name="gender" class="w-full px-4 py-3 border-2 border-neutral-300 rounded-duo focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
-                                <option value="">Select Gender</option>
-                                <option value="male" {{ old('gender', $user->gender) == 'male' ? 'selected' : '' }}>Male</option>
-                                <option value="female" {{ old('gender', $user->gender) == 'female' ? 'selected' : '' }}>Female</option>
-                                <option value="other" {{ old('gender', $user->gender) == 'other' ? 'selected' : '' }}>Other</option>
-                                <option value="prefer_not_to_say" {{ old('gender', $user->gender) == 'prefer_not_to_say' ? 'selected' : '' }}>Prefer not to say</option>
-                            </select>
-                        </div>
-                        
-                        <div>
-                            <label class="block text-sm font-medium text-neutral-700 mb-2">Location</label>
-                            <input type="text" name="location" value="{{ old('location', $user->location) }}" 
-                                   class="w-full px-4 py-3 border-2 border-neutral-300 rounded-duo focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
-                        </div>
-                    </div>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-sm font-medium text-neutral-700 mb-2">Website</label>
-                            <input type="url" name="website" value="{{ old('website', $user->website) }}" 
-                                   class="w-full px-4 py-3 border-2 border-neutral-300 rounded-duo focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
-                        </div>
-                        
-                        <div>
-                            <label class="block text-sm font-medium text-neutral-700 mb-2">Timezone</label>
-                            <select name="timezone" class="w-full px-4 py-3 border-2 border-neutral-300 rounded-duo focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
-                                <option value="">Select Timezone</option>
-                                @foreach(timezone_identifiers_list() as $timezone)
-                                    <option value="{{ $timezone }}" {{ old('timezone', $user->timezone) == $timezone ? 'selected' : '' }}>
-                                        {{ $timezone }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <div class="flex justify-end pt-4">
-                        <button type="submit" class="app-button px-8">
-                            <i class="fas fa-save mr-2"></i> Save Changes
-                        </button>
-                    </div>
-                </form>
-                
-                <!-- Profile Image Upload -->
-                <div class="mt-8 pt-8 border-t border-neutral-200">
-                    <h3 class="text-lg font-semibold mb-4 text-neutral-800">Profile Images</h3>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- Profile Image -->
-                        <div>
-                            <label class="block text-sm font-medium text-neutral-700 mb-2">Profile Picture</label>
-                            <div class="flex items-center gap-4">
-                                <div class="w-20 h-20 rounded-full overflow-hidden border-2 border-neutral-300">
+                    <div class="grid gap-6">
+                        <div class="grid place-items-center">
+                        <div class="w-20 h-20 rounded-full overflow-hidden border-2 border-neutral-300">
                                     @if($user->profile_image)
                                         <img src="{{ asset('storage/' . $user->profile_image) }}" 
                                              alt="Profile" class="w-full h-full object-cover">
@@ -334,151 +235,105 @@
                                             </span>
                                         </div>
                                     @endif
-                                </div>
-                                
-                                <form action="{{ route('settings.profile-image.upload') }}" 
-                                      method="POST" 
-                                      enctype="multipart/form-data"
-                                      class="flex-1">
-                                    @csrf
-                                    <label class="block">
-                                        <input type="file" 
-                                               name="profile_image" 
-                                               accept="image/*" 
-                                               class="hidden"
-                                               onchange="this.form.submit()">
-                                        <div class="profile-image-upload p-4 rounded-duo text-center cursor-pointer">
-                                            <i class="fas fa-cloud-upload-alt text-primary-500 text-xl mb-2"></i>
-                                            <p class="text-sm text-neutral-600">Click to upload new photo</p>
-                                            <p class="text-xs text-neutral-500 mt-1">JPG, PNG up to 2MB</p>
-                                        </div>
-                                    </label>
-                                </form>
-                            </div>
+                        </div>
                         </div>
                         
-                        <!-- Cover Image -->
-                        <div>
-                            <label class="block text-sm font-medium text-neutral-700 mb-2">Cover Photo</label>
-                            <div class="h-32 rounded-duo overflow-hidden border-2 border-neutral-300 mb-3">
-                                @if($user->cover_image)
-                                    <img src="{{ asset('storage/' . $user->cover_image) }}" 
-                                         alt="Cover" class="w-full h-full object-cover">
-                                @else
-                                    <div class="w-full h-full bg-gradient-to-r from-primary-100 to-secondary-100 flex items-center justify-center">
-                                        <i class="fas fa-mountain text-primary-300 text-3xl"></i>
-                                    </div>
-                                @endif
-                            </div>
-                            
-                            <form action="{{ route('settings.cover-image.upload') }}" 
-                                  method="POST" 
-                                  enctype="multipart/form-data">
-                                @csrf
-                                <label class="block">
-                                    <input type="file" 
-                                           name="cover_image" 
-                                           accept="image/*" 
-                                           class="hidden"
-                                           onchange="this.form.submit()">
-                                    <div class="profile-image-upload p-3 rounded-duo text-center cursor-pointer">
-                                        <i class="fas fa-image text-primary-500 mr-2"></i>
-                                        <span class="text-sm text-neutral-600">Upload new cover photo</span>
-                                    </div>
-                                </label>
-                            </form>
-                        </div>
+    <div>
+        <label class="block text-sm font-medium text-neutral-700 mb-2">Full Name</label>
+        <input type="text" name="name" value="{{ old('name', $user->name) }}" 
+            class="w-full px-4 py-3 border-2 border-neutral-300 rounded-duo bg-neutral-100 text-neutral-600 cursor-not-allowed"
+            readonly>
+    </div>
+    
+    <div>
+        <label class="block text-sm font-medium text-neutral-700 mb-2">Username</label>
+        <input type="text" name="username" value="{{ old('username', $user->username) }}" 
+                class="w-full px-4 py-3 border-2 border-neutral-300 rounded-duo bg-neutral-100 text-neutral-600 cursor-not-allowed"
+                readonly>
+    </div>
+    
+    <div>
+        <label class="block text-sm font-medium text-neutral-700 mb-2">Email</label>
+        <input type="email" name="email" value="{{ old('email', $user->email) }}" 
+               class="w-full px-4 py-3 border-2 border-neutral-300 rounded-duo bg-neutral-100 text-neutral-600 cursor-not-allowed"
+               readonly>
+    </div>
+    
+    <div>
+        <label class="block text-sm font-medium text-neutral-700 mb-2">Phone</label>
+        <input type="tel" name="phone" value="{{ old('phone', $user->phone) }}" 
+               class="w-full px-4 py-3 border-2 border-neutral-300 rounded-duo bg-neutral-100 text-neutral-600 cursor-not-allowed"
+               readonly>
+    </div>
+</div>
+
+<div>
+    <label class="block text-sm font-medium text-neutral-700 mb-2">Bio</label>
+    <textarea name="bio" rows="3" 
+              class="w-full px-4 py-3 border-2 border-neutral-300 rounded-duo bg-neutral-100 text-neutral-600 cursor-not-allowed resize-none"
+              readonly>{{ old('bio', $user->bio) }}</textarea>
+    <p class="text-sm text-neutral-500 mt-1">Tell us a little about yourself</p>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div>
+        <label class="block text-sm font-medium text-neutral-700 mb-2">Date of Birth</label>
+        <input type="text" name="date_of_birth_display" value="{{ old('date_of_birth', $user->date_of_birth ? $user->date_of_birth->format('F d, Y') : 'Not set') }}" 
+               class="w-full px-4 py-3 border-2 border-neutral-300 rounded-duo bg-neutral-100 text-neutral-600 cursor-not-allowed"
+               readonly>
+        <input type="hidden" name="date_of_birth" value="{{ old('date_of_birth', $user->date_of_birth ? $user->date_of_birth->format('Y-m-d') : '') }}">
+    </div>
+    
+    <div>
+        <label class="block text-sm font-medium text-neutral-700 mb-2">Gender</label>
+        <input type="text" name="gender_display" value="{{ ucfirst($user->gender ?? 'Not set') }}" 
+               class="w-full px-4 py-3 border-2 border-neutral-300 rounded-duo bg-neutral-100 text-neutral-600 cursor-not-allowed"
+               readonly>
+        <input type="hidden" name="gender" value="{{ old('gender', $user->gender) }}">
+    </div>
+    
+    <div>
+        <label class="block text-sm font-medium text-neutral-700 mb-2">Location</label>
+        <input type="text" name="location" value="{{ old('location', $user->location) }}" 
+               class="w-full px-4 py-3 border-2 border-neutral-300 rounded-duo bg-neutral-100 text-neutral-600 cursor-not-allowed"
+               readonly>
+    </div>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div>
+        <label class="block text-sm font-medium text-neutral-700 mb-2">Website</label>
+        @if($user->website)
+            <div class="w-full px-4 py-3 border-2 border-neutral-300 rounded-duo bg-neutral-100 text-primary-600">
+                <a href="{{ $user->website }}" target="_blank" class="hover:underline">{{ $user->website }}</a>
+            </div>
+            <input type="hidden" name="website" value="{{ old('website', $user->website) }}">
+        @else
+            <input type="text" value="Not set" 
+                   class="w-full px-4 py-3 border-2 border-neutral-300 rounded-duo bg-neutral-100 text-neutral-600 cursor-not-allowed"
+                   readonly>
+        @endif
+    </div>
+    
+    <div>
+        <label class="block text-sm font-medium text-neutral-700 mb-2">Timezone</label>
+        <input type="text" name="timezone_display" value="{{ $user->timezone ?? 'Not set' }}" 
+               class="w-full px-4 py-3 border-2 border-neutral-300 rounded-duo bg-neutral-100 text-neutral-600 cursor-not-allowed"
+               readonly>
+        <input type="hidden" name="timezone" value="{{ old('timezone', $user->timezone) }}">
+    </div>
+</div>
+                    
+                    <div class="flex justify-end pt-4">
+                        <button href="" type="button" class="app-button px-8 bg-primary-600 hover:bg-primary-700">
+                            <i class="fas fa-edit mr-2"></i> Edit Profile
+                        </button>
+                    </div>
+                </form>
                     </div>
                 </div>
             </div>
         </div>
-
-        <!-- Account Section (Hidden by default) -->
-        <div id="account-section" class="settings-section hidden">
-            <div class="card p-6">
-                <h2 class="text-2xl font-bold mb-6 text-neutral-800">Account Settings</h2>
-                
-                <!-- Password Update -->
-                <div class="mb-8">
-                    <h3 class="text-lg font-semibold mb-4 text-neutral-800">Change Password</h3>
-                    <form action="{{ route('settings.password.update') }}" method="POST" class="space-y-4">
-                        @csrf
-                        @method('PUT')
-                        
-                        <div>
-                            <label class="block text-sm font-medium text-neutral-700 mb-2">Current Password</label>
-                            <input type="password" name="current_password" required
-                                   class="w-full px-4 py-3 border-2 border-neutral-300 rounded-duo focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
-                        </div>
-                        
-                        <div>
-                            <label class="block text-sm font-medium text-neutral-700 mb-2">New Password</label>
-                            <input type="password" name="new_password" required
-                                   class="w-full px-4 py-3 border-2 border-neutral-300 rounded-duo focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
-                        </div>
-                        
-                        <div>
-                            <label class="block text-sm font-medium text-neutral-700 mb-2">Confirm New Password</label>
-                            <input type="password" name="new_password_confirmation" required
-                                   class="w-full px-4 py-3 border-2 border-neutral-300 rounded-duo focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
-                        </div>
-                        
-                        <div class="flex justify-end pt-2">
-                            <button type="submit" class="app-button px-6">
-                                <i class="fas fa-key mr-2"></i> Update Password
-                            </button>
-                        </div>
-                    </form>
-                </div>
-                
-                <!-- Account Information -->
-                <div class="border-t border-neutral-200 pt-6">
-                    <h3 class="text-lg font-semibold mb-4 text-neutral-800">Account Information</h3>
-                    
-                    <div class="space-y-3">
-                        <div class="flex justify-between items-center py-2 border-b border-neutral-100">
-                            <span class="text-neutral-600">Account Created</span>
-                            <span class="font-medium">{{ $user->created_at->format('F d, Y') }}</span>
-                        </div>
-                        
-                        <div class="flex justify-between items-center py-2 border-b border-neutral-100">
-                            <span class="text-neutral-600">Last Login</span>
-                            <span class="font-medium">
-                                @if($user->last_login_at)
-                                    {{ $user->last_login_at->diffForHumans() }}
-                                @else
-                                    Never
-                                @endif
-                            </span>
-                        </div>
-                        
-                        <div class="flex justify-between items-center py-2 border-b border-neutral-100">
-                            <span class="text-neutral-600">Account Type</span>
-                            <span class="font-medium capitalize">{{ $user->account_type ?? 'Free' }}</span>
-                        </div>
-                        
-                        <div class="flex justify-between items-center py-2 border-b border-neutral-100">
-                            <span class="text-neutral-600">Account Status</span>
-                            <span class="font-medium">
-                                @if($user->is_active)
-                                    <span class="text-primary-600">Active</span>
-                                @else
-                                    <span class="text-accent-red">Inactive</span>
-                                @endif
-                            </span>
-                        </div>
-                        
-                        <div class="flex justify-between items-center py-2">
-                            <span class="text-neutral-600">Verified</span>
-                            <span class="font-medium">
-                                @if($user->is_verified)
-                                    <i class="fas fa-check-circle text-primary-500"></i> Verified
-                                @else
-                                    <i class="fas fa-times-circle text-neutral-400"></i> Not Verified
-                                @endif
-                            </span>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

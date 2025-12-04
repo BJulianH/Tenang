@@ -36,7 +36,7 @@ Route::prefix('community')->group(function () {
     Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
     Route::post('/comments/{comment}/like', [CommentController::class, 'like'])->name('comments.like');
     Route::post('/comments/{comment}/unlike', [CommentController::class, 'unlike'])->name('comments.unlike');
-    Route::prefix('profile')->group(function () {
+    Route::prefix('profile')->name("community.")->group(function () {
         Route::get('/{user:username}', [CommunityProfileController::class, 'show'])->name('profile.community');
         Route::get('/{user:username}/posts', [CommunityProfileController::class, 'posts'])->name('profile.posts');
         Route::get('/{user:username}/comments', [CommunityProfileController::class, 'comments'])->name('profile.comments');

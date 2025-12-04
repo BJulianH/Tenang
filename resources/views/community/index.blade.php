@@ -309,6 +309,7 @@
 @endsection
 
 @section('content')
+@extends('widget.border.klasik')
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex flex-col lg:flex-row gap-6">
         <!-- Main Feed -->
@@ -317,15 +318,15 @@
             <div class="mb-6">
                 <!-- Profile Header -->
                 <div class="bg-white rounded-duo-xl p-6 shadow-duo border-2 border-neutral-200">
-                    <div class="flex flex-col md:flex-row items-start md:items-center gap-6">
+                    <div class="flex flex-col md:flex-row items-start md:items-center gap-6 ">
                         <!-- Profile Image -->
-                        <div class="flex-shrink-0">
-                            <div class="w-20 h-20 rounded-full bg-gradient-to-r from-primary-400 to-secondary-400 flex items-center justify-center text-white font-bold text-2xl shadow-duo">
-                                @if($user->profile_image)
+                        <div class="flex-shrink-0 ">
+                            <div class="w-20 h-20 rounded-full bg-gradient-to-r from-primary-400 to-secondary-400 flex items-center justify-center text-white font-bold text-2 shadow-duo my-border">
+                                {{-- @if($user->profile_image) --}}
                                 <img src="{{ Storage::url($user->profile_image) }}" alt="{{ $user->name }}" class="w-full h-full rounded-full object-cover">
-                                @else
+                                {{-- @else
                                 {{ substr($user->name, 0, 1) }}
-                                @endif
+                                @endif --}}
                             </div>
                         </div>
 

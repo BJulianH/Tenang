@@ -1037,7 +1037,7 @@
                         questElement.className = 'flex items-center p-3 border border-neutral-200 rounded-lg hover:bg-primary-50 transition-colors';
                         questElement.innerHTML = `
                     <input type="checkbox" value="${quest.id}" 
-                           class="mr-3 quest-checkbox rounded text-primary-500">
+                            class="mr-3 quest-checkbox rounded text-primary-500">
                     <div class="flex-1">
                         <h4 class="font-medium text-neutral-800">${quest.title}</h4>
                         <p class="text-sm text-neutral-500">${quest.description}</p>
