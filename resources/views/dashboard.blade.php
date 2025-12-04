@@ -164,134 +164,113 @@
     </div>
 </div>
 
-<!-- Updated Welcome Header with Wilson Icon -->
 <div class="mb-8">
-    <!-- Main Welcome Container -->
     <div class="bg-white rounded-xl p-6 card border border-neutral-200">
-        <!-- Background Gradient -->
-        <div class="absolute inset-0 "></div>
-
         <!-- Content -->
         <div class="relative z-10">
             <div class="flex flex-col lg:flex-row items-center justify-between gap-6">
-                <!-- Left: Wilson Character -->
+                <!-- Left: Profile Section -->
                 <div class="flex items-center space-x-4">
-                    <!-- Wilson Character with animation -->
-                    <div class="relative group">
-                        <!-- Outer ring animation -->
-                        <div class="absolute inset-0 rounded-full bg-gradient-to-r from-primary-500 to-accent-purple animate-spin-slow opacity-20"></div>
-
-                        <!-- Profile Container -->
-                        <div class="relative w-24 h-24 rounded-full bg-gradient-to-br from-primary-500 to-accent-blue p-1.5 shadow-duo-lg">
-                            <!-- Inner white circle -->
+                    <!-- Profile Photo Container -->
+                    <div class="relative">
+                        <!-- Profile Ring -->
+                        <div class="w-24 h-24 rounded-full bg-gradient-to-br from-primary-500 to-accent-blue p-1.5">
+                            <!-- Profile Image -->
                             <div class="w-full h-full rounded-full bg-white flex items-center justify-center overflow-hidden">
-                                <!-- User Profile Photo -->
                                 @if(auth()->user()->profile_photo_path)
-                                <!-- Jika user punya foto profil -->
-                                <img src="{{ Storage::url(auth()->user()->profile_photo_path) }}" alt="{{ auth()->user()->name }}" class="w-full h-full object-cover rounded-full" onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name) }}&background=58cc70&color=fff&size=128'">
+                                    <img src="{{ Storage::url(auth()->user()->profile_photo_path) }}" 
+                                         alt="{{ auth()->user()->name }}" 
+                                         class="w-full h-full object-cover rounded-full cursor-pointer hover:opacity-90 transition-opacity"
+                                         onclick="document.getElementById('profileUpload').click()"
+                                         onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name) }}&background=58cc70&color=fff&size=128'">
                                 @elseif(auth()->user()->profile_photo_url)
-                                <!-- Jika menggunakan Socialite/OAuth photo -->
-                                <img src="{{ auth()->user()->profile_photo_url }}" alt="{{ auth()->user()->name }}" class="w-full h-full object-cover rounded-full">
+                                    <img src="{{ auth()->user()->profile_photo_url }}" 
+                                         alt="{{ auth()->user()->name }}" 
+                                         class="w-full h-full object-cover rounded-full cursor-pointer hover:opacity-90 transition-opacity"
+                                         onclick="document.getElementById('profileUpload').click()">
                                 @else
-                                <!-- Fallback ke avatar dengan initial -->
-                                <div class="w-full h-full rounded-full bg-gradient-to-br from-primary-500 to-accent-blue flex items-center justify-center">
-                                    <span class="text-3xl font-bold text-white">
-                                        {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
-                                    </span>
-                                </div>
+                                    <div class="w-full h-full rounded-full bg-gradient-to-br from-primary-500 to-accent-blue flex items-center justify-center cursor-pointer hover:opacity-90 transition-opacity"
+                                         onclick="document.getElementById('profileUpload').click()">
+                                        <span class="text-3xl font-bold text-white">
+                                            {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                                        </span>
+                                    </div>
                                 @endif
-
-                                <!-- Level Badge -->
-                                <div class="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-secondary-500 flex items-center justify-center shadow-duo animate-bounce-gentle border-2 border-white">
-                                    <span class="text-xs font-bold text-white">{{ auth()->user()->level ?? 1 }}</span>
-                                </div>
                             </div>
                         </div>
-
-                        <!-- Online indicator -->
-                        <div class="absolute bottom-2 right-2 w-4 h-4 bg-green-500 rounded-full border-2 border-white shadow-sm">
-                            <!-- Animated pulse effect -->
-                            <div class="absolute inset-0 rounded-full bg-green-500 animate-ping opacity-75"></div>
-                        </div>
-
-                        <!-- Interactive overlay on hover -->
-                        <div class="absolute inset-0 rounded-full bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center cursor-pointer">
-                            <div class="w-8 h-8 rounded-full bg-white/80 flex items-center justify-center">
-                                <i class="fas fa-camera text-primary-600 text-sm"></i>
-                            </div>
-                        </div>
-
-                        <!-- Tooltip on hover -->
-                        <div class="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-neutral-800 text-white text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap pointer-events-none">
-                            <div class="flex items-center gap-1">
-                                <i class="fas fa-user-circle"></i>
-                                {{ auth()->user()->name }}
-                            </div>
-                            <div class="text-xs text-neutral-300 mt-0.5">
-                                Level {{ auth()->user()->level ?? 1 }} • {{ auth()->user()->streak ?? 0 }} day streak
-                            </div>
+                        
+                        <!-- Hidden File Input -->
+                        <input type="file" id="profileUpload" class="hidden" accept="image/*">
+                        
+                        <!-- Camera Icon Overlay -->
+                        <div class="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-primary-500 flex items-center justify-center cursor-pointer border-2 border-white shadow-sm hover:bg-primary-600 transition-colors"
+                             onclick="document.getElementById('profileUpload').click()"
+                             title="Change profile photo">
+                            <i class="fas fa-camera text-white text-xs"></i>
                         </div>
                     </div>
+                    
                     <!-- Greeting Message -->
                     <div class="flex-1">
                         <!-- Greeting with time-based emoji -->
                         <div class="flex items-center gap-2 mb-2">
                             @php
-                            $hour = date('H');
-                            $greetings = [
-                            ['emoji' => '🌅', 'text' => 'Good morning'],
-                            ['emoji' => '☀️', 'text' => 'Good afternoon'],
-                            ['emoji' => '🌇', 'text' => 'Good evening'],
-                            ['emoji' => '🌙', 'text' => 'Good night']
-                            ];
-
-                            $greeting = $hour < 12 ? $greetings[0] : ($hour < 17 ? $greetings[1] : ($hour < 21 ? $greetings[2] : $greetings[3])); @endphp <span class="text-2xl animate-bounce-gentle">{{ $greeting['emoji'] }}</span>
-                                <h1 class="text-2xl lg:text-3xl font-bold text-neutral-800">
-                                    {{ $greeting['text'] }},
-                                    <span class="text-primary-600">{{ auth()->user()->name ?? 'Explorer' }}</span>!
-                                    <span class="wave-animation inline-block ml-2">👋</span>
-                                </h1>
+                                $hour = date('H');
+                                $greetings = [
+                                    ['emoji' => '🌅', 'text' => 'Good morning'],
+                                    ['emoji' => '☀️', 'text' => 'Good afternoon'],
+                                    ['emoji' => '🌇', 'text' => 'Good evening'],
+                                    ['emoji' => '🌙', 'text' => 'Good night']
+                                ];
+                                $greeting = $hour < 12 ? $greetings[0] : ($hour < 17 ? $greetings[1] : ($hour < 21 ? $greetings[2] : $greetings[3]));
+                            @endphp
+                            <span class="text-2xl">{{ $greeting['emoji'] }}</span>
+                            <h1 class="text-2xl lg:text-3xl font-bold text-neutral-800">
+                                {{ $greeting['text'] }},
+                                <span class="text-primary-600">{{ auth()->user()->name ?? 'Explorer' }}</span>!
+                                <span class="wave-animation inline-block ml-2">👋</span>
+                            </h1>
                         </div>
 
                         <!-- Encouraging message -->
                         <p class="text-neutral-600 mb-3 text-sm lg:text-base">
                             @php
-                            $messages = [
-                            "Ready to level up your wellness today?",
-                            "Small steps lead to big changes. Let's go!",
-                            "Your mental health journey continues...",
-                            "Every moment is a new opportunity to grow.",
-                            "Take a deep breath. You've got this!"
-                            ];
-                            echo $messages[array_rand($messages)];
+                                $messages = [
+                                    "Ready to level up your wellness today?",
+                                    "Small steps lead to big changes. Let's go!",
+                                    "Your mental health journey continues...",
+                                    "Every moment is a new opportunity to grow.",
+                                    "Take a deep breath. You've got this!"
+                                ];
+                                echo $messages[array_rand($messages)];
                             @endphp
                         </p>
 
                         <!-- Quick Stats -->
-                        <div class="flex flex-wrap items-center gap-4">
+                        <div class="flex flex-wrap items-center gap-3">
                             <!-- Daily Progress -->
-                            <div class="flex items-center gap-2 px-3 py-1.5 bg-white/80 backdrop-blur-sm rounded-full border border-primary-200">
-                                <div class="w-6 h-6 rounded-full bg-primary-100 flex items-center justify-center">
+                            <a href="#daily-quests" class="flex items-center gap-2 px-3 py-2 bg-primary-50 hover:bg-primary-100 transition-colors rounded-lg border border-primary-200 cursor-pointer group">
+                                <div class="w-6 h-6 rounded-full bg-primary-100 group-hover:bg-primary-200 transition-colors flex items-center justify-center">
                                     <i class="fas fa-check text-primary-600 text-xs"></i>
                                 </div>
                                 <span class="text-sm font-medium text-neutral-700">
                                     {{ $todayQuests->where('status', 'completed')->count() }}/{{ $todayQuests->count() }} quests
                                 </span>
-                            </div>
+                            </a>
 
                             <!-- Streak -->
-                            <div class="flex items-center gap-2 px-3 py-1.5 bg-white/80 backdrop-blur-sm rounded-full border border-secondary-200">
-                                <div class="w-6 h-6 rounded-full bg-secondary-100 flex items-center justify-center">
+                            {{-- <a href="{{ route('profile.stats') }}" class="flex items-center gap-2 px-3 py-2 bg-secondary-50 hover:bg-secondary-100 transition-colors rounded-lg border border-secondary-200 cursor-pointer group">
+                                <div class="w-6 h-6 rounded-full bg-secondary-100 group-hover:bg-secondary-200 transition-colors flex items-center justify-center">
                                     <i class="fas fa-fire text-secondary-500 text-xs"></i>
                                 </div>
                                 <span class="text-sm font-medium text-neutral-700">
                                     {{ $streakDays ?? '0' }} day streak
                                 </span>
-                            </div>
+                            </a> --}}
 
                             <!-- Date -->
-                            <div class="flex items-center gap-2 px-3 py-1.5 bg-white/80 backdrop-blur-sm rounded-full border border-accent-blue/20">
-                                <div class="w-6 h-6 rounded-full bg-accent-blue/10 flex items-center justify-center">
+                            <div class="flex items-center gap-2 px-3 py-2 bg-accent-blue/10 hover:bg-accent-blue/20 transition-colors rounded-lg border border-accent-blue/20 cursor-default">
+                                <div class="w-6 h-6 rounded-full bg-accent-blue/20 flex items-center justify-center">
                                     <i class="fas fa-calendar text-accent-blue text-xs"></i>
                                 </div>
                                 <span class="text-sm font-medium text-neutral-700">
@@ -304,11 +283,13 @@
 
                 <!-- Right: Wilson's Message Bubble (Desktop) -->
                 <div class="hidden lg:block">
-                    <div class="relative">
+                    <div class="relative group cursor-default">
                         <!-- Chat bubble -->
-                        <div class="bg-white rounded-2xl p-4 border-2 border-primary-300 shadow-duo-lg max-w-xs">
+                        <div class="bg-white rounded-2xl p-4 border-2 border-primary-300 shadow-lg hover:shadow-xl transition-shadow max-w-xs">
                             <div class="flex items-center gap-2 mb-3">
-                                <div class="w-10 h-10 rounded-full bg-gradient-to-r from-primary-500 to-accent-blue flex items-center justify-center">
+                                <div class="w-10 h-10 rounded-full bg-gradient-to-r from-primary-500 to-accent-blue flex items-center justify-center cursor-pointer hover:opacity-90 transition-opacity"
+                                     onclick="toggleWilsonMessage()"
+                                     title="Click to change message">
                                     <span class="text-white font-bold">W</span>
                                 </div>
                                 <div>
@@ -316,7 +297,7 @@
                                     <p class="text-xs text-neutral-500">Always here for you</p>
                                 </div>
                             </div>
-                            <p class="text-neutral-700 text-sm italic">
+                            <p class="text-neutral-700 text-sm italic select-none" id="wilson-message">
                                 "{{ $messages[array_rand($messages)] }}"
                             </p>
 
@@ -333,6 +314,11 @@
                         <div class="absolute -left-3 top-1/2 transform -translate-y-1/2">
                             <div class="w-4 h-4 bg-white border-l-2 border-b-2 border-primary-300 transform rotate-45"></div>
                         </div>
+                        
+                        <!-- Hover Tooltip -->
+                        <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-neutral-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">
+                            Click Wilson to change message
+                        </div>
                     </div>
                 </div>
             </div>
@@ -341,10 +327,13 @@
             <div class="mt-6">
                 <div class="flex items-center justify-between text-sm text-neutral-600 mb-2">
                     <span>Daily Progress</span>
-                    <span>{{ $todayQuests->where('status', 'completed')->count() * 100 / max($todayQuests->count(), 1) }}%</span>
+                    <span class="font-semibold">{{ $todayQuests->where('status', 'completed')->count() * 100 / max($todayQuests->count(), 1) }}%</span>
                 </div>
-                <div class="h-3 bg-neutral-200 rounded-full overflow-hidden">
-                    <div class="h-full bg-gradient-to-r from-primary-500 to-accent-blue rounded-full transition-all duration-500" style="width: {{ $todayQuests->where('status', 'completed')->count() * 100 / max($todayQuests->count(), 1) }}%"></div>
+                <div class="h-3 bg-neutral-200 rounded-full overflow-hidden cursor-default">
+                    <div class="h-full bg-gradient-to-r from-primary-500 to-accent-blue rounded-full transition-all duration-500" 
+                         style="width: {{ $todayQuests->where('status', 'completed')->count() * 100 / max($todayQuests->count(), 1) }}%"
+                         title="{{ $todayQuests->where('status', 'completed')->count() }}/{{ $todayQuests->count() }} quests completed">
+                    </div>
                 </div>
             </div>
         </div>
@@ -352,7 +341,8 @@
 
     <!-- Mobile Wilson Message -->
     <div class="lg:hidden mt-4">
-        <div class="bg-gradient-to-r from-primary-50 to-accent-blue/20 rounded-xl p-4 border border-primary-200">
+        <div class="bg-gradient-to-r from-primary-50 to-accent-blue/20 rounded-xl p-4 border border-primary-200 cursor-pointer hover:from-primary-100 hover:to-accent-blue/30 transition-all"
+             onclick="toggleWilsonMessage()">
             <div class="flex items-center gap-3">
                 <div class="w-12 h-12 rounded-full bg-gradient-to-r from-primary-500 to-accent-blue flex items-center justify-center">
                     <span class="text-white font-bold">W</span>
@@ -370,6 +360,8 @@
         </div>
     </div>
 </div>
+
+
 
 <!-- Main Content Area -->
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
