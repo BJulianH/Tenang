@@ -248,4 +248,70 @@ public function addPoints($amount)
         $this->increment('level');
         return $this;
     }
+    // Di Model User yang sudah ada, tambahkan:
+
+// Relasi tasks
+public function tasks()
+{
+    return $this->hasMany(Task::class);
+}
+
+// Relasi task preferences
+public function taskPreferences()
+{
+    return $this->hasOne(UserTaskPreferences::class);
+}
+
+// Relasi task completions (history)
+public function taskCompletions()
+{
+    return $this->hasMany(TaskCompletion::class);
+}
+
+// Relasi task templates
+public function taskTemplates()
+{
+    return $this->hasMany(TaskTemplate::class);
+}
+
+// Method untuk mendapatkan tugas hari ini
+public function getTodayTasks()
+{
+    return $this->tasks()->dueToday()->active()->get();
+}
+
+// Method untuk mendapatkan tugas overdue
+public function getOverdueTasks()
+{
+    return $this->tasks()->overdue()->get();
+}
+
+// Method untuk mendapatkan statistik tasks
+public function getTaskStatistics()
+{
+    $total = $this->tasks()->count();
+    $completed = $this->tasks()->where('status', 'completed')->count();
+    $pending = $this->tasks()->active()->count();
+    $streak = $this->task_streak;
+    
+    return [
+        'total' => $total,
+        'completed' => $completed,
+        'pending' => $pending,
+        'completion_rate' => $total > 0 ? round(($completed / $total) * 100, 2) : 0,
+        'streak' => $streak,
+    ];
+}
+
+// Method untuk membuat task dari template
+public function createTaskFromTemplate($templateId, $dueDate = null, $dueTime = null)
+{
+    $template = TaskTemplate::findOrFail($templateId);
+    
+    if (!$template->is_public && $template->user_id !== $this->id) {
+        throw new \Exception('Template tidak tersedia');
+    }
+    
+    return $template->createTask($this->id, $dueDate, $dueTime);
+}
 }
