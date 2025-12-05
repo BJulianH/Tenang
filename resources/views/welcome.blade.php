@@ -702,10 +702,10 @@
                             <i class="fas fa-peace ml-3"></i>
                         </button>
                     </a>
-                    <button class="px-8 py-4 bg-white text-primary-600 border-2 border-primary-500 font-bold rounded-duo hover:bg-primary-50 hover:shadow-duo transition-all flex items-center">
+                    <a href="https://www.youtube.com/shorts/Cz4RTMKD57c" class="px-8 py-4 bg-white text-primary-600 border-2 border-primary-500 font-bold rounded-duo hover:bg-primary-50 hover:shadow-duo transition-all flex items-center">
                         <i class="fas fa-play-circle mr-3"></i>
                         Lihat Demo
-                    </button>
+                    </a>
                 </div>
 
                 <!-- Stats -->
@@ -898,21 +898,20 @@
                             <div class="w-32 h-32 bg-gradient-to-r from-primary-400 to-secondary-400 rounded-full flex items-center justify-center mx-auto mb-6 shadow-duo-lg">
                                 <i class="fas fa-user text-white text-4xl"></i>
                             </div>
-                            <h4 class="text-xl font-bold text-neutral-800 mb-2">Ahmad Rizki</h4>
-                            <p class="text-primary-600 font-medium mb-4">Full Stack Developer</p>
+                            <h4 class="text-xl font-bold text-neutral-800 mb-2">Dimas Arya Duwipangga</h4>
+                            <p class="text-primary-600 font-medium mb-4">Beckend Developer</p>
                             <p class="text-neutral-600 mb-6">
-                                Spesialis dalam pengembangan aplikasi web dengan fokus pada user experience 
-                                dan performa. Bertanggung jawab atas arsitektur keseluruhan aplikasi Tenang.
+                                Berpengalaman dalam pengembangan Beckend aplikasi, memiliki jam terbang yang tinggi wis kaya senior programmer
                             </p>
                             <div class="flex justify-center space-x-4">
-                                <a href="#" class="social-icon w-10 h-10 rounded-full flex items-center justify-center text-primary-600">
+                                <a href="github.com/DUWIPANGGA" class="social-icon w-10 h-10 rounded-full flex items-center justify-center text-primary-600">
                                     <i class="fab fa-github"></i>
                                 </a>
-                                <a href="#" class="social-icon w-10 h-10 rounded-full flex items-center justify-center text-primary-600">
+                                <a href="https://www.linkedin.com/in/duwipangga/" class="social-icon w-10 h-10 rounded-full flex items-center justify-center text-primary-600">
                                     <i class="fab fa-linkedin"></i>
                                 </a>
-                                <a href="#" class="social-icon w-10 h-10 rounded-full flex items-center justify-center text-primary-600">
-                                    <i class="fab fa-twitter"></i>
+                                <a href="https://duwipangga.pey.my.id/" class="social-icon w-10 h-10 rounded-full flex items-center justify-center text-primary-600">
+                                    <i class="fas fa-globe"></i>
                                 </a>
                             </div>
                         </div>
@@ -922,12 +921,10 @@
                             <div class="w-32 h-32 bg-gradient-to-r from-secondary-400 to-accent-purple rounded-full flex items-center justify-center mx-auto mb-6 shadow-duo-lg">
                                 <i class="fas fa-user text-white text-4xl"></i>
                             </div>
-                            <h4 class="text-xl font-bold text-neutral-800 mb-2">Sarah Wijaya</h4>
-                            <p class="text-secondary-600 font-medium mb-4">UI/UX Designer & Frontend Developer</p>
+                            <h4 class="text-xl font-bold text-neutral-800 mb-2">Muhamad Ifran Maulana</h4>
+                            <p class="text-secondary-600 font-medium mb-4">Penggaruk Peler</p>
                             <p class="text-neutral-600 mb-6">
-                                Menciptakan pengalaman pengguna yang intuitif dan menarik. Menggabungkan 
-                                prinsip desain dengan psikologi warna untuk menciptakan antarmuka yang menenangkan.
-                            </p>
+                                Peler saya selalu gatel
                             <div class="flex justify-center space-x-4">
                                 <a href="#" class="social-icon w-10 h-10 rounded-full flex items-center justify-center text-secondary-600">
                                     <i class="fab fa-github"></i>
@@ -935,8 +932,8 @@
                                 <a href="#" class="social-icon w-10 h-10 rounded-full flex items-center justify-center text-secondary-600">
                                     <i class="fab fa-linkedin"></i>
                                 </a>
-                                <a href="#" class="social-icon w-10 h-10 rounded-full flex items-center justify-center text-secondary-600">
-                                    <i class="fab fa-dribbble"></i>
+                                <a href="mailto:mohammadifran22@gmail.com" class="social-icon w-10 h-10 rounded-full flex items-center justify-center text-secondary-600">
+                                    <i class="fa-regular fa-envelope"></i>
                                 </a>
                             </div>
                         </div>
@@ -946,21 +943,20 @@
                             <div class="w-32 h-32 bg-gradient-to-r from-accent-blue to-accent-purple rounded-full flex items-center justify-center mx-auto mb-6 shadow-duo-lg">
                                 <i class="fas fa-user text-white text-4xl"></i>
                             </div>
-                            <h4 class="text-xl font-bold text-neutral-800 mb-2">Budi Santoso</h4>
-                            <p class="text-accent-purple font-medium mb-4">Backend Developer & Data Analyst</p>
+                            <h4 class="text-xl font-bold text-neutral-800 mb-2">Bintang Julian Hidayat</h4>
+                            <p class="text-accent-purple font-medium mb-4">Frontend Developer</p>
                             <p class="text-neutral-600 mb-6">
-                                Mengelola infrastruktur backend dan menganalisis data untuk memberikan 
-                                insight yang personal dan relevan bagi pengguna Tenang.
+                                Junior Programmer yang masih mencari pengalaman dalam dunia pemrograman
                             </p>
                             <div class="flex justify-center space-x-4">
-                                <a href="#" class="social-icon w-10 h-10 rounded-full flex items-center justify-center text-purple-600">
+                                <a href="https://github.com/BJulianH" class="social-icon w-10 h-10 rounded-full flex items-center justify-center text-purple-600">
                                     <i class="fab fa-github"></i>
                                 </a>
-                                <a href="#" class="social-icon w-10 h-10 rounded-full flex items-center justify-center text-purple-600">
+                                <a href="https://www.linkedin.com/in/bintang-julian-hidayat-a24572365/" class="social-icon w-10 h-10 rounded-full flex items-center justify-center text-purple-600">
                                     <i class="fab fa-linkedin"></i>
                                 </a>
-                                <a href="#" class="social-icon w-10 h-10 rounded-full flex items-center justify-center text-purple-600">
-                                    <i class="fas fa-envelope"></i>
+                                <a href="mailto:bintangjulianhidayat@gmail.com" class="social-icon w-10 h-10 rounded-full flex items-center justify-center text-purple-600">
+                                    <i class="fa-regular fa-envelope"></i>
                                 </a>
                             </div>
                         </div>
@@ -1117,7 +1113,7 @@
             }
 
             createParticles();
-        });
+        }});
     </script>
 </body>
 </html>
