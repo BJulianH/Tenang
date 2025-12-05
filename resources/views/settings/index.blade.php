@@ -227,7 +227,7 @@
                         <div class="w-20 h-20 rounded-full overflow-hidden border-2 border-neutral-300">
                                     @if($user->profile_image)
                                         <img src="{{ asset('storage/' . $user->profile_image) }}" 
-                                             alt="Profile" class="w-full h-full object-cover">
+                                            alt="Profile" class="w-full h-full object-cover">
                                     @else
                                         <div class="w-full h-full bg-primary-100 flex items-center justify-center">
                                             <span class="text-2xl font-bold text-primary-600">
