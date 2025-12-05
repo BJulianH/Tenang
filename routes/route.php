@@ -9,5 +9,6 @@ require __DIR__.'/journal/index.php';
 require __DIR__.'/noises/index.php';
 require __DIR__.'/profile/index.php';
 require __DIR__.'/quests/index.php';
+require __DIR__.'/tasks/index.php';
 require __DIR__.'/chat/index.php';
 require __DIR__.'/settings/index.php';
