@@ -1,5 +1,5 @@
 <?php
-// database/migrations/xxxx_xx_xx_add_task_stats_to_users_table.php
+// database/migrations/xxxx_xx_xx_create_task_templates_table.php
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -9,30 +9,38 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            // Stats untuk tasks
-            $table->integer('tasks_completed')->default(0)->after('quests_completed');
-            $table->integer('tasks_streak')->default(0)->after('tasks_completed');
-            $table->integer('tasks_created')->default(0)->after('tasks_streak');
-            $table->date('last_task_completed_at')->nullable()->after('tasks_created');
-            $table->decimal('task_completion_rate', 5, 2)->default(0)->after('last_task_completed_at');
+        Schema::create('task_templates', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
+            $table->string('name');
+            $table->text('description')->nullable();
+            $table->enum('category', [
+                'self_care', 
+                'therapy', 
+                'medication', 
+                'exercise', 
+                'social', 
+                'work',
+                'appointment',
+                'mindfulness',
+                'creative',
+                'chores',
+                'other'
+            ])->default('other');
+            $table->integer('estimated_duration')->nullable();
+            $table->tinyInteger('energy_level_required')->nullable();
+            $table->tinyInteger('difficulty_level')->nullable();
+            $table->json('tags')->nullable();
+            $table->boolean('is_public')->default(false);
+            $table->integer('usage_count')->default(0);
+            $table->timestamps();
             
-            // Preferences untuk tasks (bisa dipindah ke tabel terpisah)
-            $table->json('task_preferences')->nullable()->after('notification_settings');
+            $table->index(['user_id', 'is_public']);
         });
     }
 
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn([
-                'tasks_completed',
-                'tasks_streak',
-                'tasks_created',
-                'last_task_completed_at',
-                'task_completion_rate',
-                'task_preferences'
-            ]);
-        });
+        Schema::dropIfExists('task_templates');
     }
 };

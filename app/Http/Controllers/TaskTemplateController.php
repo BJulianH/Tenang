@@ -6,48 +6,41 @@ namespace App\Http\Controllers;
 use App\Models\TaskTemplate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
 
 class TaskTemplateController extends Controller
 {
+    // WEB METHODS
+    
     /**
-     * Get all templates (user's + public)
+     * Display a listing of templates
      */
-    public function index(Request $request)
+    public function index()
     {
         $user = Auth::user();
         
-        $query = TaskTemplate::forUser($user->id);
+        $templates = TaskTemplate::where('user_id', $user->id)
+            ->orWhere('is_public', true)
+            ->orderBy('usage_count', 'desc')
+            ->orderBy('created_at', 'desc')
+            ->paginate(12);
         
-        if ($request->filled('category')) {
-            $query->where('category', $request->category);
-        }
-        
-        if ($request->filled('search')) {
-            $search = $request->search;
-            $query->where(function($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('description', 'like', "%{$search}%");
-            });
-        }
-        
-        $templates = $query->orderBy('usage_count', 'desc')
-                          ->orderBy('created_at', 'desc')
-                          ->paginate($request->get('per_page', 20));
-        
-        return response()->json([
-            'success' => true,
-            'data' => $templates,
-            'message' => 'Templates retrieved successfully'
-        ]);
+        return view('templates.index', compact('templates'));
     }
     
     /**
-     * Store a new template
+     * Show the form for creating a new template
+     */
+    public function create()
+    {
+        return view('templates.create');
+    }
+    
+    /**
+     * Store a newly created template
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'category' => 'required|in:self_care,therapy,medication,exercise,social,work,appointment,mindfulness,creative,chores,other',
@@ -57,54 +50,54 @@ class TaskTemplateController extends Controller
             'priority' => 'required|in:low,medium,high,urgent',
             'is_important' => 'boolean',
             'is_urgent' => 'boolean',
-            'tags' => 'nullable|array',
-            'tags.*' => 'string|max:50',
+            'tags' => 'nullable|string',
             'is_public' => 'boolean',
         ]);
         
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Validation error',
-                'errors' => $validator->errors()
-            ], 422);
-        }
-        
-        $validated = $validator->validated();
         $validated['user_id'] = Auth::id();
         
-        $template = TaskTemplate::create($validated);
+        if (!empty($validated['tags'])) {
+            $tags = array_map('trim', explode(',', $validated['tags']));
+            $validated['tags'] = json_encode($tags);
+        }
         
-        return response()->json([
-            'success' => true,
-            'data' => $template,
-            'message' => 'Template created successfully'
-        ], 201);
+        TaskTemplate::create($validated);
+        
+        return redirect()->route('task-templates.index')
+            ->with('success', 'Template berhasil dibuat!');
     }
     
     /**
-     * Show a specific template
+     * Display the specified template
      */
-    public function show($id)
+    public function show(TaskTemplate $template)
     {
-        $user = Auth::user();
-        $template = TaskTemplate::forUser($user->id)->findOrFail($id);
+        // Check authorization
+        if (!$template->is_public && $template->user_id !== Auth::id()) {
+            abort(403);
+        }
         
-        return response()->json([
-            'success' => true,
-            'data' => $template,
-            'message' => 'Template retrieved successfully'
-        ]);
+        return view('templates.show', compact('template'));
     }
     
     /**
-     * Update a template
+     * Show the form for editing the specified template
      */
-    public function update(Request $request, $id)
+    public function edit(TaskTemplate $template)
     {
-        $template = Auth::user()->taskTemplates()->findOrFail($id);
+        $this->authorize('update', $template);
         
-        $validator = Validator::make($request->all(), [
+        return view('templates.edit', compact('template'));
+    }
+    
+    /**
+     * Update the specified template
+     */
+    public function update(Request $request, TaskTemplate $template)
+    {
+        $this->authorize('update', $template);
+        
+        $validated = $request->validate([
             'name' => 'string|max:255',
             'description' => 'nullable|string',
             'category' => 'in:self_care,therapy,medication,exercise,social,work,appointment,mindfulness,creative,chores,other',
@@ -114,110 +107,70 @@ class TaskTemplateController extends Controller
             'priority' => 'in:low,medium,high,urgent',
             'is_important' => 'boolean',
             'is_urgent' => 'boolean',
-            'tags' => 'nullable|array',
-            'tags.*' => 'string|max:50',
+            'tags' => 'nullable|string',
             'is_public' => 'boolean',
         ]);
         
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Validation error',
-                'errors' => $validator->errors()
-            ], 422);
+        if (!empty($validated['tags'])) {
+            $tags = array_map('trim', explode(',', $validated['tags']));
+            $validated['tags'] = json_encode($tags);
         }
         
-        $template->update($validator->validated());
+        $template->update($validated);
         
-        return response()->json([
-            'success' => true,
-            'data' => $template->fresh(),
-            'message' => 'Template updated successfully'
-        ]);
+        return redirect()->route('task-templates.index')
+            ->with('success', 'Template berhasil diperbarui!');
     }
     
     /**
-     * Delete a template
+     * Remove the specified template
      */
-    public function destroy($id)
+    public function destroy(TaskTemplate $template)
     {
-        $template = Auth::user()->taskTemplates()->findOrFail($id);
+        $this->authorize('delete', $template);
+        
         $template->delete();
         
-        return response()->json([
-            'success' => true,
-            'message' => 'Template deleted successfully'
-        ]);
-    }
-    
-    /**
-     * Create task from template
-     */
-    public function createTaskFromTemplate(Request $request, $id)
-    {
-        $user = Auth::user();
-        
-        $validator = Validator::make($request->all(), [
-            'due_date' => 'nullable|date|after_or_equal:today',
-            'due_time' => 'nullable|date_format:H:i',
-            'custom_title' => 'nullable|string|max:255',
-            'custom_description' => 'nullable|string',
-        ]);
-        
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Validation error',
-                'errors' => $validator->errors()
-            ], 422);
-        }
-        
-        $task = $user->createTaskFromTemplate(
-            $id,
-            $request->due_date,
-            $request->due_time
-        );
-        
-        // Customize if needed
-        if ($request->filled('custom_title')) {
-            $task->update(['title' => $request->custom_title]);
-        }
-        
-        if ($request->filled('custom_description')) {
-            $task->update(['description' => $request->custom_description]);
-        }
-        
-        return response()->json([
-            'success' => true,
-            'data' => $task,
-            'message' => 'Task created from template successfully'
-        ], 201);
+        return redirect()->route('task-templates.index')
+            ->with('success', 'Template berhasil dihapus!');
     }
     
     /**
      * Duplicate a template
      */
-    public function duplicate($id)
+    public function duplicate(TaskTemplate $template)
     {
-        $user = Auth::user();
-        $template = TaskTemplate::forUser($user->id)->findOrFail($id);
-        
         $newTemplate = $template->replicate();
-        $newTemplate->user_id = $user->id;
+        $newTemplate->user_id = Auth::id();
         $newTemplate->is_public = false;
         $newTemplate->usage_count = 0;
         $newTemplate->save();
         
-        return response()->json([
-            'success' => true,
-            'data' => $newTemplate,
-            'message' => 'Template duplicated successfully'
-        ], 201);
+        return redirect()->route('task-templates.index')
+            ->with('success', 'Template berhasil diduplikasi!');
     }
     
     /**
-     * Get popular templates
+     * Create task from template
      */
+    public function createTaskFromTemplate(Request $request, TaskTemplate $template)
+    {
+        // Check authorization
+        if (!$template->is_public && $template->user_id !== Auth::id()) {
+            abort(403);
+        }
+        
+        $task = $template->createTask(
+            Auth::id(),
+            $request->due_date,
+            $request->due_time
+        );
+        
+        return redirect()->route('tasks.show', $task)
+            ->with('success', 'Task berhasil dibuat dari template!');
+    }
+    
+    // API METHODS (tambahkan jika perlu)
     public function popular()
     {
         $templates = TaskTemplate::where('is_public', true)
@@ -227,8 +180,7 @@ class TaskTemplateController extends Controller
         
         return response()->json([
             'success' => true,
-            'data' => $templates,
-            'message' => 'Popular templates retrieved successfully'
+            'data' => $templates
         ]);
     }
 }

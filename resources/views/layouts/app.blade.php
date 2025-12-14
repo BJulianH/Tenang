@@ -792,111 +792,119 @@
     @yield('scripts')
 
     <script>
-        // Sidebar toggle functionality for desktop
-        document.getElementById('sidebar-toggle') ? .addEventListener('click', function() {
-            const sidebar = document.getElementById('sidebar');
-            sidebar.classList.toggle('collapsed');
+document.addEventListener("DOMContentLoaded", () => {
+
+    // Sidebar toggle (Desktop)
+    document.getElementById('sidebar-toggle')?.addEventListener('click', function () {
+        const sidebar = document.getElementById('sidebar');
+        sidebar.classList.toggle('collapsed');
+    });
+
+    // Mobile menu toggle
+    function toggleMobileMenu() {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('mobile-overlay');
+
+        sidebar.classList.toggle('mobile-open');
+        overlay.classList.toggle('active');
+
+        // Lock scroll ketika menu terbuka
+        document.body.style.overflow = sidebar.classList.contains('mobile-open') ? 'hidden' : '';
+    }
+
+    document.getElementById('mobile-menu-toggle')?.addEventListener('click', toggleMobileMenu);
+    document.getElementById('mobile-menu-toggle-2')?.addEventListener('click', toggleMobileMenu);
+    document.getElementById('mobile-overlay')?.addEventListener('click', toggleMobileMenu);
+
+    // Close menu on link click (for mobile)
+    document.querySelectorAll('.sidebar-item').forEach(item => {
+        item.addEventListener('click', function () {
+            if (window.innerWidth <= 768) {
+                toggleMobileMenu();
+            }
+
+            // Update active state
+            document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
+
+    // Duolingo style interactions
+    document.querySelectorAll('.app-button, .card, .gamification-badge, .sidebar-item').forEach(element => {
+
+        element.addEventListener('mousedown', function () {
+            this.style.transform = 'translateY(2px)';
+            if (this.classList.contains('app-button') || this.classList.contains('duo-card')) {
+                this.style.boxShadow = '0 2px 0 rgba(0, 0, 0, 0.1)';
+            }
         });
 
-        // Mobile menu toggle functionality
-        function toggleMobileMenu() {
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('mobile-overlay');
-
-            sidebar.classList.toggle('mobile-open');
-            overlay.classList.toggle('active');
-
-            // Prevent body scroll when menu is open
-            document.body.style.overflow = sidebar.classList.contains('mobile-open') ? 'hidden' : '';
-        }
-
-        document.getElementById('mobile-menu-toggle') ? .addEventListener('click', toggleMobileMenu);
-        document.getElementById('mobile-menu-toggle-2') ? .addEventListener('click', toggleMobileMenu);
-        document.getElementById('mobile-overlay') ? .addEventListener('click', toggleMobileMenu);
-
-        // Close mobile menu when clicking on a link
-        document.querySelectorAll('.sidebar-item').forEach(item => {
-            item.addEventListener('click', function() {
-                if (window.innerWidth <= 768) {
-                    toggleMobileMenu();
-                }
-
-                // Update active state
-                document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
-                this.classList.add('active');
-            });
+        element.addEventListener('mouseup', function () {
+            this.style.transform = 'translateY(0)';
+            if (this.classList.contains('app-button') || this.classList.contains('duo-card')) {
+                this.style.boxShadow = '0 4px 0 rgba(0, 0, 0, 0.1)';
+            }
         });
 
-        // Add Duolingo-style interactions to all duo elements
-        document.querySelectorAll('.app-button, .card, .gamification-badge, .sidebar-item').forEach(element => {
-            element.addEventListener('mousedown', function() {
-                this.style.transform = 'translateY(2px)';
-                if (this.classList.contains('app-button') || this.classList.contains('duo-card')) {
-                    this.style.boxShadow = '0 2px 0 rgba(0, 0, 0, 0.1)';
-                }
-            });
-
-            element.addEventListener('mouseup', function() {
-                this.style.transform = 'translateY(0)';
-                if (this.classList.contains('app-button') || this.classList.contains('duo-card')) {
-                    this.style.boxShadow = '0 4px 0 rgba(0, 0, 0, 0.1)';
-                }
-            });
-
-            element.addEventListener('mouseleave', function() {
-                this.style.transform = 'translateY(0)';
-                if (this.classList.contains('app-button') || this.classList.contains('duo-card')) {
-                    this.style.boxShadow = '0 4px 0 rgba(0, 0, 0, 0.1)';
-                }
-            });
+        element.addEventListener('mouseleave', function () {
+            this.style.transform = 'translateY(0)';
+            if (this.classList.contains('app-button') || this.classList.contains('duo-card')) {
+                this.style.boxShadow = '0 4px 0 rgba(0, 0, 0, 0.1)';
+            }
         });
+    });
 
-        function showNotification(message, type = 'info') {
-            // Remove existing notifications
-            document.querySelectorAll('.custom-notification').forEach(n => n.remove());
+    // Notification System
+    function showNotification(message, type = 'info') {
+        // Remove existing notifications
+        document.querySelectorAll('.custom-notification').forEach(n => n.remove());
 
-            const colors = {
-                success: 'bg-primary-500 text-white shadow-duo'
-                , error: 'bg-accent-red text-white shadow-duo'
-                , warning: 'bg-secondary-500 text-neutral-900 shadow-duo'
-                , info: 'bg-accent-blue text-white shadow-duo'
-            };
+        const colors = {
+            success: 'bg-primary-500 text-white shadow-duo',
+            error: 'bg-accent-red text-white shadow-duo',
+            warning: 'bg-secondary-500 text-neutral-900 shadow-duo',
+            info: 'bg-accent-blue text-white shadow-duo'
+        };
 
-            const icons = {
-                success: 'fa-check-circle'
-                , error: 'fa-exclamation-circle'
-                , warning: 'fa-exclamation-triangle'
-                , info: 'fa-info-circle'
-            };
+        const icons = {
+            success: 'fa-check-circle',
+            error: 'fa-exclamation-circle',
+            warning: 'fa-exclamation-triangle',
+            info: 'fa-info-circle'
+        };
 
-            // Create element
-            const notification = document.createElement('div');
-            notification.className = `
-        custom-notification
-        fixed top-24 right-8 
-        px-5 py-4 rounded-duo-lg z-[9999]
-        transform transition-all duration-300
-        animate-slide-in
-        border-2 border-white
-        flex items-center gap-3
-        ${colors[type] || colors.info}
-    `;
+        const notification = document.createElement('div');
+        notification.className = `
+            custom-notification
+            fixed top-24 right-8 
+            px-5 py-4 rounded-duo-lg z-[9999]
+            transform transition-all duration-300
+            animate-slide-in
+            border-2 border-white
+            flex items-center gap-3
+            ${colors[type] || colors.info}
+        `;
 
-            notification.innerHTML = `
-        <i class="fas ${icons[type]} text-xl"></i>
-        <span class="font-semibold">${message}</span>
-    `;
+        notification.innerHTML = `
+            <i class="fas ${icons[type]} text-xl"></i>
+            <span class="font-semibold">${message}</span>
+        `;
 
-            document.body.appendChild(notification);
+        document.body.appendChild(notification);
 
-            // Auto remove
-            setTimeout(() => {
-                notification.style.opacity = "0";
-                notification.style.transform = "translateX(100%)";
-                setTimeout(() => notification.remove(), 300);
-            }, 4000);
-        }
+        // Auto remove
+        setTimeout(() => {
+            notification.style.opacity = "0";
+            notification.style.transform = "translateX(100%)";
+            setTimeout(() => notification.remove(), 300);
+        }, 4000);
+    }
 
-    </script>
+    // Global bind
+    window.showNotification = showNotification;
+
+});
+</script>
+
 </body>
 </html>
