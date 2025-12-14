@@ -893,74 +893,81 @@
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        <!-- Developer 1 -->
-                        <div class="developer-card card p-6 text-center fade-in-up">
-                            <div class="w-32 h-32 bg-gradient-to-r from-primary-400 to-secondary-400 rounded-full flex items-center justify-center mx-auto mb-6 shadow-duo-lg">
-                                <i class="fas fa-user text-white text-4xl"></i>
-                            </div>
-                            <h4 class="text-xl font-bold text-neutral-800 mb-2">Dimas Arya Duwipangga</h4>
-                            <p class="text-primary-600 font-medium mb-4">Beckend Developer</p>
-                            <p class="text-neutral-600 mb-6">
-                                Berpengalaman dalam pengembangan Beckend aplikasi, memiliki jam terbang yang tinggi wis kaya senior programmer
-                            </p>
-                            <div class="flex justify-center space-x-4">
-                                <a href="github.com/DUWIPANGGA" class="social-icon w-10 h-10 rounded-full flex items-center justify-center text-primary-600">
-                                    <i class="fab fa-github"></i>
-                                </a>
-                                <a href="https://www.linkedin.com/in/duwipangga/" class="social-icon w-10 h-10 rounded-full flex items-center justify-center text-primary-600">
-                                    <i class="fab fa-linkedin"></i>
-                                </a>
-                                <a href="https://duwipangga.pey.my.id/" class="social-icon w-10 h-10 rounded-full flex items-center justify-center text-primary-600">
-                                    <i class="fas fa-globe"></i>
-                                </a>
-                            </div>
-                        </div>
+    <!-- Developer 1 -->
+    <div class="developer-card card p-6 text-center fade-in-up">
+        <div class="w-32 h-32 mx-auto mb-6 overflow-hidden rounded-full shadow-duo-lg">
+            <img src="{{ asset('assets/images/dimas.jpeg') }}" 
+                 alt="Dimas Arya Duwipangga"
+                 class="w-full h-full object-cover">
+        </div>
+        <h4 class="text-xl font-bold text-neutral-800 mb-2">Dimas Arya Duwipangga</h4>
+        <p class="text-primary-600 font-medium mb-4">Backend Developer</p>
+        <p class="text-neutral-600 mb-6">
+            Berpengalaman dalam pengembangan Backend aplikasi, memiliki jam terbang yang tinggi.
+        </p>
+        <div class="flex justify-center space-x-4">
+            <a href="https://github.com/DUWIPANGGA" class="social-icon w-10 h-10 rounded-full flex items-center justify-center text-primary-600">
+                <i class="fab fa-github"></i>
+            </a>
+            <a href="https://www.linkedin.com/in/duwipangga/" class="social-icon w-10 h-10 rounded-full flex items-center justify-center text-primary-600">
+                <i class="fab fa-linkedin"></i>
+            </a>
+            <a href="https://duwipangga.pey.my.id/" class="social-icon w-10 h-10 rounded-full flex items-center justify-center text-primary-600">
+                <i class="fas fa-globe"></i>
+            </a>
+        </div>
+    </div>
 
-                        <!-- Developer 2 -->
-                        <div class="developer-card card p-6 text-center fade-in-up" style="animation-delay: 0.2s;">
-                            <div class="w-32 h-32 bg-gradient-to-r from-secondary-400 to-accent-purple rounded-full flex items-center justify-center mx-auto mb-6 shadow-duo-lg">
-                                <i class="fas fa-user text-white text-4xl"></i>
-                            </div>
-                            <h4 class="text-xl font-bold text-neutral-800 mb-2">Muhamad Ifran Maulana</h4>
-                            <p class="text-secondary-600 font-medium mb-4">Penggaruk Peler</p>
-                            <p class="text-neutral-600 mb-6">
-                                Peler saya selalu gatel
-                            <div class="flex justify-center space-x-4">
-                                <a href="#" class="social-icon w-10 h-10 rounded-full flex items-center justify-center text-secondary-600">
-                                    <i class="fab fa-github"></i>
-                                </a>
-                                <a href="#" class="social-icon w-10 h-10 rounded-full flex items-center justify-center text-secondary-600">
-                                    <i class="fab fa-linkedin"></i>
-                                </a>
-                                <a href="mailto:mohammadifran22@gmail.com" class="social-icon w-10 h-10 rounded-full flex items-center justify-center text-secondary-600">
-                                    <i class="fa-regular fa-envelope"></i>
-                                </a>
-                            </div>
-                        </div>
+    <!-- Developer 2 -->
+    <div class="developer-card card p-6 text-center fade-in-up" style="animation-delay: 0.2s;">
+        <div class="w-32 h-32 mx-auto mb-6 overflow-hidden rounded-full shadow-duo-lg">
+            <img src="{{ asset('assets/images/ifran.jpeg') }}" 
+                 alt="Muhamad Ifran Maulana"
+                 class="w-full h-full object-cover">
+        </div>
+        <h4 class="text-xl font-bold text-neutral-800 mb-2">Muhamad Ifran Maulana</h4>
+        <p class="text-secondary-600 font-medium mb-4">Sistem Analisis</p>
+        <p class="text-neutral-600 mb-6">
+            Mengerjakan Sistem secara terstruktur
+        </p>
+        <div class="flex justify-center space-x-4">
+            <a href="#" class="social-icon w-10 h-10 rounded-full flex items-center justify-center text-secondary-600">
+                <i class="fab fa-github"></i>
+            </a>
+            <a href="#" class="social-icon w-10 h-10 rounded-full flex items-center justify-center text-secondary-600">
+                <i class="fab fa-linkedin"></i>
+            </a>
+            <a href="mailto:mohammadifran22@gmail.com" class="social-icon w-10 h-10 rounded-full flex items-center justify-center text-secondary-600">
+                <i class="fa-regular fa-envelope"></i>
+            </a>
+        </div>
+    </div>
 
-                        <!-- Developer 3 -->
-                        <div class="developer-card card p-6 text-center fade-in-up" style="animation-delay: 0.4s;">
-                            <div class="w-32 h-32 bg-gradient-to-r from-accent-blue to-accent-purple rounded-full flex items-center justify-center mx-auto mb-6 shadow-duo-lg">
-                                <i class="fas fa-user text-white text-4xl"></i>
-                            </div>
-                            <h4 class="text-xl font-bold text-neutral-800 mb-2">Bintang Julian Hidayat</h4>
-                            <p class="text-accent-purple font-medium mb-4">Frontend Developer</p>
-                            <p class="text-neutral-600 mb-6">
-                                Junior Programmer yang masih mencari pengalaman dalam dunia pemrograman
-                            </p>
-                            <div class="flex justify-center space-x-4">
-                                <a href="https://github.com/BJulianH" class="social-icon w-10 h-10 rounded-full flex items-center justify-center text-purple-600">
-                                    <i class="fab fa-github"></i>
-                                </a>
-                                <a href="https://www.linkedin.com/in/bintang-julian-hidayat-a24572365/" class="social-icon w-10 h-10 rounded-full flex items-center justify-center text-purple-600">
-                                    <i class="fab fa-linkedin"></i>
-                                </a>
-                                <a href="mailto:bintangjulianhidayat@gmail.com" class="social-icon w-10 h-10 rounded-full flex items-center justify-center text-purple-600">
-                                    <i class="fa-regular fa-envelope"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
+    <!-- Developer 3 -->
+    <div class="developer-card card p-6 text-center fade-in-up" style="animation-delay: 0.4s;">
+        <div class="w-32 h-32 mx-auto mb-6 overflow-hidden rounded-full shadow-duo-lg">
+            <img src="{{ asset('assets/images/julian.jpeg') }}" 
+                 alt="Bintang Julian Hidayat"
+                 class="w-full h-full object-cover">
+        </div>
+        <h4 class="text-xl font-bold text-neutral-800 mb-2">Bintang Julian Hidayat</h4>
+        <p class="text-accent-purple font-medium mb-4">Frontend Developer</p>
+        <p class="text-neutral-600 mb-6">
+            Junior Programmer yang masih mencari pengalaman dalam dunia pemrograman
+        </p>
+        <div class="flex justify-center space-x-4">
+            <a href="https://github.com/BJulianH" class="social-icon w-10 h-10 rounded-full flex items-center justify-center text-purple-600">
+                <i class="fab fa-github"></i>
+            </a>
+            <a href="https://www.linkedin.com/in/bintang-julian-hidayat-a24572365/" class="social-icon w-10 h-10 rounded-full flex items-center justify-center text-purple-600">
+                <i class="fab fa-linkedin"></i>
+            </a>
+            <a href="mailto:bintangjulianhidayat@gmail.com" class="social-icon w-10 h-10 rounded-full flex items-center justify-center text-purple-600">
+                <i class="fa-regular fa-envelope"></i>
+            </a>
+        </div>
+    </div>
+</div>
                 </div>
 
                 <!-- Our Story -->
