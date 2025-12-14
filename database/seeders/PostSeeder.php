@@ -17,28 +17,34 @@ class PostSeeder extends Seeder
 
         $posts = [
             [
-                'title' => 'Welcome to our Community!',
-                'content' => 'This is the first post in our amazing community. Feel free to introduce yourself!',
+                'title' => 'Selamat Datang di Komunitas Kami!',
+                'content' => 'Ini adalah postingan pertama di komunitas yang luar biasa ini. Silakan perkenalkan diri Anda!',
                 'user_id' => $users->first()->id,
                 'community_id' => $communities->first()->id,
             ],
             [
-                'title' => 'Laravel 11 Features',
-                'content' => 'What are the most exciting features coming in Laravel 11? Let\'s discuss!',
+                'title' => 'Dukungan untuk Kesehatan Mental',
+                'content' => 'Hari ini saya ingin berbagi pengalaman perjalanan kesehatan mental saya. Mari saling mendukung!',
                 'user_id' => $users->get(1)->id,
-                'community_id' => $communities->where('slug', 'laravel')->first()->id,
+                'community_id' => $communities->where('slug', 'mental-health-support')->first()->id,
             ],
             [
-                'title' => 'JavaScript Frameworks Comparison',
-                'content' => 'React vs Vue vs Angular - which one do you prefer and why?',
+                'title' => 'Teknik Mindfulness untuk Pemula',
+                'content' => 'Apa teknik mindfulness yang paling efektif untuk pemula? Bagikan pengalaman Anda!',
                 'user_id' => $users->get(2)->id,
-                'community_id' => $communities->where('slug', 'javascript')->first()->id,
+                'community_id' => $communities->where('slug', 'mindfulness-meditation')->first()->id,
             ],
             [
-                'title' => 'Programming Tips for Beginners',
-                'content' => 'Share your best programming tips for those just starting out!',
+                'title' => 'Strategi Mengatasi Stres',
+                'content' => 'Bagikan strategi terbaik Anda untuk mengatasi stres sehari-hari!',
                 'user_id' => $users->get(3)->id,
-                'community_id' => $communities->where('slug', 'programming')->first()->id,
+                'community_id' => $communities->where('slug', 'coping-strategies')->first()->id,
+            ],
+            [
+                'title' => 'Tips Mencari Bantuan Profesional',
+                'content' => 'Bagaimana cara menemukan terapis atau profesional kesehatan mental yang tepat?',
+                'user_id' => $users->get(4)->id ?? $users->first()->id,
+                'community_id' => $communities->where('slug', 'professional-support')->first()->id,
             ],
         ];
 
