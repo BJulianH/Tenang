@@ -492,11 +492,99 @@
         .checkbox-confirmed {
             animation: celebrate 0.6s ease-out;
         }
+        
+        /* Checkbox container style when clicking triggers modal */
+        .checkbox-trigger-container {
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .checkbox-trigger-container:hover {
+            background-color: #f8fafc;
+            border-radius: 8px;
+            padding: 4px;
+        }
+
+        /* Loading dots */
+        .loading-dots {
+            display: inline-flex;
+        }
+        
+        .loading-dots .dot {
+            animation: dotPulse 1.5s infinite;
+            opacity: 0;
+        }
+        
+        .loading-dots .dot:nth-child(1) {
+            animation-delay: 0s;
+        }
+        
+        .loading-dots .dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .loading-dots .dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        @keyframes dotPulse {
+            0%, 100% {
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
+        
+        /* Duolingo progress bar */
+        .duo-progress-fill {
+            transition: width 2s ease-in-out;
+        }
+        
+        .progress-animation {
+            animation: progressFill 2s ease-in-out infinite;
+            width: 100%;
+        }
+        
+        @keyframes progressFill {
+            0% { width: 0%; }
+            50% { width: 70%; }
+            100% { width: 100%; }
+        }
+        
+        /* Tooltip untuk checkbox */
+        .checkbox-tooltip {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .checkbox-tooltip .tooltip-text {
+            visibility: hidden;
+            width: 200px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.75rem;
+        }
+        
+        .checkbox-tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
     </style>
 </head>
 <body class="bg-neutral-50 max-h-full overflow-hidden">
     <!-- Loading Section -->
-        <div id="loading-section" class="fixed inset-0 z-50 flex items-center justify-center bg-white transition-all duration-500">
+    <div id="loading-section" class="fixed inset-0 z-50 flex items-center justify-center bg-white transition-all duration-500">
         <div class="text-center">
             <!-- Container dengan efek kartu Duolingo -->
             <div class="bg-white rounded-duo-xl p-8 shadow-duo-lg border-4 border-primary-100 transform transition-all duration-300 hover:scale-105">
@@ -709,21 +797,24 @@
 
                         <!-- Terms and Conditions -->
                         <div class="mb-6">
-                            <label class="flex items-start">
-                                <input type="checkbox" name="terms" id="termsCheckbox" class="w-4 h-4 text-primary-600 border-neutral-300 rounded focus:ring-primary-500 mt-1" required disabled>
-                                <span class="ml-2 text-sm text-neutral-600">
-                                    Saya setuju dengan
-                                    <button type="button" id="termsBtn" class="text-primary-600 hover:text-primary-700 underline font-medium transition-colors">Syarat Layanan</button>
-                                    dan
-                                    <button type="button" id="privacyBtn" class="text-primary-600 hover:text-primary-700 underline font-medium transition-colors">Kebijakan Privasi</button>
-                                    <span id="termsStatus" class="text-xs text-orange-500 ml-2 hidden">
-                                        (Harap baca kedua dokumen terlebih dahulu)
+                            <div class="checkbox-trigger-container">
+                                <label class="flex items-start cursor-pointer">
+                                    <div class="checkbox-tooltip relative">
+                                        <input type="checkbox" name="terms" id="termsCheckbox" class="w-4 h-4 text-primary-600 border-neutral-300 rounded focus:ring-primary-500 mt-1" disabled>
+                                        <span class="tooltip-text">Klik untuk membaca Syarat Layanan & Kebijakan Privasi</span>
+                                    </div>
+                                    <span class="ml-2 text-sm text-neutral-600">
+                                        Saya setuju dengan
+                                        <button type="button" id="policyBtn" class="text-primary-600 hover:text-primary-700 underline font-medium transition-colors">Syarat Layanan & Kebijakan Privasi</button>
+                                        <span id="termsStatus" class="text-xs text-orange-500 ml-2">
+                                            (Harap baca dokumen terlebih dahulu)
+                                        </span>
+                                        <span id="termsConfirmed" class="text-xs text-green-500 ml-2 hidden">
+                                            <i class="fas fa-check mr-1"></i>Sudah dibaca dan disetujui
+                                        </span>
                                     </span>
-                                    <span id="termsConfirmed" class="text-xs text-green-500 ml-2 hidden">
-                                        <i class="fas fa-check mr-1"></i>Sudah dibaca dan disetujui
-                                    </span>
-                                </span>
-                            </label>
+                                </label>
+                            </div>
                             @error('terms')
                             <div class="error-message">
                                 <i class="fas fa-exclamation-circle text-xs"></i>
@@ -807,8 +898,8 @@
         </div>
     </div>
 
-    <!-- Privacy Policy Modal -->
-    <div id="privacyModal" class="fixed inset-0 z-50 overflow-y-auto hidden">
+    <!-- Combined Policy Modal (Syarat Layanan & Kebijakan Privasi) -->
+    <div id="policyModal" class="fixed inset-0 z-50 overflow-y-auto hidden">
         <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
             <!-- Background overlay -->
             <div class="fixed inset-0 transition-opacity bg-neutral-500 bg-opacity-75 modal-overlay"></div>
@@ -816,264 +907,175 @@
             <!-- Modal panel -->
             <div class="relative inline-block w-full max-w-4xl my-8 overflow-hidden text-left align-middle transition-all transform card modal-content">
                 <!-- Header -->
-                <div class="px-6 py-4 bg-primary-50 border-b border-primary-200">
+                <div class="px-6 py-4 bg-gradient-to-r from-primary-50 to-secondary-50 border-b border-primary-200">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center">
-                            <div class="w-10 h-10 bg-primary-500 rounded-full flex items-center justify-center mr-3">
-                                <i class="fas fa-shield-alt text-white text-sm"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-xl font-bold text-neutral-800">Kebijakan Privasi</h3>
-                                <p class="text-sm text-neutral-600">Terakhir diperbarui: {{ date('d M Y') }}</p>
-                            </div>
-                        </div>
-                        <button id="closePrivacy" class="w-8 h-8 rounded-full hover:bg-neutral-100 flex items-center justify-center transition-colors">
-                            <i class="fas fa-times text-neutral-500"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Content -->
-                <div class="px-6 py-4 max-h-96 overflow-y-auto modal-scrollbar" id="privacyContent">
-                    <div class="prose prose-sm max-w-none">
-                        <h4>1. Informasi yang Kami Kumpulkan</h4>
-                        <p class="text-neutral-700 mb-4">
-                            Kami mengumpulkan informasi yang Anda berikan secara langsung saat mendaftar dan menggunakan layanan Tenang, termasuk:
-                        </p>
-                        <ul class="list-disc list-inside text-neutral-700 mb-4 space-y-1">
-                            <li>Data pribadi (nama, email)</li>
-                            <li>Data kesehatan mental (mood, journal entries)</li>
-                            <li>Data penggunaan aplikasi</li>
-                            <li>Informasi teknis (perangkat, browser, IP address)</li>
-                        </ul>
-
-                        <h4>2. Penggunaan Informasi</h4>
-                        <p class="text-neutral-700 mb-4">
-                            Informasi yang kami kumpulkan digunakan untuk:
-                        </p>
-                        <ul class="list-disc list-inside text-neutral-700 mb-4 space-y-1">
-                            <li>Menyediakan dan mempersonalisasi layanan</li>
-                            <li>Meningkatkan kualitas layanan dan pengalaman pengguna</li>
-                            <li>Analisis tren kesehatan mental yang anonym</li>
-                            <li>Komunikasi terkait layanan dan pembaruan</li>
-                            <li>Memastikan keamanan akun Anda</li>
-                        </ul>
-
-                        <h4>3. Perlindungan Data</h4>
-                        <p class="text-neutral-700 mb-4">
-                            Kami menerapkan standar keamanan tinggi untuk melindungi data Anda:
-                        </p>
-                        <ul class="list-disc list-inside text-neutral-700 mb-4 space-y-1">
-                            <li>Semua data disimpan secara terenkripsi</li>
-                            <li>Akses data dibatasi hanya untuk pihak yang berwenang</li>
-                            <li>Protokol keamanan mengikuti standar industri</li>
-                            <li>Audit keamanan berkala</li>
-                        </ul>
-
-                        <h4>4. Berbagi Informasi</h4>
-                        <p class="text-neutral-700 mb-4">
-                            Kami tidak menjual atau menyewakan data pribadi Anda. Informasi dapat dibagikan hanya dalam kondisi:
-                        </p>
-                        <ul class="list-disc list-inside text-neutral-700 mb-4 space-y-1">
-                            <li>Dengan persetujuan eksplisit dari Anda</li>
-                            <li>Untuk mematuhi kewajiban hukum</li>
-                            <li>Melindungi hak dan keselamatan pengguna lain</li>
-                            <li>Dengan penyedia layanan yang membantu operasional kami (dengan kontrak kerahasiaan)</li>
-                        </ul>
-
-                        <h4>5. Hak Anda</h4>
-                        <p class="text-neutral-700 mb-4">
-                            Anda memiliki hak untuk:
-                        </p>
-                        <ul class="list-disc list-inside text-neutral-700 mb-4 space-y-1">
-                            <li>Mengakses data pribadi Anda</li>
-                            <li>Memperbaiki data yang tidak akurat</li>
-                            <li>Menghapus data pribadi</li>
-                            <li>Membatasi pemrosesan data</li>
-                            <li>Menerima salinan data dalam format terstruktur</li>
-                        </ul>
-
-                        <h4>6. Penyimpanan Data</h4>
-                        <p class="text-neutral-700 mb-4">
-                            Data disimpan selama diperlukan untuk menyediakan layanan atau sesuai dengan ketentuan hukum. Anda dapat meminta penghapusan data kapan saja.
-                        </p>
-
-                        <h4>7. Cookies dan Teknologi Serupa</h4>
-                        <p class="text-neutral-700 mb-4">
-                            Kami menggunakan cookies untuk meningkatkan pengalaman pengguna, menganalisis traffic, dan personalisasi konten.
-                        </p>
-
-                        <h4>8. Perubahan Kebijakan</h4>
-                        <p class="text-neutral-700 mb-4">
-                            Kami dapat memperbarui kebijakan privasi ini dari waktu ke waktu. Perubahan signifikan akan diumumkan melalui aplikasi, email, atau notifikasi lainnya.
-                        </p>
-
-                        <h4>9. Kontak</h4>
-                        <p class="text-neutral-700">
-                            Untuk pertanyaan tentang kebijakan privasi atau penggunaan data, hubungi kami di <strong>privacy@tenang.com</strong>.
-                        </p>
-
-                        <!-- Extra content to ensure scrolling is needed -->
-                        <div class="mt-8 pt-8 border-t border-neutral-200">
-                            <h4>10. Komitmen Kami</h4>
-                            <p class="text-neutral-700 mb-4">
-                                Kami berkomitmen untuk melindungi privasi Anda dan memastikan bahwa data pribadi Anda dikelola dengan transparansi dan tanggung jawab.
-                            </p>
-                            <p class="text-neutral-700">
-                                Dengan menggunakan layanan Tenang, Anda mempercayai kami dengan informasi pribadi Anda, dan kami sangat serius dalam menjaga kepercayaan tersebut.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Reading Progress -->
-                <div class="reading-progress">
-                    <div id="privacyProgress" class="reading-progress-fill"></div>
-                </div>
-
-                <!-- Scroll Indicator -->
-                <div id="privacyScrollIndicator" class="scroll-indicator">
-                    <i class="fas fa-arrow-down mr-2"></i>
-                    Scroll ke bawah untuk melanjutkan membaca
-                </div>
-
-                <!-- Footer -->
-                <div class="px-6 py-4 bg-neutral-50 border-t border-neutral-200 flex justify-end">
-                    <button id="understandPrivacy" class="app-button px-6 py-2" disabled>
-                        <span id="privacyButtonText">Mengerti</span>
-                        <span id="privacyButtonLoading" class="hidden">
-                            <i class="fas fa-spinner loading-spinner mr-2"></i>
-                            Memproses...
-                        </span>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Terms of Service Modal -->
-    <div id="termsModal" class="fixed inset-0 z-50 overflow-y-auto hidden">
-        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
-            <!-- Background overlay -->
-            <div class="fixed inset-0 transition-opacity bg-neutral-500 bg-opacity-75 modal-overlay"></div>
-
-            <!-- Modal panel -->
-            <div class="relative inline-block w-full max-w-4xl my-8 overflow-hidden text-left align-middle transition-all transform card modal-content">
-                <!-- Header -->
-                <div class="px-6 py-4 bg-secondary-50 border-b border-secondary-200">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center">
-                            <div class="w-10 h-10 bg-secondary-500 rounded-full flex items-center justify-center mr-3">
+                            <div class="w-10 h-10 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full flex items-center justify-center mr-3">
                                 <i class="fas fa-file-contract text-white text-sm"></i>
                             </div>
                             <div>
-                                <h3 class="text-xl font-bold text-neutral-800">Syarat Layanan</h3>
+                                <h3 class="text-xl font-bold text-neutral-800">Syarat Layanan & Kebijakan Privasi</h3>
                                 <p class="text-sm text-neutral-600">Terakhir diperbarui: {{ date('d M Y') }}</p>
                             </div>
                         </div>
-                        <button id="closeTerms" class="w-8 h-8 rounded-full hover:bg-neutral-100 flex items-center justify-center transition-colors">
+                        <button id="closePolicy" class="w-8 h-8 rounded-full hover:bg-neutral-100 flex items-center justify-center transition-colors">
                             <i class="fas fa-times text-neutral-500"></i>
                         </button>
                     </div>
                 </div>
 
                 <!-- Content -->
-                <div class="px-6 py-4 max-h-96 overflow-y-auto modal-scrollbar" id="termsContent">
+                <div class="px-6 py-4 max-h-96 overflow-y-auto modal-scrollbar" id="policyContent">
                     <div class="prose prose-sm max-w-none">
-                        <h4>1. Penerimaan Syarat</h4>
+                        <!-- Introduction -->
+                        <h4 class="text-lg font-semibold text-primary-700 mb-3">1. Pengantar dan Penerimaan</h4>
                         <p class="text-neutral-700 mb-4">
-                            Dengan mendaftar dan menggunakan layanan Tenang, Anda menyetujui semua syarat dan ketentuan yang tercantum di bawah ini. Jika Anda tidak setuju, harap jangan menggunakan layanan kami.
+                            Dengan mendaftar dan menggunakan layanan Tenang, Anda menyetujui semua syarat layanan dan ketentuan privasi yang tercantum di bawah ini. Mohon baca dokumen ini dengan seksama sebelum menggunakan layanan kami.
                         </p>
 
-                        <h4>2. Akun Pengguna</h4>
-                        <p class="text-neutral-700 mb-4">
-                            Saat membuat akun, Anda setuju untuk:
-                        </p>
-                        <ul class="list-disc list-inside text-neutral-700 mb-4 space-y-1">
-                            <li>Menyediakan informasi yang akurat, lengkap, dan terkini</li>
-                            <li>Menjaga kerahasiaan informasi akun dan password</li>
-                            <li>Bertanggung jawab penuh atas semua aktivitas yang terjadi di akun Anda</li>
-                            <li>Segera melaporkan aktivitas mencurigakan atau pelanggaran keamanan</li>
-                            <li>Memastikan Anda berusia minimal 13 tahun (atau sesuai ketentuan hukum setempat)</li>
-                        </ul>
+                        <!-- Syarat Layanan Section -->
+                        <div class="mb-6">
+                            <h4 class="text-lg font-semibold text-primary-700 mb-3">2. Syarat Layanan</h4>
+                            
+                            <h5 class="font-medium text-neutral-800 mb-2">2.1. Akun Pengguna</h5>
+                            <p class="text-neutral-700 mb-3">
+                                Saat membuat akun, Anda setuju untuk:
+                            </p>
+                            <ul class="list-disc list-inside text-neutral-700 mb-4 space-y-1 ml-4">
+                                <li>Menyediakan informasi yang akurat, lengkap, dan terkini</li>
+                                <li>Menjaga kerahasiaan informasi akun dan password</li>
+                                <li>Bertanggung jawab penuh atas semua aktivitas yang terjadi di akun Anda</li>
+                                <li>Segera melaporkan aktivitas mencurigakan atau pelanggaran keamanan</li>
+                                <li>Memastikan Anda berusia minimal 13 tahun (atau sesuai ketentuan hukum setempat)</li>
+                            </ul>
 
-                        <h4>3. Penggunaan Layanan</h4>
-                        <p class="text-neutral-700 mb-4">
-                            Anda setuju untuk menggunakan layanan Tenang secara bertanggung jawab dan tidak:
-                        </p>
-                        <ul class="list-disc list-inside text-neutral-700 mb-4 space-y-1">
-                            <li>Menyalahgunakan layanan untuk tujuan ilegal, berbahaya, atau tidak sah</li>
-                            <li>Mengganggu atau mencoba mengganggu operasional layanan</li>
-                            <li>Mencoba mengakses data pengguna lain tanpa izin</li>
-                            <li>Menyebarkan malware, virus, atau kode berbahaya</li>
-                            <li>Melakukan scraping atau pengumpulan data otomatis</li>
-                            <li>Melanggar hak kekayaan intelektual orang lain</li>
-                            <li>Menyebarkan konten yang bersifat ujaran kebencian, diskriminatif, atau tidak pantas</li>
-                        </ul>
+                            <h5 class="font-medium text-neutral-800 mb-2">2.2. Penggunaan Layanan</h5>
+                            <p class="text-neutral-700 mb-3">
+                                Anda setuju untuk menggunakan layanan Tenang secara bertanggung jawab dan tidak:
+                            </p>
+                            <ul class="list-disc list-inside text-neutral-700 mb-4 space-y-1 ml-4">
+                                <li>Menyalahgunakan layanan untuk tujuan ilegal, berbahaya, atau tidak sah</li>
+                                <li>Mengganggu atau mencoba mengganggu operasional layanan</li>
+                                <li>Mencoba mengakses data pengguna lain tanpa izin</li>
+                                <li>Menyebarkan malware, virus, atau kode berbahaya</li>
+                                <li>Melakukan scraping atau pengumpulan data otomatis</li>
+                                <li>Melanggar hak kekayaan intelektual orang lain</li>
+                                <li>Menyebarkan konten yang bersifat ujaran kebencian, diskriminatif, atau tidak pantas</li>
+                            </ul>
 
-                        <h4>4. Batasan Layanan</h4>
-                        <p class="text-neutral-700 mb-4">
-                            <strong>Penting:</strong> Tenang adalah alat pendukung kesehatan mental dan bukan pengganti perawatan medis profesional. Layanan kami tidak memberikan diagnosis medis, pengobatan, atau terapi pengganti.
-                        </p>
-                        <p class="text-neutral-700 mb-4">
-                            Dalam keadaan darurat medis atau krisis kesehatan mental, segera hubungi:
-                        </p>
-                        <ul class="list-disc list-inside text-neutral-700 mb-4 space-y-1">
-                            <li>Layanan darurat setempat (119)</li>
-                            <li>Dokter atau profesional kesehatan mental</li>
-                            <li>Layanan crisis helpline</li>
-                        </ul>
+                            <h5 class="font-medium text-neutral-800 mb-2">2.3. Batasan Layanan</h5>
+                            <p class="text-neutral-700 mb-3">
+                                <strong class="text-red-500">Penting:</strong> Tenang adalah alat pendukung kesehatan mental dan <strong>bukan pengganti perawatan medis profesional</strong>. Layanan kami tidak memberikan diagnosis medis, pengobatan, atau terapi pengganti.
+                            </p>
+                            <p class="text-neutral-700 mb-3">
+                                Dalam keadaan darurat medis atau krisis kesehatan mental, segera hubungi:
+                            </p>
+                            <ul class="list-disc list-inside text-neutral-700 mb-4 space-y-1 ml-4">
+                                <li>Layanan darurat setempat (119)</li>
+                                <li>Dokter atau profesional kesehatan mental</li>
+                                <li>Layanan crisis helpline</li>
+                            </ul>
+                        </div>
 
-                        <h4>5. Hak Kekayaan Intelektual</h4>
-                        <p class="text-neutral-700 mb-4">
-                            Semua konten, fitur, fungsi, dan materi dalam aplikasi Tenang (termasuk tapi tidak terbatas pada teks, grafis, logo, dan kode) adalah milik kami atau pemberi lisensi kami dan dilindungi oleh hukum hak cipta dan hak kekayaan intelektual lainnya.
-                        </p>
+                        <!-- Kebijakan Privasi Section -->
+                        <div class="mb-6">
+                            <h4 class="text-lg font-semibold text-primary-700 mb-3">3. Kebijakan Privasi</h4>
+                            
+                            <h5 class="font-medium text-neutral-800 mb-2">3.1. Informasi yang Kami Kumpulkan</h5>
+                            <p class="text-neutral-700 mb-3">
+                                Kami mengumpulkan informasi yang Anda berikan secara langsung saat mendaftar dan menggunakan layanan Tenang, termasuk:
+                            </p>
+                            <ul class="list-disc list-inside text-neutral-700 mb-4 space-y-1 ml-4">
+                                <li>Data pribadi (nama, email)</li>
+                                <li>Data kesehatan mental (mood, journal entries) - disimpan secara terenkripsi</li>
+                                <li>Data penggunaan aplikasi</li>
+                                <li>Informasi teknis (perangkat, browser, IP address)</li>
+                            </ul>
 
-                        <h4>6. Konten Pengguna</h4>
-                        <p class="text-neutral-700 mb-4">
-                            Anda mempertahankan kepemilikan atas konten yang Anda buat di Tenang. Dengan mengirimkan konten, Anda memberikan kami lisensi untuk menggunakan, menampilkan, dan menyimpan konten tersebut untuk menyediakan layanan.
-                        </p>
+                            <h5 class="font-medium text-neutral-800 mb-2">3.2. Penggunaan Informasi</h5>
+                            <p class="text-neutral-700 mb-3">
+                                Informasi yang kami kumpulkan digunakan untuk:
+                            </p>
+                            <ul class="list-disc list-inside text-neutral-700 mb-4 space-y-1 ml-4">
+                                <li>Menyediakan dan mempersonalisasi layanan</li>
+                                <li>Meningkatkan kualitas layanan dan pengalaman pengguna</li>
+                                <li>Analisis tren kesehatan mental yang anonym</li>
+                                <li>Komunikasi terkait layanan dan pembaruan</li>
+                                <li>Memastikan keamanan akun Anda</li>
+                            </ul>
 
-                        <h4>7. Pembatasan Tanggung Jawab</h4>
-                        <p class="text-neutral-700 mb-4">
-                            Layanan disediakan "sebagaimana adanya" tanpa jaminan apapun. Kami tidak bertanggung jawab atas:
-                        </p>
-                        <ul class="list-disc list-inside text-neutral-700 mb-4 space-y-1">
-                            <li>Kerugian tidak langsung, insidental, atau konsekuensial</li>
-                            <li>Keakuratan atau kelengkapan konten yang dihasilkan pengguna</li>
-                            <li>Interupsi atau gangguan layanan di luar kendali kami</li>
-                            <li>Tindakan atau kelalaian pengguna lain</li>
-                        </ul>
+                            <h5 class="font-medium text-neutral-800 mb-2">3.3. Perlindungan Data</h5>
+                            <p class="text-neutral-700 mb-3">
+                                Kami menerapkan standar keamanan tinggi untuk melindungi data Anda:
+                            </p>
+                            <ul class="list-disc list-inside text-neutral-700 mb-4 space-y-1 ml-4">
+                                <li>Semua data disimpan secara terenkripsi</li>
+                                <li>Akses data dibatasi hanya untuk pihak yang berwenang</li>
+                                <li>Protokol keamanan mengikuti standar industri</li>
+                                <li>Audit keamanan berkala</li>
+                            </ul>
 
-                        <h4>8. Penghentian Layanan</h4>
-                        <p class="text-neutral-700 mb-4">
-                            Kami dapat menghentikan atau menangguhkan akses Anda jika:
-                        </p>
-                        <ul class="list-disc list-inside text-neutral-700 mb-4 space-y-1">
-                            <li>Melanggar syarat layanan ini</li>
-                            <li>Menimbulkan risiko atau tanggung jawab hukum bagi kami</li>
-                            <li>Pembuatan akun untuk tujuan penipuan</li>
-                            <li>Penggunaan yang tidak sah atau berbahaya</li>
-                        </ul>
+                            <h5 class="font-medium text-neutral-800 mb-2">3.4. Berbagi Informasi</h5>
+                            <p class="text-neutral-700 mb-3">
+                                Kami tidak menjual atau menyewakan data pribadi Anda. Informasi dapat dibagikan hanya dalam kondisi:
+                            </p>
+                            <ul class="list-disc list-inside text-neutral-700 mb-4 space-y-1 ml-4">
+                                <li>Dengan persetujuan eksplisit dari Anda</li>
+                                <li>Untuk mematuhi kewajiban hukum</li>
+                                <li>Melindungi hak dan keselamatan pengguna lain</li>
+                                <li>Dengan penyedia layanan yang membantu operasional kami (dengan kontrak kerahasiaan)</li>
+                            </ul>
+                        </div>
 
-                        <h4>9. Perubahan Syarat</h4>
-                        <p class="text-neutral-700 mb-4">
-                            Kami berhak mengubah syarat layanan kapan saja. Perubahan akan diberitahukan melalui aplikasi, email, atau notifikasi lainnya. Penggunaan berkelanjutan setelah perubahan berarti penerimaan Anda terhadap syarat baru.
-                        </p>
+                        <!-- Hak Pengguna Section -->
+                        <div class="mb-6">
+                            <h4 class="text-lg font-semibold text-primary-700 mb-3">4. Hak Anda</h4>
+                            <p class="text-neutral-700 mb-3">
+                                Sebagai pengguna Tenang, Anda memiliki hak untuk:
+                            </p>
+                            <ul class="list-disc list-inside text-neutral-700 mb-4 space-y-1 ml-4">
+                                <li>Mengakses data pribadi Anda</li>
+                                <li>Memperbaiki data yang tidak akurat</li>
+                                <li>Menghapus data pribadi (hak untuk dilupakan)</li>
+                                <li>Membatasi pemrosesan data</li>
+                                <li>Menerima salinan data dalam format terstruktur</li>
+                                <li>Menarik persetujuan pemrosesan data kapan saja</li>
+                            </ul>
+                        </div>
 
-                        <h4>10. Hukum yang Berlaku</h4>
-                        <p class="text-neutral-700">
-                            Syarat layanan ini diatur oleh hukum Indonesia. Setiap sengketa akan diselesaikan di pengadilan yang berwenang di Indonesia.
-                        </p>
+                        <!-- Ketentuan Umum -->
+                        <div class="mb-6">
+                            <h4 class="text-lg font-semibold text-primary-700 mb-3">5. Ketentuan Umum</h4>
+                            
+                            <h5 class="font-medium text-neutral-800 mb-2">5.1. Penyimpanan Data</h5>
+                            <p class="text-neutral-700 mb-3">
+                                Data disimpan selama diperlukan untuk menyediakan layanan atau sesuai dengan ketentuan hukum. Anda dapat meminta penghapusan data kapan saja melalui pengaturan akun atau dengan menghubungi kami.
+                            </p>
 
-                        <!-- Extra content to ensure scrolling is needed -->
+                            <h5 class="font-medium text-neutral-800 mb-2">5.2. Perubahan Syarat</h5>
+                            <p class="text-neutral-700 mb-3">
+                                Kami berhak mengubah syarat layanan dan kebijakan privasi kapan saja. Perubahan signifikan akan diumumkan melalui aplikasi, email, atau notifikasi lainnya. Penggunaan berkelanjutan setelah perubahan berarti penerimaan Anda terhadap syarat baru.
+                            </p>
+
+                            <h5 class="font-medium text-neutral-800 mb-2">5.3. Hukum yang Berlaku</h5>
+                            <p class="text-neutral-700 mb-3">
+                                Syarat layanan dan kebijakan privasi ini diatur oleh hukum Indonesia. Setiap sengketa akan diselesaikan di pengadilan yang berwenang di Indonesia.
+                            </p>
+
+                            <h5 class="font-medium text-neutral-800 mb-2">5.4. Kontak</h5>
+                            <p class="text-neutral-700">
+                                Untuk pertanyaan tentang kebijakan privasi, syarat layanan, atau penggunaan data, hubungi kami di <strong class="text-primary-600">privacy@tenang.com</strong>.
+                            </p>
+                        </div>
+
+                        <!-- Komitmen Section -->
                         <div class="mt-8 pt-8 border-t border-neutral-200">
-                            <h4>11. Komitmen Kami</h4>
+                            <h4 class="text-lg font-semibold text-primary-700 mb-3">6. Komitmen Kami</h4>
                             <p class="text-neutral-700 mb-4">
-                                Kami berkomitmen untuk memberikan pengalaman yang aman, mendukung, dan bermanfaat bagi semua pengguna Tenang.
+                                Kami berkomitmen untuk melindungi privasi Anda dan memastikan bahwa data pribadi Anda dikelola dengan transparansi dan tanggung jawab. Tenang dirancang sebagai ruang yang aman dan mendukung untuk perjalanan kesehatan mental Anda.
                             </p>
                             <p class="text-neutral-700">
-                                Dengan menyetujui syarat layanan ini, Anda menjadi bagian dari komunitas yang peduli dengan kesehatan mental dan kesejahteraan bersama.
+                                Dengan menyetujui dokumen ini, Anda menjadi bagian dari komunitas yang peduli dengan kesehatan mental dan kesejahteraan bersama.
                             </p>
                         </div>
                     </div>
@@ -1081,20 +1083,20 @@
 
                 <!-- Reading Progress -->
                 <div class="reading-progress">
-                    <div id="termsProgress" class="reading-progress-fill"></div>
+                    <div id="policyProgress" class="reading-progress-fill"></div>
                 </div>
 
                 <!-- Scroll Indicator -->
-                <div id="termsScrollIndicator" class="scroll-indicator">
+                <div id="policyScrollIndicator" class="scroll-indicator">
                     <i class="fas fa-arrow-down mr-2"></i>
                     Scroll ke bawah untuk melanjutkan membaca
                 </div>
 
                 <!-- Footer -->
                 <div class="px-6 py-4 bg-neutral-50 border-t border-neutral-200 flex justify-end">
-                    <button id="understandTerms" class="app-button-secondary px-6 py-2" disabled>
-                        <span id="termsButtonText">Mengerti</span>
-                        <span id="termsButtonLoading" class="hidden">
+                    <button id="understandPolicy" class="app-button px-6 py-2" disabled>
+                        <span id="policyButtonText">Saya Mengerti & Menyetujui</span>
+                        <span id="policyButtonLoading" class="hidden">
                             <i class="fas fa-spinner loading-spinner mr-2"></i>
                             Memproses...
                         </span>
@@ -1121,25 +1123,21 @@
 
         document.addEventListener("DOMContentLoaded", () => {
             // State management
-            let privacyRead = false;
-            let termsRead = false;
+            let policyRead = false;
 
             // Modal Elements
-            const privacyModal = document.getElementById("privacyModal");
-            const termsModal = document.getElementById("termsModal");
-            const privacyBtn = document.getElementById("privacyBtn");
-            const termsBtn = document.getElementById("termsBtn");
-            const closePrivacy = document.getElementById("closePrivacy");
-            const closeTerms = document.getElementById("closeTerms");
-            const understandPrivacy = document.getElementById("understandPrivacy");
-            const understandTerms = document.getElementById("understandTerms");
-            const modalOverlays = document.querySelectorAll(".modal-overlay");
+            const policyModal = document.getElementById("policyModal");
+            const policyBtn = document.getElementById("policyBtn");
+            const closePolicy = document.getElementById("closePolicy");
+            const understandPolicy = document.getElementById("understandPolicy");
+            const modalOverlay = document.querySelector(".modal-overlay");
 
             // Form Elements
             const termsCheckbox = document.getElementById("termsCheckbox");
             const termsStatus = document.getElementById("termsStatus");
             const termsConfirmed = document.getElementById("termsConfirmed");
             const submitBtn = document.getElementById("submitBtn");
+            const checkboxContainer = document.querySelector('.checkbox-trigger-container');
 
             // Password Elements
             const passwordInput = document.getElementById("password");
@@ -1151,42 +1149,58 @@
 
             // Update form state based on reading status
             function updateFormState() {
-                if (privacyRead && termsRead) {
+                if (policyRead) {
                     termsCheckbox.disabled = false;
                     termsCheckbox.checked = true;
                     termsStatus.classList.add('hidden');
                     termsConfirmed.classList.remove('hidden');
                     termsCheckbox.classList.add('checkbox-confirmed');
                     submitBtn.disabled = false;
+                    
+                    // Change cursor back to default
+                    checkboxContainer.style.cursor = 'default';
+                    checkboxContainer.classList.remove('checkbox-trigger-container');
                 } else {
                     termsStatus.classList.remove('hidden');
                     termsConfirmed.classList.add('hidden');
+                    termsCheckbox.disabled = true;
+                    termsCheckbox.checked = false;
+                    submitBtn.disabled = true;
                 }
             }
 
             // Modal Functions
-            function openModal(modal) {
-                modal.classList.remove("hidden");
+            function openModal() {
+                policyModal.classList.remove("hidden");
                 document.body.style.overflow = "hidden";
                 
                 // Reset scroll position
-                const content = modal.querySelector('.modal-scrollbar');
+                const content = policyModal.querySelector('.modal-scrollbar');
                 if (content) {
                     content.scrollTop = 0;
+                    // Reset progress bar
+                    document.getElementById('policyProgress').style.width = '0%';
                 }
+                
+                // Reset understand button state
+                understandPolicy.disabled = true;
+                understandPolicy.classList.add('disabled:opacity-50');
+                
+                // Show scroll indicator initially
+                document.getElementById('policyScrollIndicator').classList.remove('hidden');
                 
                 // Trigger animation
                 setTimeout(() => {
-                    const overlay = modal.querySelector(".modal-overlay");
-                    const content = modal.querySelector(".modal-content");
+                    const overlay = policyModal.querySelector(".modal-overlay");
+                    const content = policyModal.querySelector(".modal-content");
                     overlay.classList.add("overlay-enter-active");
                     content.classList.add("modal-enter-active");
                 }, 10);
             }
 
-            function closeModal(modal) {
-                const overlay = modal.querySelector(".modal-overlay");
-                const content = modal.querySelector(".modal-content");
+            function closeModal() {
+                const overlay = policyModal.querySelector(".modal-overlay");
+                const content = policyModal.querySelector(".modal-content");
                 
                 overlay.classList.remove("overlay-enter-active");
                 content.classList.remove("modal-enter-active");
@@ -1195,16 +1209,16 @@
                 content.classList.add("modal-leave-active");
                 
                 setTimeout(() => {
-                    modal.classList.add("hidden");
+                    policyModal.classList.add("hidden");
                     document.body.style.overflow = "";
                     overlay.classList.remove("overlay-leave-active");
                     content.classList.remove("modal-leave-active");
                 }, 200);
             }
 
-            // Scroll detection for modals
-            function setupScrollDetection(modal, progressBar, scrollIndicator, understandButton, type) {
-                const content = modal.querySelector('.modal-scrollbar');
+            // Scroll detection for modal
+            function setupScrollDetection() {
+                const content = policyModal.querySelector('.modal-scrollbar');
                 if (!content) return;
 
                 content.addEventListener('scroll', function() {
@@ -1214,107 +1228,91 @@
                     const scrollPercentage = (scrollTop / (scrollHeight - clientHeight)) * 100;
 
                     // Update progress bar
+                    const progressBar = document.getElementById('policyProgress');
                     if (progressBar) {
                         progressBar.style.width = `${Math.min(scrollPercentage, 100)}%`;
                     }
 
-                    // Hide scroll indicator when near bottom
+                    // Show/hide scroll indicator
+                    const scrollIndicator = document.getElementById('policyScrollIndicator');
                     if (scrollIndicator) {
                         if (scrollPercentage > 80) {
                             scrollIndicator.classList.add('hidden');
-                        } else {
+                        } else if (scrollPercentage > 10) {
                             scrollIndicator.classList.remove('hidden');
                         }
                     }
 
                     // Enable understand button when scrolled to bottom
-                    if (understandButton && scrollPercentage >= 95) {
-                        understandButton.disabled = false;
+                    if (understandPolicy && scrollPercentage >= 95) {
+                        understandPolicy.disabled = false;
+                        understandPolicy.classList.remove('disabled:opacity-50');
                     }
                 });
             }
 
-            // Event Listeners for Modals
-            privacyBtn.addEventListener("click", () => {
-                openModal(privacyModal);
-                setupScrollDetection(privacyModal, 
-                    document.getElementById('privacyProgress'),
-                    document.getElementById('privacyScrollIndicator'),
-                    understandPrivacy,
-                    'privacy'
-                );
+            // Event Listeners for Modal
+            policyBtn.addEventListener("click", () => {
+                openModal();
+                setupScrollDetection();
             });
 
-            termsBtn.addEventListener("click", () => {
-                openModal(termsModal);
-                setupScrollDetection(termsModal,
-                    document.getElementById('termsProgress'),
-                    document.getElementById('termsScrollIndicator'),
-                    understandTerms,
-                    'terms'
-                );
+            // NEW: Trigger modal when clicking on checkbox or its label container
+            checkboxContainer.addEventListener("click", (e) => {
+                // Prevent the default checkbox behavior when it's disabled
+                e.preventDefault();
+                
+                // Only open modal if policy hasn't been read yet
+                if (!policyRead) {
+                    openModal();
+                    setupScrollDetection();
+                }
             });
 
-            closePrivacy.addEventListener("click", () => closeModal(privacyModal));
-            closeTerms.addEventListener("click", () => closeModal(termsModal));
+            // Also listen for clicks directly on the checkbox
+            termsCheckbox.addEventListener("click", (e) => {
+                e.preventDefault();
+                
+                if (!policyRead) {
+                    openModal();
+                    setupScrollDetection();
+                }
+            });
 
-            // Understand button handlers
-            understandPrivacy.addEventListener("click", () => {
-                privacyRead = true;
+            closePolicy.addEventListener("click", () => closeModal());
+
+            // Understand button handler
+            understandPolicy.addEventListener("click", () => {
+                policyRead = true;
                 updateFormState();
-                closeModal(privacyModal);
                 
                 // Show confirmation animation
-                const buttonText = document.getElementById('privacyButtonText');
-                const buttonLoading = document.getElementById('privacyButtonLoading');
+                const buttonText = document.getElementById('policyButtonText');
+                const buttonLoading = document.getElementById('policyButtonLoading');
                 
                 buttonText.classList.add('hidden');
                 buttonLoading.classList.remove('hidden');
                 
                 setTimeout(() => {
+                    closeModal();
                     buttonLoading.classList.add('hidden');
                     buttonText.classList.remove('hidden');
-                    understandPrivacy.disabled = true;
-                }, 1000);
-            });
-
-            understandTerms.addEventListener("click", () => {
-                termsRead = true;
-                updateFormState();
-                closeModal(termsModal);
-                
-                // Show confirmation animation
-                const buttonText = document.getElementById('termsButtonText');
-                const buttonLoading = document.getElementById('termsButtonLoading');
-                
-                buttonText.classList.add('hidden');
-                buttonLoading.classList.remove('hidden');
-                
-                setTimeout(() => {
-                    buttonLoading.classList.add('hidden');
-                    buttonText.classList.remove('hidden');
-                    understandTerms.disabled = true;
-                }, 1000);
+                    understandPolicy.disabled = true;
+                    understandPolicy.classList.add('disabled:opacity-50');
+                }, 800);
             });
 
             // Close modal when clicking overlay
-            modalOverlays.forEach(overlay => {
-                overlay.addEventListener("click", function(e) {
-                    if (e.target === this) {
-                        const modal = this.closest('.fixed.inset-0');
-                        if (modal) closeModal(modal);
-                    }
-                });
+            modalOverlay.addEventListener("click", function(e) {
+                if (e.target === this) {
+                    closeModal();
+                }
             });
 
             // Close modal with Escape key
             document.addEventListener("keydown", (e) => {
-                if (e.key === "Escape") {
-                    if (!privacyModal.classList.contains("hidden")) {
-                        closeModal(privacyModal);
-                    } else if (!termsModal.classList.contains("hidden")) {
-                        closeModal(termsModal);
-                    }
+                if (e.key === "Escape" && !policyModal.classList.contains("hidden")) {
+                    closeModal();
                 }
             });
 
