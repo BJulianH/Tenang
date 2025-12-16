@@ -271,68 +271,206 @@
             });
         }
         
-        // Initialize delete confirmation modal
-        initializeDeleteModal();
+        // Initialize delete functionality
+        initializeDeleteFunctionality();
     }
 
-    // Delete Confirmation Modal
-    function initializeDeleteModal() {
-        const modal = document.getElementById('deleteMoodModal');
-        if (!modal) return;
-        
-        const cancelBtn = document.getElementById('cancelDelete');
+    // Delete Functionality (Single and Multiple)
+    function initializeDeleteFunctionality() {
+        // Single delete modal
+        const deleteModal = document.getElementById('deleteMoodModal');
+        const cancelDeleteBtn = document.getElementById('cancelDelete');
         const deleteForm = document.getElementById('deleteMoodForm');
-        let currentMoodId = null;
         
-        // Open modal when delete button is clicked
-        document.querySelectorAll('.delete-mood-btn').forEach(btn => {
+        // Multiple delete modal
+        const multipleDeleteModal = document.getElementById('deleteMultipleMoodsModal');
+        const cancelMultipleDeleteBtn = document.getElementById('cancelMultipleDelete');
+        const confirmMultipleDeleteBtn = document.getElementById('confirmMultipleDelete');
+        
+        // Delete selected moods button
+        const deleteSelectedBtn = document.getElementById('delete-selected-moods');
+        const selectAllBtn = document.getElementById('select-all-moods');
+        const selectedCountSpan = document.getElementById('selected-count');
+        const countSpan = document.getElementById('count');
+        const deleteCountSpan = document.getElementById('delete-count');
+        
+        // Checkbox elements
+        const checkboxes = document.querySelectorAll('.mood-checkbox');
+        
+        // Variables
+        let selectedMoodIds = new Set();
+        let isSelectAll = false;
+        
+        // Update selected count display
+        function updateSelectedCount() {
+            const count = selectedMoodIds.size;
+            countSpan.textContent = count;
+            deleteCountSpan.textContent = count;
+            
+            if (count > 0) {
+                selectedCountSpan.classList.remove('hidden');
+                deleteSelectedBtn.classList.remove('hidden');
+                selectAllBtn.innerHTML = '<i class="fas fa-times mr-2"></i>Batal Pilih';
+            } else {
+                selectedCountSpan.classList.add('hidden');
+                deleteSelectedBtn.classList.add('hidden');
+                selectAllBtn.innerHTML = '<i class="fas fa-check-square mr-2"></i>Pilih Semua';
+            }
+        }
+        
+        // Handle checkbox change
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                if (this.checked) {
+                    selectedMoodIds.add(this.value);
+                } else {
+                    selectedMoodIds.delete(this.value);
+                }
+                updateSelectedCount();
+            });
+        });
+        
+        // Select all / deselect all
+        selectAllBtn.addEventListener('click', function() {
+            isSelectAll = !isSelectAll;
+            
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = isSelectAll;
+                if (isSelectAll) {
+                    selectedMoodIds.add(checkbox.value);
+                } else {
+                    selectedMoodIds.delete(checkbox.value);
+                }
+            });
+            
+            updateSelectedCount();
+        });
+        
+        // Open single delete modal
+        document.querySelectorAll('.delete-single-mood-btn').forEach(btn => {
             btn.addEventListener('click', function() {
-                currentMoodId = this.getAttribute('data-id');
+                const moodId = this.getAttribute('data-id');
                 const deleteUrl = this.getAttribute('data-url');
+                
                 deleteForm.action = deleteUrl;
-                modal.classList.remove('hidden');
-                modal.classList.add('show');
+                deleteModal.classList.remove('hidden');
                 document.body.style.overflow = 'hidden';
             });
         });
         
-        // Close modal when cancel button is clicked
-        if (cancelBtn) {
-            cancelBtn.addEventListener('click', function() {
-                modal.classList.add('hidden');
-                modal.classList.remove('show');
+        // Open multiple delete modal
+        deleteSelectedBtn.addEventListener('click', function() {
+            if (selectedMoodIds.size === 0) {
+                showToast('Pilih setidaknya satu catatan mood untuk dihapus.', 'error');
+                return;
+            }
+            
+            multipleDeleteModal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        });
+        
+        // Close single delete modal
+        if (cancelDeleteBtn) {
+            cancelDeleteBtn.addEventListener('click', function() {
+                deleteModal.classList.add('hidden');
                 document.body.style.overflow = 'auto';
-                currentMoodId = null;
             });
         }
         
-        // Close modal when clicking outside
-        modal.addEventListener('click', function(e) {
-            if (e.target === modal) {
-                modal.classList.add('hidden');
-                modal.classList.remove('show');
+        // Close multiple delete modal
+        if (cancelMultipleDeleteBtn) {
+            cancelMultipleDeleteBtn.addEventListener('click', function() {
+                multipleDeleteModal.classList.add('hidden');
                 document.body.style.overflow = 'auto';
-                currentMoodId = null;
+            });
+        }
+        
+        // Confirm multiple delete
+        if (confirmMultipleDeleteBtn) {
+            confirmMultipleDeleteBtn.addEventListener('click', function() {
+                const moodIds = Array.from(selectedMoodIds);
+                
+                // Show loading
+                this.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Menghapus...';
+                this.disabled = true;
+                
+                // Send AJAX request
+                fetch('{{ route("mood.tracking.destroy.multiple") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({
+                        mood_ids: moodIds
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Remove deleted entries from DOM
+                        moodIds.forEach(id => {
+                            const entry = document.querySelector(`.mood-entry[data-id="${id}"]`);
+                            if (entry) {
+                                entry.remove();
+                            }
+                        });
+                        
+                        // Reset selection
+                        selectedMoodIds.clear();
+                        checkboxes.forEach(cb => cb.checked = false);
+                        updateSelectedCount();
+                        
+                        // Show success message
+                        showToast(data.message, 'success');
+                        
+                        // Close modal
+                        multipleDeleteModal.classList.add('hidden');
+                        document.body.style.overflow = 'auto';
+                        
+                        // Reload page after 1.5 seconds to update stats
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1500);
+                    } else {
+                        showToast(data.message, 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showToast('Terjadi kesalahan saat menghapus.', 'error');
+                })
+                .finally(() => {
+                    // Reset button
+                    this.innerHTML = 'Hapus Semua';
+                    this.disabled = false;
+                });
+            });
+        }
+        
+        // Close modals when clicking outside
+        [deleteModal, multipleDeleteModal].forEach(modal => {
+            if (modal) {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        this.classList.add('hidden');
+                        document.body.style.overflow = 'auto';
+                    }
+                });
             }
         });
         
-        // Handle form submission
-        if (deleteForm) {
-            deleteForm.addEventListener('submit', function(e) {
-                // The form will submit normally
-                modal.classList.add('hidden');
-                modal.classList.remove('show');
-                document.body.style.overflow = 'auto';
-            });
-        }
-        
         // Close with Escape key
         document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && modal.classList.contains('show')) {
-                modal.classList.add('hidden');
-                modal.classList.remove('show');
-                document.body.style.overflow = 'auto';
-                currentMoodId = null;
+            if (e.key === 'Escape') {
+                if (!deleteModal.classList.contains('hidden')) {
+                    deleteModal.classList.add('hidden');
+                    document.body.style.overflow = 'auto';
+                }
+                if (!multipleDeleteModal.classList.contains('hidden')) {
+                    multipleDeleteModal.classList.add('hidden');
+                    document.body.style.overflow = 'auto';
+                }
             }
         });
     }

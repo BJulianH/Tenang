@@ -13,9 +13,634 @@ use Illuminate\Support\Facades\Validator;
 
 class TaskController extends Controller
 {
+    // WEB METHODS
+    
     /**
-     * Get all tasks with filters
+     * Display tasks dashboard
      */
+    public function dashboard()
+    {
+        $user = Auth::user();
+        
+        $todayTasks = $user->tasks()
+            ->dueToday()
+            ->whereNotIn('status', ['completed', 'cancelled'])
+            ->with('subtasks')
+            ->orderBy('priority', 'desc')
+            ->orderBy('due_time')
+            ->get();
+        
+        $overdueCount = $user->tasks()
+            ->where('due_date', '<', Carbon::today())
+            ->whereNotIn('status', ['completed', 'cancelled'])
+            ->count();
+        
+        $completedToday = $user->tasks()
+            ->whereDate('completed_at', Carbon::today())
+            ->count();
+        
+        $statistics = $user->getTaskStatistics();
+        
+        // Get matrix counts
+        $matrixCounts = [
+            'important_urgent' => $user->tasks()
+                ->where('is_important', true)
+                ->where('is_urgent', true)
+                ->whereNotIn('status', ['completed', 'cancelled'])
+                ->count(),
+            'important_not_urgent' => $user->tasks()
+                ->where('is_important', true)
+                ->where('is_urgent', false)
+                ->whereNotIn('status', ['completed', 'cancelled'])
+                ->count(),
+            'not_important_urgent' => $user->tasks()
+                ->where('is_important', false)
+                ->where('is_urgent', true)
+                ->whereNotIn('status', ['completed', 'cancelled'])
+                ->count(),
+            'not_important_not_urgent' => $user->tasks()
+                ->where('is_important', false)
+                ->where('is_urgent', false)
+                ->whereNotIn('status', ['completed', 'cancelled'])
+                ->count(),
+        ];
+        
+        // Category distribution
+        $categoryStats = $user->tasks()
+            ->selectRaw('category, COUNT(*) as total')
+            ->groupBy('category')
+            ->get();
+        
+        // Get recent templates
+        $templates = TaskTemplate::where('user_id', $user->id)
+            ->orWhere('is_public', true)
+            ->orderBy('usage_count', 'desc')
+            ->limit(3)
+            ->get();
+        
+        return view('tasks.dashboard', compact(
+            'todayTasks',
+            'overdueCount',
+            'completedToday',
+            'statistics',
+            'matrixCounts',
+            'categoryStats',
+            'templates'
+        ));
+    }
+    
+    /**
+     * Display today's tasks
+     */
+    public function today()
+    {
+        $user = Auth::user();
+        
+        $tasks = $user->tasks()
+            ->dueToday()
+            ->whereNotIn('status', ['completed', 'cancelled'])
+            ->with('subtasks')
+            ->orderBy('priority', 'desc')
+            ->orderBy('due_time')
+            ->get();
+        
+        $overdue = $user->tasks()
+            ->where('due_date', '<', Carbon::today())
+            ->whereNotIn('status', ['completed', 'cancelled'])
+            ->get();
+        
+        $completedToday = $user->tasks()
+            ->whereDate('completed_at', Carbon::today())
+            ->get();
+        
+        return view('tasks.today', compact('tasks', 'overdue', 'completedToday'));
+    }
+    
+    /**
+     * Display upcoming tasks
+     */
+    public function upcoming()
+    {
+        $user = Auth::user();
+        
+        $tasks = $user->tasks()
+            ->whereBetween('due_date', [Carbon::today(), Carbon::today()->addDays(7)])
+            ->whereNotIn('status', ['completed', 'cancelled'])
+            ->with('subtasks')
+            ->orderBy('due_date')
+            ->orderBy('due_time')
+            ->paginate(20);
+        
+        return view('tasks.upcoming', compact('tasks'));
+    }
+    
+    /**
+     * Display overdue tasks
+     */
+    public function overdue()
+    {
+        $user = Auth::user();
+        
+        $tasks = $user->tasks()
+            ->where('due_date', '<', Carbon::today())
+            ->whereNotIn('status', ['completed', 'cancelled'])
+            ->with('subtasks')
+            ->orderBy('due_date')
+            ->orderBy('priority', 'desc')
+            ->paginate(20);
+        
+        return view('tasks.overdue', compact('tasks'));
+    }
+    
+    /**
+     * Display Eisenhower Matrix
+     */
+    public function matrix()
+    {
+        $user = Auth::user();
+        
+        $quadrants = [
+            'important_urgent' => [
+                'title' => 'Penting & Mendesak',
+                'tasks' => $user->tasks()
+                    ->where('is_important', true)
+                    ->where('is_urgent', true)
+                    ->whereNotIn('status', ['completed', 'cancelled'])
+                    ->with('subtasks')
+                    ->orderBy('priority', 'desc')
+                    ->orderBy('due_date')
+                    ->get(),
+                'color' => 'bg-red-50 border-red-200'
+            ],
+            'important_not_urgent' => [
+                'title' => 'Penting & Tidak Mendesak',
+                'tasks' => $user->tasks()
+                    ->where('is_important', true)
+                    ->where('is_urgent', false)
+                    ->whereNotIn('status', ['completed', 'cancelled'])
+                    ->with('subtasks')
+                    ->orderBy('due_date')
+                    ->get(),
+                'color' => 'bg-green-50 border-green-200'
+            ],
+            'not_important_urgent' => [
+                'title' => 'Tidak Penting & Mendesak',
+                'tasks' => $user->tasks()
+                    ->where('is_important', false)
+                    ->where('is_urgent', true)
+                    ->whereNotIn('status', ['completed', 'cancelled'])
+                    ->with('subtasks')
+                    ->orderBy('priority', 'desc')
+                    ->get(),
+                'color' => 'bg-yellow-50 border-yellow-200'
+            ],
+            'not_important_not_urgent' => [
+                'title' => 'Tidak Penting & Tidak Mendesak',
+                'tasks' => $user->tasks()
+                    ->where('is_important', false)
+                    ->where('is_urgent', false)
+                    ->whereNotIn('status', ['completed', 'cancelled'])
+                    ->with('subtasks')
+                    ->orderBy('due_date')
+                    ->get(),
+                'color' => 'bg-blue-50 border-blue-200'
+            ]
+        ];
+        
+        return view('tasks.matrix', compact('quadrants'));
+    }
+    
+    /**
+     * Display statistics
+     */
+    public function statistics()
+    {
+        $user = Auth::user();
+        
+        // Weekly statistics
+        $startDate = Carbon::today()->startOfWeek();
+        $endDate = Carbon::today()->endOfWeek();
+        
+        $completions = $user->taskCompletions()
+            ->whereBetween('completed_at', [$startDate, $endDate])
+            ->with('task')
+            ->get();
+        
+        // Group by day
+        $dailyStats = [];
+        $currentDate = $startDate->copy();
+        
+        while ($currentDate <= $endDate) {
+            $dateStr = $currentDate->format('Y-m-d');
+            $dayCompletions = $completions->filter(function($completion) use ($dateStr) {
+                return $completion->completed_at->format('Y-m-d') === $dateStr;
+            });
+            
+            $dailyStats[$dateStr] = [
+                'date' => $dateStr,
+                'day_name' => $currentDate->translatedFormat('l'),
+                'total_completed' => $dayCompletions->count(),
+                'total_points' => $dayCompletions->sum('points_earned'),
+                'avg_mood_before' => $dayCompletions->avg('mood_before'),
+                'avg_mood_after' => $dayCompletions->avg('mood_after'),
+            ];
+            
+            $currentDate->addDay();
+        }
+        
+        // Category statistics
+        $categoryStats = $user->tasks()
+            ->selectRaw('category, COUNT(*) as total, SUM(CASE WHEN status = "completed" THEN 1 ELSE 0 END) as completed')
+            ->groupBy('category')
+            ->get()
+            ->map(function($stat) {
+                $stat->completion_rate = $stat->total > 0 ? round(($stat->completed / $stat->total) * 100, 2) : 0;
+                return $stat;
+            });
+        
+        // Overall statistics
+        $overallStats = $user->getTaskStatistics();
+        
+        // Calculate completion rate trend (last 30 days)
+        $trend = [];
+        $endDate = Carbon::today();
+        $startDate = $endDate->copy()->subDays(29);
+        
+        $currentDate = $startDate->copy();
+        
+        while ($currentDate <= $endDate) {
+            $completed = $user->taskCompletions()
+                ->whereDate('completed_at', $currentDate)
+                ->count();
+            
+            $created = $user->tasks()
+                ->whereDate('created_at', $currentDate)
+                ->count();
+            
+            $rate = $created > 0 ? round(($completed / $created) * 100, 2) : 0;
+            
+            $trend[] = [
+                'date' => $currentDate->format('Y-m-d'),
+                'completed' => $completed,
+                'created' => $created,
+                'rate' => $rate,
+            ];
+            
+            $currentDate->addDay();
+        }
+        
+        return view('tasks.statistics', compact(
+            'overallStats',
+            'dailyStats',
+            'categoryStats',
+            'trend'
+        ));
+    }
+    
+    /**
+     * Display calendar view
+     */
+    public function calendar()
+    {
+        $user = Auth::user();
+        
+        $tasks = $user->tasks()
+            ->whereBetween('due_date', [Carbon::today()->startOfMonth(), Carbon::today()->endOfMonth()])
+            ->with('subtasks')
+            ->get()
+            ->groupBy('due_date');
+        
+        return view('tasks.calendar', compact('tasks'));
+    }
+    
+    /**
+     * Show the form for creating a new task
+     */
+    public function create()
+    {
+        $categories = [
+            'self_care' => ['icon' => '🛁', 'name' => 'Perawatan Diri'],
+            'therapy' => ['icon' => '🧠', 'name' => 'Terapi'],
+            'medication' => ['icon' => '💊', 'name' => 'Obat-obatan'],
+            'exercise' => ['icon' => '🏃', 'name' => 'Olahraga'],
+            'social' => ['icon' => '👥', 'name' => 'Sosial'],
+            'work' => ['icon' => '💼', 'name' => 'Pekerjaan'],
+            'appointment' => ['icon' => '📅', 'name' => 'Janji Temu'],
+            'mindfulness' => ['icon' => '🧘', 'name' => 'Mindfulness'],
+            'creative' => ['icon' => '🎨', 'name' => 'Kreatif'],
+            'chores' => ['icon' => '🧹', 'name' => 'Pekerjaan Rumah'],
+            'other' => ['icon' => '📝', 'name' => 'Lainnya'],
+        ];
+        
+        $templates = TaskTemplate::where('user_id', Auth::id())
+            ->orWhere('is_public', true)
+            ->orderBy('usage_count', 'desc')
+            ->limit(6)
+            ->get();
+        
+        return view('tasks.create', compact('categories', 'templates'));
+    }
+    
+    /**
+     * Store a newly created task
+     */
+    public function store(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'category' => 'required|in:self_care,therapy,medication,exercise,social,work,appointment,mindfulness,creative,chores,other',
+            'priority' => 'required|in:low,medium,high,urgent',
+            'due_date' => 'nullable|date|after_or_equal:today',
+            'due_time' => 'nullable|date_format:H:i',
+            'is_important' => 'boolean',
+            'is_urgent' => 'boolean',
+            'estimated_duration' => 'nullable|integer|min:1',
+            'energy_level_required' => 'nullable|integer|min:1|max:5',
+            'difficulty_level' => 'nullable|integer|min:1|max:5',
+            'tags' => 'nullable|string',
+            'parent_id' => 'nullable|exists:tasks,id',
+            'template_id' => 'nullable|exists:task_templates,id',
+            'is_recurring' => 'boolean',
+            'recurring_pattern' => 'nullable|in:daily,weekly,monthly,weekdays,weekends,custom',
+            'recurring_days' => 'nullable|array',
+            'recurring_end_date' => 'nullable|date|after:due_date',
+            'reminder_before' => 'nullable|integer|min:1|max:1440',
+        ]);
+        
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+        
+        $validated = $validator->validated();
+        $validated['user_id'] = Auth::id();
+        $validated['status'] = 'pending';
+        
+        // Parse tags
+        if (!empty($validated['tags'])) {
+            $tags = array_map('trim', explode(',', $validated['tags']));
+            $validated['tags'] = json_encode($tags);
+        }
+        
+        // Parse recurring days
+        if (!empty($validated['recurring_days'])) {
+            $validated['recurring_days'] = json_encode($validated['recurring_days']);
+        }
+        
+        // Set defaults
+        if (!isset($validated['is_important'])) $validated['is_important'] = false;
+        if (!isset($validated['is_urgent'])) $validated['is_urgent'] = false;
+        if (!isset($validated['is_recurring'])) $validated['is_recurring'] = false;
+        
+        // Create task
+        $task = Task::create($validated);
+        
+        // Create subtasks if any
+        if ($request->has('subtasks')) {
+            foreach ($request->subtasks as $subtaskTitle) {
+                if (trim($subtaskTitle)) {
+                    $task->subtasks()->create([
+                        'user_id' => Auth::id(),
+                        'title' => $subtaskTitle,
+                        'category' => $task->category,
+                        'priority' => $task->priority,
+                        'status' => 'pending',
+                        'parent_id' => $task->id,
+                    ]);
+                }
+            }
+        }
+        
+        // Update template usage count
+        if (!empty($validated['template_id'])) {
+            TaskTemplate::where('id', $validated['template_id'])->increment('usage_count');
+        }
+        
+        return redirect()->route('tasks.dashboard')
+            ->with('success', 'Task berhasil dibuat!');
+    }
+    
+    /**
+     * Display the specified task
+     */
+    public function show(Task $task)
+    {
+        $this->authorize('view', $task);
+        
+        $task->load(['subtasks', 'completions', 'template']);
+        $completionRate = $task->getCompletionRate();
+        
+        return view('tasks.show', compact('task', 'completionRate'));
+    }
+    
+    /**
+     * Show the form for editing the specified task
+     */
+    public function edit(Task $task)
+    {
+        $this->authorize('update', $task);
+        
+        $categories = [
+            'self_care' => ['icon' => '🛁', 'name' => 'Perawatan Diri'],
+            'therapy' => ['icon' => '🧠', 'name' => 'Terapi'],
+            'medication' => ['icon' => '💊', 'name' => 'Obat-obatan'],
+            'exercise' => ['icon' => '🏃', 'name' => 'Olahraga'],
+            'social' => ['icon' => '👥', 'name' => 'Sosial'],
+            'work' => ['icon' => '💼', 'name' => 'Pekerjaan'],
+            'appointment' => ['icon' => '📅', 'name' => 'Janji Temu'],
+            'mindfulness' => ['icon' => '🧘', 'name' => 'Mindfulness'],
+            'creative' => ['icon' => '🎨', 'name' => 'Kreatif'],
+            'chores' => ['icon' => '🧹', 'name' => 'Pekerjaan Rumah'],
+            'other' => ['icon' => '📝', 'name' => 'Lainnya'],
+        ];
+        
+        return view('tasks.edit', compact('task', 'categories'));
+    }
+    
+    /**
+     * Update the specified task
+     */
+    public function update(Request $request, Task $task)
+    {
+        $this->authorize('update', $task);
+        
+        // Can't update completed or cancelled tasks
+        if (in_array($task->status, ['completed', 'cancelled'])) {
+            return redirect()->back()
+                ->with('error', 'Tidak dapat mengubah task yang sudah selesai/dibatalkan');
+        }
+        
+        $validator = Validator::make($request->all(), [
+            'title' => 'string|max:255',
+            'description' => 'nullable|string',
+            'category' => 'in:self_care,therapy,medication,exercise,social,work,appointment,mindfulness,creative,chores,other',
+            'priority' => 'in:low,medium,high,urgent',
+            'due_date' => 'nullable|date',
+            'due_time' => 'nullable|date_format:H:i',
+            'is_important' => 'boolean',
+            'is_urgent' => 'boolean',
+            'estimated_duration' => 'nullable|integer|min:1',
+            'energy_level_required' => 'nullable|integer|min:1|max:5',
+            'difficulty_level' => 'nullable|integer|min:1|max:5',
+            'tags' => 'nullable|string',
+            'status' => 'in:pending,in_progress,completed,cancelled,snoozed',
+            'reminder_before' => 'nullable|integer|min:1|max:1440',
+        ]);
+        
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+        
+        $validated = $validator->validated();
+        
+        // Handle completion
+        if (isset($validated['status']) && $validated['status'] === 'completed') {
+            $moodBefore = $request->get('mood_before');
+            $moodAfter = $request->get('mood_after');
+            $notes = $request->get('notes');
+            $actualDuration = $request->get('actual_duration');
+            
+            if (!$task->canBeCompleted()) {
+                return redirect()->back()
+                    ->with('error', 'Tidak dapat menyelesaikan task: Belum semua subtask selesai');
+            }
+            
+            $task->markAsCompleted($moodBefore, $moodAfter, $notes, $actualDuration);
+            
+            return redirect()->route('tasks.dashboard')
+                ->with('success', 'Task berhasil diselesaikan! +' . $task->calculatePoints() . ' points');
+        }
+        
+        // Handle snooze
+        if (isset($validated['status']) && $validated['status'] === 'snoozed') {
+            $snoozeMinutes = $request->get('snooze_minutes', 30);
+            $task->snooze($snoozeMinutes);
+            
+            return redirect()->back()
+                ->with('success', 'Task ditunda selama ' . $snoozeMinutes . ' menit');
+        }
+        
+        // Regular update
+        if (!empty($validated['tags'])) {
+            $tags = array_map('trim', explode(',', $validated['tags']));
+            $validated['tags'] = json_encode($tags);
+        }
+        
+        $task->update($validated);
+        
+        return redirect()->route('tasks.show', $task)
+            ->with('success', 'Task berhasil diperbarui');
+    }
+    
+    /**
+     * Remove the specified task
+     */
+    public function destroy(Task $task)
+    {
+        $this->authorize('delete', $task);
+        
+        // Check if task has completions
+        if ($task->completions()->count() > 0) {
+            return redirect()->back()
+                ->with('error', 'Tidak dapat menghapus task yang sudah memiliki riwayat penyelesaian');
+        }
+        
+        $task->delete();
+        
+        return redirect()->route('tasks.dashboard')
+            ->with('success', 'Task berhasil dihapus');
+    }
+    
+    /**
+     * Complete a task
+     */
+    public function complete(Request $request, Task $task)
+    {
+        $this->authorize('update', $task);
+        
+        if (!$task->canBeCompleted()) {
+            return redirect()->back()
+                ->with('error', 'Tidak dapat menyelesaikan task: Belum semua subtask selesai');
+        }
+        
+        $validator = Validator::make($request->all(), [
+            'mood_before' => 'nullable|integer|min:1|max:5',
+            'mood_after' => 'nullable|integer|min:1|max:5',
+            'notes' => 'nullable|string|max:1000',
+            'actual_duration' => 'nullable|integer|min:1',
+        ]);
+        
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+        
+        $validated = $validator->validated();
+        
+        $task->markAsCompleted(
+            $validated['mood_before'] ?? null,
+            $validated['mood_after'] ?? null,
+            $validated['notes'] ?? null,
+            $validated['actual_duration'] ?? null
+        );
+        
+        return redirect()->back()
+            ->with('success', 'Task berhasil diselesaikan! +' . $task->calculatePoints() . ' points');
+    }
+    
+    /**
+     * Start a task (mark as in progress)
+     */
+    public function start(Task $task)
+    {
+        $this->authorize('update', $task);
+        
+        $task->markAsInProgress();
+        
+        return redirect()->back()
+            ->with('success', 'Task dimulai!');
+    }
+    
+    /**
+     * Snooze a task
+     */
+    public function snooze(Request $request, Task $task)
+    {
+        $this->authorize('update', $task);
+        
+        $request->validate([
+            'minutes' => 'required|integer|min:1|max:1440'
+        ]);
+        
+        $task->snooze($request->minutes);
+        
+        return redirect()->back()
+            ->with('success', 'Task ditunda selama ' . $request->minutes . ' menit');
+    }
+    
+    /**
+     * Cancel a task
+     */
+    public function cancel(Task $task)
+    {
+        $this->authorize('update', $task);
+        
+        if ($task->status === 'completed') {
+            return redirect()->back()
+                ->with('error', 'Tidak dapat membatalkan task yang sudah selesai');
+        }
+        
+        $task->update(['status' => 'cancelled']);
+        
+        return redirect()->back()
+            ->with('success', 'Task dibatalkan');
+    }
+    
     public function index(Request $request)
     {
         $user = Auth::user();
@@ -201,195 +826,6 @@ class TaskController extends Controller
             'message' => 'Tasks by matrix retrieved successfully'
         ]);
     }
-    
-    /**
-     * Store a new task
-     */
-    public function store(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'category' => 'required|in:self_care,therapy,medication,exercise,social,work,appointment,mindfulness,creative,chores,other',
-            'priority' => 'required|in:low,medium,high,urgent',
-            'due_date' => 'nullable|date|after_or_equal:today',
-            'due_time' => 'nullable|date_format:H:i',
-            'is_important' => 'boolean',
-            'is_urgent' => 'boolean',
-            'estimated_duration' => 'nullable|integer|min:1',
-            'energy_level_required' => 'nullable|integer|min:1|max:5',
-            'difficulty_level' => 'nullable|integer|min:1|max:5',
-            'tags' => 'nullable|array',
-            'tags.*' => 'string|max:50',
-            'parent_id' => 'nullable|exists:tasks,id',
-            'template_id' => 'nullable|exists:task_templates,id',
-            'is_recurring' => 'boolean',
-            'recurring_pattern' => 'nullable|in:daily,weekly,monthly,weekdays,weekends,custom',
-            'recurring_days' => 'nullable|array',
-            'recurring_days.*' => 'integer|min:0|max:6',
-            'recurring_end_date' => 'nullable|date|after:due_date',
-            'reminder_before' => 'nullable|integer|min:1|max:1440',
-        ]);
-        
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Validation error',
-                'errors' => $validator->errors()
-            ], 422);
-        }
-        
-        $validated = $validator->validated();
-        $validated['user_id'] = Auth::id();
-        $validated['status'] = 'pending';
-        
-        // Set default values from preferences
-        $preferences = Auth::user()->taskPreferences;
-        if ($preferences) {
-            $validated['category'] = $validated['category'] ?? $preferences->default_category;
-            $validated['priority'] = $validated['priority'] ?? $preferences->default_priority;
-            $validated['reminder_before'] = $validated['reminder_before'] ?? $preferences->default_reminder_before;
-        }
-        
-        // Create task
-        $task = Task::create($validated);
-        
-        // Create reminder if enabled
-        if ($preferences && $preferences->enable_reminders && 
-            $validated['due_date'] && $validated['due_time']) {
-            
-            $dueDateTime = Carbon::parse($validated['due_date'] . ' ' . $validated['due_time']);
-            $reminderTime = $dueDateTime->subMinutes($validated['reminder_before']);
-            
-            $task->reminders()->create([
-                'reminder_time' => $reminderTime,
-                'status' => 'pending',
-                'channel' => 'push',
-                'message' => "Reminder: {$task->title} due at {$dueDateTime->format('H:i')}",
-            ]);
-        }
-        
-        // Update user stats
-        Auth::user()->increment('tasks_created');
-        
-        return response()->json([
-            'success' => true,
-            'data' => $task->load(['subtasks', 'reminders']),
-            'message' => 'Task created successfully'
-        ], 201);
-    }
-    
-    /**
-     * Show a specific task
-     */
-    public function show($id)
-    {
-        $task = Auth::user()->tasks()
-            ->with(['subtasks', 'reminders', 'completions', 'template'])
-            ->findOrFail($id);
-        
-        $completionRate = $task->getCompletionRate();
-        $moodImprovement = $task->getMoodImprovement();
-        
-        return response()->json([
-            'success' => true,
-            'data' => [
-                'task' => $task,
-                'stats' => [
-                    'completion_rate' => $completionRate,
-                    'mood_improvement' => $moodImprovement,
-                    'streak_count' => $task->streak_count,
-                    'completion_count' => $task->completion_count,
-                ]
-            ],
-            'message' => 'Task retrieved successfully'
-        ]);
-    }
-    
-    /**
-     * Update a task
-     */
-    public function update(Request $request, $id)
-    {
-        $task = Auth::user()->tasks()->findOrFail($id);
-        
-        // Can't update completed or cancelled tasks
-        if (in_array($task->status, ['completed', 'cancelled'])) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Cannot update completed or cancelled tasks'
-            ], 400);
-        }
-        
-        $validator = Validator::make($request->all(), [
-            'title' => 'string|max:255',
-            'description' => 'nullable|string',
-            'category' => 'in:self_care,therapy,medication,exercise,social,work,appointment,mindfulness,creative,chores,other',
-            'priority' => 'in:low,medium,high,urgent',
-            'due_date' => 'nullable|date',
-            'due_time' => 'nullable|date_format:H:i',
-            'is_important' => 'boolean',
-            'is_urgent' => 'boolean',
-            'estimated_duration' => 'nullable|integer|min:1',
-            'energy_level_required' => 'nullable|integer|min:1|max:5',
-            'difficulty_level' => 'nullable|integer|min:1|max:5',
-            'tags' => 'nullable|array',
-            'tags.*' => 'string|max:50',
-            'status' => 'in:pending,in_progress,completed,cancelled,snoozed',
-            'reminder_before' => 'nullable|integer|min:1|max:1440',
-        ]);
-        
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Validation error',
-                'errors' => $validator->errors()
-            ], 422);
-        }
-        
-        $validated = $validator->validated();
-        
-        // Handle completion
-        if (isset($validated['status']) && $validated['status'] === 'completed') {
-            $moodBefore = $request->get('mood_before');
-            $moodAfter = $request->get('mood_after');
-            $notes = $request->get('notes');
-            $actualDuration = $request->get('actual_duration');
-            
-            $result = $task->markAsCompleted($moodBefore, $moodAfter, $notes, $actualDuration);
-            
-            return response()->json([
-                'success' => true,
-                'data' => $result,
-                'message' => 'Task marked as completed successfully'
-            ]);
-        }
-        
-        // Handle snooze
-        if (isset($validated['status']) && $validated['status'] === 'snoozed') {
-            $snoozeMinutes = $request->get('snooze_minutes', 30);
-            $task->snooze($snoozeMinutes);
-            
-            return response()->json([
-                'success' => true,
-                'data' => $task->fresh(),
-                'message' => 'Task snoozed successfully'
-            ]);
-        }
-        
-        // Regular update
-        $task->update($validated);
-        
-        return response()->json([
-            'success' => true,
-            'data' => $task->fresh()->load(['subtasks', 'reminders']),
-            'message' => 'Task updated successfully'
-        ]);
-    }
-    
-    /**
-     * Mark task as completed
-     */
     public function completeTask(Request $request, $id)
     {
         $task = Auth::user()->tasks()->findOrFail($id);
@@ -502,29 +938,6 @@ class TaskController extends Controller
             'success' => true,
             'data' => $task->fresh(),
             'message' => 'Task snoozed successfully'
-        ]);
-    }
-    
-    /**
-     * Delete a task
-     */
-    public function destroy($id)
-    {
-        $task = Auth::user()->tasks()->findOrFail($id);
-        
-        // Check if task has completions
-        if ($task->completions()->count() > 0) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Cannot delete task with completion history. Cancel instead.'
-            ], 400);
-        }
-        
-        $task->delete();
-        
-        return response()->json([
-            'success' => true,
-            'message' => 'Task deleted successfully'
         ]);
     }
     
@@ -762,51 +1175,4 @@ class TaskController extends Controller
             'message' => 'Bulk operation completed'
         ]);
     }
-    // Di TaskController.php
-public function dashboard()
-{
-    return view('tasks.dashboard');
-}
-
-public function today()
-{
-    return view('tasks.today');
-}
-
-public function upcoming()
-{
-    return view('tasks.upcoming');
-}
-
-public function overdue()
-{
-    return view('tasks.overdue');
-}
-
-public function matrix()
-{
-    return view('tasks.matrix');
-}
-
-public function statistics()
-{
-    return view('tasks.statistics');
-}
-
-public function calendar()
-{
-    return view('tasks.calendar');
-}
-
-public function create()
-{
-    return view('tasks.create');
-}
-
-
-public function edit(Task $task)
-{
-    $this->authorize('update', $task);
-    return view('tasks.edit', compact('task'));
-}
 }

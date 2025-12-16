@@ -131,4 +131,5 @@ class TaskTemplate extends Model
 
         return $task;
     }
+    
 }

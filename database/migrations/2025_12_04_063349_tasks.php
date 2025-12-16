@@ -1,6 +1,4 @@
 <?php
-// database/migrations/xxxx_xx_xx_create_tasks_table.php
-
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,6 +10,13 @@ return new class extends Migration
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            
+            // Parent task untuk subtask
+            $table->foreignId('parent_id')
+                  ->nullable()
+                  ->constrained('tasks')
+                  ->onDelete('cascade');
+
             $table->string('title');
             $table->text('description')->nullable();
             
@@ -53,13 +58,13 @@ return new class extends Migration
                 'weekends',
                 'custom'
             ])->nullable();
-            $table->json('recurring_days')->nullable()->comment('[1,3,5] for days of week');
+            $table->json('recurring_days')->nullable();
             $table->date('recurring_end_date')->nullable();
             
             // Task characteristics
-            $table->integer('estimated_duration')->nullable()->comment('In minutes');
-            $table->tinyInteger('energy_level_required')->nullable()->comment('1-5 scale');
-            $table->tinyInteger('difficulty_level')->nullable()->comment('1-5 scale');
+            $table->integer('estimated_duration')->nullable();
+            $table->tinyInteger('energy_level_required')->nullable();
+            $table->tinyInteger('difficulty_level')->nullable();
             
             // Eisenhower Matrix
             $table->boolean('is_important')->default(false);
@@ -67,13 +72,13 @@ return new class extends Migration
             
             // Completion tracking
             $table->timestamp('completed_at')->nullable();
-            $table->tinyInteger('mood_before')->nullable()->comment('1-5 scale, mood before task');
-            $table->tinyInteger('mood_after')->nullable()->comment('1-5 scale, mood after task');
-            $table->text('notes')->nullable()->comment('User notes after completion');
+            $table->tinyInteger('mood_before')->nullable();
+            $table->tinyInteger('mood_after')->nullable();
+            $table->text('notes')->nullable();
             
             // Tags and metadata
             $table->json('tags')->nullable();
-            $table->integer('streak_count')->default(0)->comment('For recurring tasks');
+            $table->integer('streak_count')->default(0);
             $table->integer('completion_count')->default(0);
             
             // Soft deletes and timestamps
@@ -85,6 +90,7 @@ return new class extends Migration
             $table->index(['user_id', 'status']);
             $table->index(['user_id', 'priority']);
             $table->index(['user_id', 'is_important', 'is_urgent']);
+            $table->index('parent_id');
         });
     }
 
