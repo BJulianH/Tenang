@@ -896,7 +896,7 @@
                         <!-- Developer 1 -->
                         <div class="developer-card card p-6 text-center fade-in-up">
                             <div class="w-32 h-32 bg-gradient-to-r from-primary-400 to-secondary-400 rounded-full flex items-center justify-center mx-auto mb-6 shadow-duo-lg">
-                                <i class="fas fa-user text-white text-4xl"></i>
+                                <i></i>
                             </div>
                             <h4 class="text-xl font-bold text-neutral-800 mb-2">Dimas Arya Duwipangga</h4>
                             <p class="text-primary-600 font-medium mb-4">Beckend Developer</p>
@@ -921,10 +921,10 @@
                             <div class="w-32 h-32 bg-gradient-to-r from-secondary-400 to-accent-purple rounded-full flex items-center justify-center mx-auto mb-6 shadow-duo-lg">
                                 <i class="fas fa-user text-white text-4xl"></i>
                             </div>
-                            <h4 class="text-xl font-bold text-neutral-800 mb-2">Muhamad Ifran Maulana</h4>
-                            <p class="text-secondary-600 font-medium mb-4">Penggaruk Peler</p>
+                            <h4 class="text-xl font-bold text-neutral-800 mb-2">Mohammad Ifran Maulana</h4>
+                            <p class="text-secondary-600 font-medium mb-4">sistem analis</p>
                             <p class="text-neutral-600 mb-6">
-                                Peler saya selalu gatel
+                                mengerjakan projek terkait informatika secara terstruktur
                             <div class="flex justify-center space-x-4">
                                 <a href="#" class="social-icon w-10 h-10 rounded-full flex items-center justify-center text-secondary-600">
                                     <i class="fab fa-github"></i>
