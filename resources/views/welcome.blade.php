@@ -711,16 +711,13 @@
                 <!-- Stats -->
                 <div class="grid grid-cols-3 gap-6 pt-8">
                     <div class="text-center">
-                        <div class="stat-number text-2xl">10K+</div>
-                        <div class="text-sm text-neutral-500">Pengguna Aktif</div>
+                        
                     </div>
                     <div class="text-center">
-                        <div class="stat-number text-2xl">95%</div>
-                        <div class="text-sm text-neutral-500">Melaporkan Perbaikan</div>
+                        
                     </div>
                     <div class="text-center">
-                        <div class="stat-number text-2xl">4.9★</div>
-                        <div class="text-sm text-neutral-500">Rating Pengguna</div>
+                        
                     </div>
                 </div>
             </div>
@@ -775,55 +772,6 @@
                 </div>
                 <h3 class="text-xl font-bold text-neutral-800 mb-3 text-center">Komunitas Support</h3>
                 <p class="text-neutral-600 text-center">Terhubung dengan orang lain dalam perjalanan serupa di lingkungan yang aman dan mendukung.</p>
-            </div>
-        </section>
-
-        <!-- Testimonials -->
-        <section class="mt-20">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-neutral-800 mb-4">Apa Kata Pengguna Kami</h2>
-                <p class="text-neutral-600 max-w-2xl mx-auto">Bergabung dengan ribuan orang yang telah menemukan kedamaian dan keseimbangan dengan Tenang</p>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="testimonial-card card p-6 fade-in-up">
-                    <div class="flex items-center mb-4">
-                        <div class="w-12 h-12 bg-gradient-to-br from-primary-400 to-secondary-400 rounded-full flex items-center justify-center mr-4">
-                            <i class="fas fa-user text-white"></i>
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-neutral-800">Sarah</h4>
-                            <p class="text-sm text-neutral-500">Pengguna selama 6 bulan</p>
-                        </div>
-                    </div>
-                    <p class="text-neutral-600">"Tenang membantu saya memahami pola mood dan mengelola stres dengan lebih baik. Journaling feature sangat membantu!"</p>
-                </div>
-                
-                <div class="testimonial-card card p-6 fade-in-up" style="animation-delay: 0.2s;">
-                    <div class="flex items-center mb-4">
-                        <div class="w-12 h-12 bg-gradient-to-br from-secondary-400 to-accent-purple rounded-full flex items-center justify-center mr-4">
-                            <i class="fas fa-user text-white"></i>
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-neutral-800">Budi</h4>
-                            <p class="text-sm text-neutral-500">Pengguna selama 3 bulan</p>
-                        </div>
-                    </div>
-                    <p class="text-neutral-600">"Sebagai mahasiswa, Tenang membantu saya menjaga keseimbangan antara akademik dan kesehatan mental."</p>
-                </div>
-                
-                <div class="testimonial-card card p-6 fade-in-up" style="animation-delay: 0.4s;">
-                    <div class="flex items-center mb-4">
-                        <div class="w-12 h-12 bg-gradient-to-br from-primary-400 to-accent-blue rounded-full flex items-center justify-center mr-4">
-                            <i class="fas fa-user text-white"></i>
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-neutral-800">Dewi</h4>
-                            <p class="text-sm text-neutral-500">Pengguna selama 1 tahun</p>
-                        </div>
-                    </div>
-                    <p class="text-neutral-600">"Meditasi harian dan tantangan kesehatan dari Tenang telah mengubah hidup saya. Sangat recommended!"</p>
-                </div>
             </div>
         </section>
 
@@ -895,8 +843,10 @@
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                         <!-- Developer 1 -->
                         <div class="developer-card card p-6 text-center fade-in-up">
-                            <div class="w-32 h-32 bg-gradient-to-r from-primary-400 to-secondary-400 rounded-full flex items-center justify-center mx-auto mb-6 shadow-duo-lg">
-                                <i class="fas fa-user text-white text-4xl"></i>
+                            <div class="w-32 h-32 mx-auto mb-6 overflow-hidden rounded-full shadow-duo-lg       ">
+                                <img src="{{ asset('assets/images/dimas.jpeg') }}" 
+                                alt="Dimas Arya Duwipangga"
+                                class="w-full h-full object-cover   ">
                             </div>
                             <h4 class="text-xl font-bold text-neutral-800 mb-2">Dimas Arya Duwipangga</h4>
                             <p class="text-primary-600 font-medium mb-4">Beckend Developer</p>
@@ -918,13 +868,15 @@
 
                         <!-- Developer 2 -->
                         <div class="developer-card card p-6 text-center fade-in-up" style="animation-delay: 0.2s;">
-                            <div class="w-32 h-32 bg-gradient-to-r from-secondary-400 to-accent-purple rounded-full flex items-center justify-center mx-auto mb-6 shadow-duo-lg">
-                                <i class="fas fa-user text-white text-4xl"></i>
+                            <div class="w-32 h-32 mx-auto mb-6 overflow-hidden rounded-full shadow-duo-lg">
+                                <img src="{{ asset('assets/images/ifran.jpeg') }}" 
+                                alt="Mohammad Ifran Maulana" 
+                                class="w-full h-full object-cover">
                             </div>
                             <h4 class="text-xl font-bold text-neutral-800 mb-2">Muhamad Ifran Maulana</h4>
-                            <p class="text-secondary-600 font-medium mb-4">Penggaruk Peler</p>
+                            <p class="text-secondary-600 font-medium mb-4">System Analis</p>
                             <p class="text-neutral-600 mb-6">
-                                Peler saya selalu gatel
+                                Mengerjakan project secara terstruktur 
                             <div class="flex justify-center space-x-4">
                                 <a href="#" class="social-icon w-10 h-10 rounded-full flex items-center justify-center text-secondary-600">
                                     <i class="fab fa-github"></i>
@@ -942,8 +894,8 @@
     <div class="developer-card card p-6 text-center fade-in-up" style="animation-delay: 0.4s;">
         <div class="w-32 h-32 mx-auto mb-6 overflow-hidden rounded-full shadow-duo-lg">
             <img src="{{ asset('assets/images/julian.jpeg') }}" 
-                 alt="Bintang Julian Hidayat"
-                 class="w-full h-full object-cover">
+                alt="Bintang Julian Hidayat"
+                class="w-full h-full object-cover">
         </div>
         <h4 class="text-xl font-bold text-neutral-800 mb-2">Bintang Julian Hidayat</h4>
         <p class="text-accent-purple font-medium mb-4">Frontend Developer</p>
@@ -1003,27 +955,26 @@
             </div>
         </section>
 
-        <!-- Final CTA Section -->
-        <section class="mt-20 py-16 cta-gradient rounded-duo-xl text-center text-white relative overflow-hidden">
-            <div class="relative z-10">
-                <h2 class="text-4xl font-bold mb-6">Siap Memulai Perjalanan Kesehatan Mental Anda?</h2>
-                <p class="text-xl mb-8 opacity-95">Bergabunglah dengan komunitas Tenang hari ini dan temukan keseimbangan dalam hidup Anda</p>
-                <div class="flex flex-col sm:flex-row justify-center gap-4">
-                    <a href="{{ route('register') }}">
-                        <button class="app-button bg-white text-primary-600 px-8 py-4 flex items-center">
-                            Daftar Sekarang - Gratis
-                            <i class="fas fa-arrow-right ml-3"></i>
-                        </button>
-                    </a>
-                    <button class="px-8 py-4 bg-transparent text-white border-2 border-white font-bold rounded-duo hover:bg-white hover:text-primary-600 transition-all flex items-center">
-                        <i class="fas fa-question-circle mr-3"></i>
-                        Pelajari Lebih Lanjut
-                    </button>
-                </div>
-                <p class="mt-6 text-sm opacity-90">Tidak membutuhkan kartu kredit • 100% privasi terjamin</p>
-            </div>
-        </section>
+<!-- Final CTA Section -->
+<section class="mt-20 py-16 cta-gradient rounded-duo-xl text-center text-white relative overflow-hidden">
+    <div class="relative z-10">
+        <h2 class="text-4xl font-bold mb-6">Siap Memulai Perjalanan Kesehatan Mental Anda?</h2>
+        <p class="text-xl mb-8 opacity-95">Bergabunglah dengan komunitas Tenang hari ini dan temukan keseimbangan dalam hidup Anda</p>
+        <div class="flex flex-col sm:flex-row justify-center gap-4">
+            <a href="{{ route('register') }}">
+                <button class="app-button text-white px-8 py-4 flex items-center">
+                    Daftar Sekarang - Gratis
+                    <i class="fas fa-arrow-right ml-3"></i>
+                </button>
+            </a>
+            <button class="px-8 py-4 bg-transparent text-white border-2 border-white font-bold rounded-duo hover:bg-white hover:text-primary-600 transition-all flex items-center">
+                <i class="fas fa-question-circle mr-3"></i>
+                Pelajari Lebih Lanjut
+            </button>
+        </div>
+        <p class="mt-6 text-sm opacity-90">Tidak membutuhkan kartu kredit • 100% privasi terjamin</p>
     </div>
+</section>
 
     <!-- Footer -->
     <footer class="bg-neutral-800 text-white py-12 mt-20">
