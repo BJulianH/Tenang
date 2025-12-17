@@ -580,6 +580,15 @@
             visibility: visible;
             opacity: 1;
         }
+        
+        /* Custom untuk modal triggers */
+        .checkbox-modal-trigger {
+            cursor: pointer;
+        }
+        
+        .checkbox-modal-trigger:disabled {
+            cursor: not-allowed;
+        }
     </style>
 </head>
 <body class="bg-neutral-50 max-h-full overflow-hidden">
@@ -800,7 +809,9 @@
                             <div class="checkbox-trigger-container">
                                 <label class="flex items-start cursor-pointer">
                                     <div class="checkbox-tooltip relative">
-                                        <input type="checkbox" name="terms" id="termsCheckbox" class="w-4 h-4 text-primary-600 border-neutral-300 rounded focus:ring-primary-500 mt-1" disabled>
+                                        <input type="checkbox" name="terms" id="termsCheckbox" 
+                                               class="w-4 h-4 text-primary-600 border-neutral-300 rounded focus:ring-primary-500 mt-1 checkbox-modal-trigger" 
+                                               disabled>
                                         <span class="tooltip-text">Klik untuk membaca Syarat Layanan & Kebijakan Privasi</span>
                                     </div>
                                     <span class="ml-2 text-sm text-neutral-600">
@@ -1166,6 +1177,10 @@
                     termsCheckbox.disabled = true;
                     termsCheckbox.checked = false;
                     submitBtn.disabled = true;
+                    
+                    // Ensure checkbox container is clickable
+                    checkboxContainer.style.cursor = 'pointer';
+                    checkboxContainer.classList.add('checkbox-trigger-container');
                 }
             }
 
@@ -1252,15 +1267,17 @@
             }
 
             // Event Listeners for Modal
+            // 1. Click on the "Syarat Layanan & Kebijakan Privasi" text link
             policyBtn.addEventListener("click", () => {
                 openModal();
                 setupScrollDetection();
             });
 
-            // NEW: Trigger modal when clicking on checkbox or its label container
+            // 2. Click on checkbox container (label and checkbox area)
             checkboxContainer.addEventListener("click", (e) => {
                 // Prevent the default checkbox behavior when it's disabled
                 e.preventDefault();
+                e.stopPropagation();
                 
                 // Only open modal if policy hasn't been read yet
                 if (!policyRead) {
@@ -1269,9 +1286,10 @@
                 }
             });
 
-            // Also listen for clicks directly on the checkbox
+            // 3. Click directly on the checkbox
             termsCheckbox.addEventListener("click", (e) => {
                 e.preventDefault();
+                e.stopPropagation();
                 
                 if (!policyRead) {
                     openModal();
@@ -1279,9 +1297,10 @@
                 }
             });
 
+            // 4. Close modal button
             closePolicy.addEventListener("click", () => closeModal());
 
-            // Understand button handler
+            // 5. Understand button handler
             understandPolicy.addEventListener("click", () => {
                 policyRead = true;
                 updateFormState();
@@ -1302,14 +1321,14 @@
                 }, 800);
             });
 
-            // Close modal when clicking overlay
+            // 6. Close modal when clicking overlay
             modalOverlay.addEventListener("click", function(e) {
                 if (e.target === this) {
                     closeModal();
                 }
             });
 
-            // Close modal with Escape key
+            // 7. Close modal with Escape key
             document.addEventListener("keydown", (e) => {
                 if (e.key === "Escape" && !policyModal.classList.contains("hidden")) {
                     closeModal();
@@ -1517,6 +1536,12 @@
 
             // Initialize form state
             updateFormState();
+            
+            // Initialize tooltips
+            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
         });
     </script>
 </body>
